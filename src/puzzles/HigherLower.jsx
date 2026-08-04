@@ -25,7 +25,7 @@ export default function HigherLower() {
 
       if (round + 1 >= P.rounds.length) {
         const score = next.filter(Boolean).length
-        const won = score >= 4
+        const won = score >= P.toWin
         setDone(won ? 'won' : 'lost')
         setStats(saveResult('higherlower', { won, guesses: score, dayKey: DAY_KEY }))
       } else {
@@ -99,7 +99,10 @@ export default function HigherLower() {
         </button>
       </div>
 
-      <span className="hl-than">than {r.a.value.toLocaleString()}</span>
+      <span className="hl-than">
+        than {r.a.value.toLocaleString()} · {results.filter(Boolean).length}/{P.toWin} right,
+        {' '}round {round + 1} of {P.rounds.length}
+      </span>
     </div>
   )
 }

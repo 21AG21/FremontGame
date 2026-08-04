@@ -12,8 +12,28 @@
 // ─────────────────────────────────────────────────────────────
 
 import { PLACES } from './town.js'
+import { distanceMiles } from '../lib/geo.js'
 
-export const ZOOM_POOL = PLACES.filter((p) => p.district !== 'Next door')
+// Two rules decide what can be an answer.
+//
+// It has to be nameable — fame 3 places stay in the autocomplete as
+// wrong guesses, which is where they are useful, and out of the answer
+// queue, where they only ever produce "I could not have got that".
+//
+// And it has to be separable. A pair of places 0.2 miles apart cannot be
+// told apart by a distance-and-bearing hint, so guessing the neighbour
+// costs a life for being essentially right. Where two candidates sit
+// inside a quarter mile of each other, the better-known one is the
+// answer and the other becomes a decoy.
+const NAMEABLE = PLACES.filter((p) => p.district !== 'Next door' && p.fame <= 2)
+
+export const ZOOM_POOL = NAMEABLE.filter(
+  (p) =>
+    !NAMEABLE.some(
+      (q) => q !== p && (q.fame < p.fame || (q.fame === p.fame && q.id < p.id)) &&
+        distanceMiles(p, q) < 0.25
+    )
+)
 
 export const ZOOM_COUNT = ZOOM_POOL.length
 
@@ -127,11 +147,14 @@ export function focusFor(place) {
   }
 }
 
-// Opens at 4.2, not the old 5.5. These plates are composed from a parts
-// library rather than drawn one at a time, and past about 4× the crop
-// starts landing inside a single shape rather than across a few — which
-// is a texture swatch, not a puzzle.
-export const LEVELS = [4.2, 3.2, 2.4, 1.8, 1.3, 1]
+// Opens at 2.6, down from 4.2 and originally 5.5.
+//
+// These plates are composed from a parts library rather than drawn one
+// at a time, so past about 3× the crop lands inside a single shape and
+// you are looking at a texture swatch, not a puzzle. Reviewers of three
+// different ages independently quit on the opening frame — the first
+// screen has to be teasing, not blank.
+export const LEVELS = [2.6, 2.1, 1.75, 1.45, 1.2, 1]
 
 export function zoomForDay(day) {
   const place = ZOOM_POOL[mix(day * 2654435761 + 17) % ZOOM_POOL.length]

@@ -49,3 +49,15 @@ export function formatDistance(miles) {
 export function warmth(miles) {
   return Math.max(0, Math.min(1, 1 - miles / 6))
 }
+
+// "7.5 mi east" assumes a map of Fremont in your head, in miles, with
+// compass bearings. Plenty of people who live here do not have that,
+// and for them the hint teaches nothing — the same blind guess, five
+// times. One word in front of it gives everyone something to act on.
+export function warmthWord(miles) {
+  if (miles < 0.4) return 'Almost'
+  if (miles < 1.2) return 'Hot'
+  if (miles < 2.5) return 'Warm'
+  if (miles < 5) return 'Cool'
+  return 'Cold'
+}

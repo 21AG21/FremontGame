@@ -20,9 +20,12 @@ const hashId = (id) => {
   return h >>> 0
 }
 
-export default function Engraving({ place }) {
-  const motifs = place.motifs || ['ridge', 'shops', 'road']
-  const p = `e-${place.id}`
+// `motifs` overrides what the place is made of, which is how Then & Now
+// draws the same location in two eras: same seed, same layout, different
+// parts. `variant` keeps the two plates' pattern ids apart.
+export default function Engraving({ place, motifs: override, variant = '' }) {
+  const motifs = override || place.motifs || ['ridge', 'shops', 'road']
+  const p = `e-${place.id}${variant}`
 
   // Back to front. A motif list is written in the order the place
   // reads, not the order it draws — sorting by layer means town.js

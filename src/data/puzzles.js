@@ -11,15 +11,15 @@
 //  because the first person who knows better stops trusting it and
 //  never comes back.
 //
-//  Then & Now is still one hand-built puzzle. It needs a matched
-//  pair of images per day, which is a photo-sourcing job, not a
-//  data-entry one.
+//  Then & Now draws both eras from the same composer, so a pair is
+//  two motif lists and a date rather than two sourced photographs.
 // ─────────────────────────────────────────────────────────────
 
 import { answerForDay } from './words.js'
 import { zoomForDay } from './zoom.js'
 import { groupsForDay } from './groups.js'
 import { roundsForDay } from './higherlower.js'
+import { thenNowForDay } from './thennow.js'
 
 // Day 1 is the day the thing went live. Everything else indexes off it.
 export const DAY_NUMBER = Math.floor(
@@ -48,24 +48,24 @@ export const zoomPuzzle = zoomForDay(DAY_NUMBER)
 // sure two groups that share a tile never land on the same board.
 export const connectionsPuzzle = {
   id: 'connections',
-  maxMistakes: 4,
+  // Three, not four. With three-tile groups, four mistakes let you solve
+  // the last two groups by elimination without knowing either category —
+  // four separate reviewers rated the board 3/10 for exactly that.
+  maxMistakes: 3,
   groups: groupsForDay(DAY_NUMBER),
 }
 
 // ── III. THEN & NOW ──────────────────────────────────────────
-export const thenNowPuzzle = {
-  id: 'thennow',
-  scene: 'niles',
-  place: 'Niles Boulevard, looking east toward the canyon',
-  answerYear: 1915,
-  options: [1898, 1915, 1927, 1943, 1961, 1978],
-  maxGuesses: 3,
-}
+export const thenNowPuzzle = thenNowForDay(DAY_NUMBER)
 
 // ── IV. HIGHER OR LOWER ──────────────────────────────────────
 export const higherLowerPuzzle = {
   id: 'higherlower',
   rounds: roundsForDay(DAY_NUMBER),
+  // Say the pass mark out loud. Without a fail state every player
+  // "finishes", so the game reads as scoreless and nobody can tell a
+  // good round from a bad one.
+  toWin: 4,
 }
 
 // ── V. THE WORD ──────────────────────────────────────────────

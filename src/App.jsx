@@ -4,6 +4,7 @@ import { PUZZLE_TYPES, DAY_KEY } from './data/puzzles.js'
 import { getRecord } from './lib/storage.js'
 import { readTheme, applyTheme } from './lib/theme.js'
 import { Ridge, ICONS, ThemeIcon } from './art/Mark.jsx'
+import HowTo from './components/HowTo.jsx'
 import Zoom from './puzzles/Zoom.jsx'
 import Connections from './puzzles/Connections.jsx'
 import ThenNow from './puzzles/ThenNow.jsx'
@@ -39,6 +40,7 @@ export default function App() {
           <h1 className="flag">{TOWN.name}</h1>
           <span className="lockup-rule" aria-hidden="true" />
           <span className="prompt">{type.prompt}</span>
+          <HowTo key={active} game={active} />
           <button
             className="theme"
             onClick={flipTheme}

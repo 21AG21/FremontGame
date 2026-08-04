@@ -1,10 +1,12 @@
 import { useState, useRef } from 'react'
-import { Niles } from '../art/Scenes.jsx'
+import Engraving from '../art/Engraving.jsx'
+import { placeById } from '../data/town.js'
 import { thenNowPuzzle as P, DAY_KEY, MARK } from '../data/puzzles.js'
 import { saveResult, getRecord } from '../lib/storage.js'
 import Result from '../components/Result.jsx'
 
 export default function ThenNow() {
+  const place = placeById(P.scene.placeId)
   const [wipe, setWipe] = useState(50)
   const [guesses, setGuesses] = useState([])
   const [done, setDone] = useState(null)
@@ -53,6 +55,7 @@ export default function ThenNow() {
           else if (e.key === 'Home') { e.preventDefault(); setWipe(0) }
           else if (e.key === 'End') { e.preventDefault(); setWipe(100) }
         }}
+        onClick={(e) => moveTo(e.clientX)}
         onMouseDown={(e) => { dragging.current = true; moveTo(e.clientX) }}
         onMouseMove={(e) => dragging.current && moveTo(e.clientX)}
         onMouseUp={() => (dragging.current = false)}
@@ -61,10 +64,10 @@ export default function ThenNow() {
         onTouchMove={(e) => moveTo(e.touches[0].clientX)}
       >
         <div className="wipe-layer">
-          <Niles era="now" />
+          <Engraving place={place} motifs={P.scene.now} variant="-now" />
         </div>
         <div className="wipe-layer wipe-top" style={{ clipPath: `inset(0 ${100 - wipe}% 0 0)` }}>
-          <Niles era="then" />
+          <Engraving place={place} motifs={P.scene.then} variant="-then" />
         </div>
 
         <div className="wipe-seam" style={{ left: `${wipe}%` }} />

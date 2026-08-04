@@ -2,7 +2,7 @@ import { useState } from 'react'
 import Engraving from '../art/Engraving.jsx'
 import { placeById } from '../data/town.js'
 import { zoomPuzzle as P, DAY_KEY, MARK } from '../data/puzzles.js'
-import { distanceMiles, bearingDegrees, compassFrom, formatDistance, warmth } from '../lib/geo.js'
+import { distanceMiles, bearingDegrees, compassFrom, formatDistance, warmth, warmthWord } from '../lib/geo.js'
 import { saveResult, getRecord } from '../lib/storage.js'
 import PlaceSearch from '../components/PlaceSearch.jsx'
 import Result from '../components/Result.jsx'
@@ -86,6 +86,7 @@ export default function Zoom() {
                       <span className="guess-meta">Correct</span>
                     ) : (
                       <span className="guess-meta">
+                        <span className="guess-warmth">{warmthWord(g.miles)}</span>
                         <span
                           className="guess-arrow"
                           style={{ transform: `rotate(${g.bearing}deg)` }}
