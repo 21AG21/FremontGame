@@ -1,6 +1,7 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { TOWN } from './data/town.js'
 import { PUZZLE_TYPES, DAY_KEY } from './data/puzzles.js'
+import { dayHasTurned } from './lib/day.js'
 import { getRecord } from './lib/storage.js'
 import { readTheme, applyTheme } from './lib/theme.js'
 import { Ridge, ICONS, ThemeIcon } from './art/Mark.jsx'
@@ -24,6 +25,21 @@ export default function App() {
   const [theme, setTheme] = useState(readTheme)
   const View = VIEWS[active]
   const type = PUZZLE_TYPES.find((t) => t.id === active)
+
+  // DAY_KEY and DAY_NUMBER are captured at import, so a phone left open
+  // overnight keeps serving yesterday's puzzles and filing results under
+  // yesterday's key. Catch the turn when the tab comes back.
+  useEffect(() => {
+    const check = () => {
+      if (document.visibilityState === 'visible' && dayHasTurned()) location.reload()
+    }
+    document.addEventListener('visibilitychange', check)
+    const t = setInterval(check, 60000)
+    return () => {
+      document.removeEventListener('visibilitychange', check)
+      clearInterval(t)
+    }
+  }, [])
 
   const flipTheme = () => {
     const next = theme === 'dark' ? 'light' : 'dark'

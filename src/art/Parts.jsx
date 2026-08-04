@@ -14,8 +14,17 @@
 
 const range = (n) => Array.from({ length: n }, (_, i) => i)
 
-export const K = 'var(--art-ink)'
-export const W = 'var(--art-paper)'
+// currentColor, not var(). A CSS custom property inside an SVG
+// *presentation attribute* is spec-legal and has a long history of
+// failing in WebKit; when it fails the attribute is invalid, fill falls
+// back to black and stroke to none, and every plate in the game becomes
+// a solid black rectangle. currentColor in a presentation attribute has
+// never been buggy anywhere. The ink is set on .plate svg in CSS.
+//
+// The paper is a literal because it is #fff in both themes — inverting
+// a line drawing turns it into a photographic negative.
+export const K = 'currentColor'
+export const W = '#fff'
 const FACE = "'Work Sans', system-ui, sans-serif"
 
 // Deterministic noise, so a place's drawing never changes between

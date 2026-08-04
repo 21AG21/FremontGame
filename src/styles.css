@@ -28,7 +28,7 @@
 
   --panel: #ffffff;
   --line: rgba(4, 55, 100, 0.12);
-  --line-2: rgba(4, 55, 100, 0.22);
+  --line-2: rgba(4, 55, 100, 0.42);
   --sunk: rgba(4, 55, 100, 0.06);
 
   --navy: #043764;
@@ -74,7 +74,7 @@
 
   --panel: #0d2c4a;
   --line: rgba(255, 255, 255, 0.14);
-  --line-2: rgba(255, 255, 255, 0.24);
+  --line-2: rgba(255, 255, 255, 0.44);
   --sunk: rgba(255, 255, 255, 0.05);
 
   /* Fills, not just type. #33632E on the dark panel measures 2.01:1
@@ -109,7 +109,7 @@
 
     --panel: #0d2c4a;
     --line: rgba(255, 255, 255, 0.14);
-    --line-2: rgba(255, 255, 255, 0.24);
+    --line-2: rgba(255, 255, 255, 0.44);
     --sunk: rgba(255, 255, 255, 0.05);
 
     /* Fills, not just type. #33632E on the dark panel measures 2.01:1
@@ -181,6 +181,7 @@ body {
   font-family: var(--sans);
   font-size: 16px;
   line-height: 1.4;
+  -webkit-text-size-adjust: 100%;
   -webkit-font-smoothing: antialiased;
   -webkit-tap-highlight-color: transparent;
 }
@@ -192,8 +193,17 @@ ul { list-style: none; }
 
 /* One focus ring, in the palette. The UA default is a yellow-orange
    that belongs to no part of this design. */
-:focus-visible { outline: 2px solid var(--navy); outline-offset: 2px; }
-.index-item:focus-visible { outline-color: var(--ink); }
+/* Two-tone. A single navy ring measured 1.00:1 against every navy fill
+   in the app — invisible on exactly the controls that matter most. The
+   white inner edge guarantees one of the two shows against anything. */
+:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 2px #fff, 0 0 0 5px var(--ink);
+}
+.index-item:focus-visible,
+.btn-primary:focus-visible,
+.tile.is-selected:focus-visible { outline-color: #fff; box-shadow: 0 0 0 2px var(--ink), 0 0 0 5px #fff; }
 
 /* ── shell ───────────────────────────────────────────────────── */
 
@@ -203,34 +213,42 @@ ul { list-style: none; }
      leave the text soft. zoom re-lays-out at the new size, so 23px type
      is really 23px at whatever step we're on. */
   zoom: var(--z);
-  height: calc(100dvh / var(--z));
+  /* min-height, not height, and it scrolls. A fixed-height clipped box
+     is one screen for most people and permanent data loss for anyone
+     who enlarges text, forces line spacing, or is on a short landscape
+     phone — 1.4.4, 1.4.10 and 1.4.12 all fail at once, silently. */
+  min-height: calc(100dvh / var(--z));
   max-width: 440px;
   margin: 0 auto;
-  padding: var(--pad) var(--pad) calc(94px + env(safe-area-inset-bottom));
+  padding: var(--pad) var(--pad) calc(18px + env(safe-area-inset-bottom));
   display: flex;
   flex-direction: column;
   gap: var(--gap);
   /* clip, not hidden: hidden is still a scroll container, so a
      programmatic scrollIntoView or a focus ring on a clipped control
-     could push the header out of view with no way to get it back. */
-  overflow: clip;
+     could push the header out of view with no way to get it back.
+     Visible, so overgrown content reaches the page scrollbar. */
+  overflow: visible;
 }
 
 /* A 440px column on a 27-inch monitor is a postage stamp, and asking
    someone to hit ⌘+ is not a design. The steps key off height as well
    as width because this is a one-screen app — a wide, short window has
    no room to grow into. */
+@supports (zoom: 1.2) {
 @media (min-width: 720px) and (min-height: 840px) { :root { --z: 1.2; } }
 @media (min-width: 820px) and (min-height: 1000px) { :root { --z: 1.45; } }
 @media (min-width: 980px) and (min-height: 1180px) { :root { --z: 1.7; } }
 @media (min-width: 1120px) and (min-height: 1360px) { :root { --z: 1.95; } }
 @media (min-width: 1280px) and (min-height: 1560px) { :root { --z: 2.2; } }
+}
 
 /* Fixed to the viewport, not to the column: a ridge scoped to the sheet
    reads as a grey slab with two hard edges once the window is wider
    than it. Stretched rather than cropped, so the skyline stays in
    frame instead of the crop landing on the flat base. */
 .ridge {
+  color: var(--ridge);
   position: fixed;
   inset: 0;
   z-index: -1;
@@ -325,10 +343,10 @@ main {
 /* ── section bar ─────────────────────────────────────────────── */
 
 .index {
-  position: absolute;
-  left: var(--pad);
-  right: var(--pad);
+  position: sticky;
   bottom: calc(18px + env(safe-area-inset-bottom));
+  z-index: 10;
+  margin: auto calc(var(--pad) * -1 + 18px) 0;
   display: flex;
   gap: 2px;
   padding: 4px;
@@ -348,7 +366,7 @@ main {
 
 /* Without backdrop-filter the pane would just be washed out, so fall
    back to the solid panel it used to be. */
-@supports not (backdrop-filter: blur(1px)) {
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
   .index { background: var(--panel); border-color: var(--line); }
 }
 
@@ -434,6 +452,10 @@ main {
   border: 1px solid var(--line);
 }
 
+/* The engravings draw in currentColor — see art/Parts.jsx for why. */
+.plate svg,
+.scene { color: var(--art-ink); }
+
 .plate svg { display: block; width: 100%; height: 100%; }
 
 .tag {
@@ -504,9 +526,8 @@ main {
   border-radius: var(--r-md);
   corner-shape: squircle;
   background: var(--panel);
-  border: 1px solid var(--line);
+  border: 2px solid var(--line-2);
   font-size: var(--t-lg);
-  outline: none;
 }
 
 .search-input:focus { border-color: var(--navy); }
@@ -612,7 +633,6 @@ main {
   font-weight: 600;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  opacity: 0.85;
 }
 
 .band-items { display: block; margin-top: 5px; font-size: var(--t-lg); font-weight: 600; }
@@ -675,9 +695,9 @@ main {
   display: grid;
   place-items: center;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.9);
-  border: 1px solid rgba(4, 55, 100, 0.2);
-  color: #043764;
+  background: #fff;
+  border: 3px solid var(--art-ink);
+  color: var(--art-ink);
   font-size: 16px;
 }
 
@@ -701,7 +721,7 @@ main {
   gap: 8px;
 }
 
-.year-hint { font-size: var(--t-xs); font-weight: 500; opacity: 0.75; }
+.year-hint { font-size: var(--t-xs); font-weight: 500; }
 
 /* ── IV. Higher or Lower ─────────────────────────────────────── */
 
@@ -809,7 +829,6 @@ main {
   font-size: 11px;
   font-weight: 700;
   line-height: 1;
-  opacity: 0.85;
 }
 
 .wg-cell.is-correct::after { content: '✓'; }
@@ -1124,6 +1143,7 @@ main {
 
 .legal-body {
   flex: 1;
+  scrollbar-gutter: stable;
   min-height: 0;
   overflow-y: auto;
   margin-bottom: 14px;
@@ -1151,4 +1171,18 @@ main {
   font-size: var(--t-sm);
   line-height: 1.5;
   color: var(--muted);
+}
+
+/* the error boundary's own screen */
+.boundary {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 14px;
+  padding: 22px;
+  border-radius: var(--r-lg);
+  corner-shape: squircle;
+  background: var(--panel);
+  border: 1px solid var(--line);
 }

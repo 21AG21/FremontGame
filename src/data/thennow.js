@@ -74,7 +74,7 @@ export const SCENES = [
   {
     id: 'first-dumbarton',
     placeId: 'dumbarton',
-    caption: 'The first bridge across the lower bay',
+    caption: 'The first highway bridge across the lower bay',
     year: 1927,
     then: ['bay', 'trestle', 'levee'],
     now: ['bay', 'bridge', 'levee'],
@@ -122,8 +122,8 @@ export const SCENES = [
   {
     id: 'ohlone-college',
     placeId: 'ohlone-college',
-    caption: 'A college is founded above the mission',
-    year: 1967,
+    caption: 'The college opens its campus on the hill',
+    year: 1974,
     then: ['ridge', 'orchard', 'oaks'],
     now: ['ridge', 'civic', 'dome', 'oaks'],
   },
@@ -177,8 +177,13 @@ function optionsFor(scene, day) {
   return picked.sort((a, b) => a - b)
 }
 
+// Fourteen scenes hashed at random repeated back-to-back 39 times in 400
+// days — one day in ten showed yesterday's puzzle again, same answer.
+// A walk cannot do that.
+const SCENE_STEP = 9 // coprime with 14
+
 export function thenNowForDay(day) {
-  const scene = SCENES[mix(day * 8677 + 5) % SCENES.length]
+  const scene = SCENES[(day * SCENE_STEP) % SCENES.length]
   return {
     id: 'thennow',
     scene,

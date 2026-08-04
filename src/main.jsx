@@ -1,6 +1,7 @@
 import React from 'react'
 import { createRoot } from 'react-dom/client'
 import App from './App.jsx'
+import Boundary from './components/Boundary.jsx'
 import Sheet from './art/Sheet.jsx'
 
 // Newsreader carries the wordmark, the captions and every numeral;
@@ -24,6 +25,8 @@ const Root = new URLSearchParams(location.search).has('sheet') ? Sheet : App
 
 createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <Root />
+    <Boundary>
+      <Root />
+    </Boundary>
   </React.StrictMode>
 )

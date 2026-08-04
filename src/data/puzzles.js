@@ -21,12 +21,10 @@ import { groupsForDay } from './groups.js'
 import { roundsForDay } from './higherlower.js'
 import { thenNowForDay } from './thennow.js'
 
-// Day 1 is the day the thing went live. Everything else indexes off it.
-export const DAY_NUMBER = Math.floor(
-  (Date.now() - new Date('2026-08-01T00:00:00').getTime()) / 86400000
-) + 1
-
-export const DAY_KEY = new Date().toISOString().slice(0, 10)
+// One source of truth for what day it is — see lib/day.js for why this
+// is a separate module and not two expressions here.
+import { DAY_KEY, DAY_NUMBER } from '../lib/day.js'
+export { DAY_KEY, DAY_NUMBER }
 
 // `short` is what fits in a fifth of the section bar; `prompt` is the
 // day's question, which sits after the wordmark and is the only place

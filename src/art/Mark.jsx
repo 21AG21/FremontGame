@@ -20,7 +20,7 @@ export function Ridge() {
     >
       <polygon
         points="0,660 0,300 84,140 150,214 232,36 300,180 340,120 340,660"
-        fill="var(--ridge)"
+        fill="currentColor"
       />
     </svg>
   )

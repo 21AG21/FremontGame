@@ -25,15 +25,30 @@ import { distanceMiles } from '../lib/geo.js'
 // costs a life for being essentially right. Where two candidates sit
 // inside a quarter mile of each other, the better-known one is the
 // answer and the other becomes a decoy.
+// 800 feet. Far enough that "0.2 mi north" distinguishes two answers,
+// close enough that genuinely distinct civic buildings a block apart
+// both stay in. A quarter mile collapsed City Hall, the main library and
+// Washington High into one.
+const SEPARATION = 0.15
+
 const NAMEABLE = PLACES.filter((p) => p.district !== 'Next door' && p.fame <= 2)
 
-export const ZOOM_POOL = NAMEABLE.filter(
-  (p) =>
-    !NAMEABLE.some(
-      (q) => q !== p && (q.fame < p.fame || (q.fame === p.fame && q.id < p.id)) &&
-        distanceMiles(p, q) < 0.25
-    )
-)
+// Greedy, best-first, and comparing against SURVIVORS — not against the
+// whole candidate list.
+//
+// The obvious version compares each place to every other candidate,
+// which lets a place be eliminated by a neighbour that is itself
+// eliminated: Aqua Adventure knocked out Central Park, which knocked out
+// Lake Elizabeth, so the two best-known places in Fremont could never be
+// the answer. Sorting by fame first and keeping a place only if it
+// clears everything already kept fixes both that and the tie-break,
+// which was alphabetical when it was supposed to be by fame.
+export const ZOOM_POOL = [...NAMEABLE]
+  .sort((a, b) => a.fame - b.fame || a.name.localeCompare(b.name))
+  .reduce((kept, p) => {
+    if (!kept.some((q) => distanceMiles(p, q) < SEPARATION)) kept.push(p)
+    return kept
+  }, [])
 
 export const ZOOM_COUNT = ZOOM_POOL.length
 
@@ -156,8 +171,18 @@ export function focusFor(place) {
 // screen has to be teasing, not blank.
 export const LEVELS = [2.6, 2.1, 1.75, 1.45, 1.2, 1]
 
+// Walk the pool rather than hash into it: a hash served the same place
+// on consecutive days nine times a year, which on a daily game reads as
+// the site being broken.
+const STEP = (() => {
+  const gcd = (a, b) => (b ? gcd(b, a % b) : a)
+  const n = ZOOM_POOL.length
+  for (let s = Math.max(7, Math.round(n * 0.618)); s < n + 7; s++) if (gcd(s, n) === 1) return s
+  return 1
+})()
+
 export function zoomForDay(day) {
-  const place = ZOOM_POOL[mix(day * 2654435761 + 17) % ZOOM_POOL.length]
+  const place = ZOOM_POOL[(day * STEP) % ZOOM_POOL.length]
   return {
     id: 'zoom',
     answerId: place.id,

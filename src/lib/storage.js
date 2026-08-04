@@ -6,6 +6,8 @@
 //
 // Both keys begin "fremont." because the privacy document says they do.
 
+import { dayBefore } from './day.js'
+
 const RECORD_KEY = 'fremont.record'
 const TODAY_KEY = 'fremont.today'
 const LEGACY_KEY = 'towndaily.v1'
@@ -37,12 +39,6 @@ function readRecords() {
 
 export function getRecord(puzzleId) {
   return readRecords()[puzzleId] || null
-}
-
-const dayBefore = (dayKey) => {
-  const d = new Date(`${dayKey}T00:00:00`)
-  d.setDate(d.getDate() - 1)
-  return d.toISOString().slice(0, 10)
 }
 
 // Scores a finished round — once per game per day, no matter how many

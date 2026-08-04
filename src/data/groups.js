@@ -20,8 +20,8 @@
 export const GROUPS = [
   // ── difficulty 0 — the gimme ────────────────────────────────
   { d: 0, label: 'Built at the plant on Fremont Boulevard', items: ['Nova', 'Corolla', 'Tacoma', 'Model 3'] },
-  { d: 0, label: 'Cities that border Fremont', items: ['Newark', 'Union City', 'Hayward', 'Milpitas'] },
-  { d: 0, label: 'Fremont high schools', items: ['American', 'Washington', 'Kennedy', 'Irvington'] },
+  { d: 0, label: 'Cities that border Fremont', items: ['Newark', 'Union City', 'Milpitas', 'San Jose'] },
+  { d: 0, label: 'Fremont high schools', items: ['American', 'Washington', 'Kennedy', 'Mission San Jose'] },
   { d: 0, label: 'Bay Area bridges', items: ['Dumbarton', 'Bay', 'San Mateo', 'Richmond'] },
   { d: 0, label: 'Trees you actually see here', items: ['Eucalyptus', 'Redwood', 'Oak', 'Sycamore'] },
   { d: 0, label: 'Bay Area teams', items: ['Warriors', 'Giants', 'Sharks', 'Earthquakes'] },
@@ -47,7 +47,7 @@ export const GROUPS = [
 
   // ── difficulty 1 — you get there, but not instantly ─────────
   { d: 1, label: 'East Bay Regional Parks, in town', items: ['Coyote Hills', 'Quarry Lakes', 'Ardenwood', 'Alameda Creek'] },
-  { d: 1, label: 'Peaks on the ridge above town', items: ['Mission', 'Monument', 'Allison', 'Bald'] },
+  { d: 1, label: 'On the ridge above town', items: ['Mission Peak', 'Monument Peak', 'Mount Allison', 'Ohlone Wilderness'] },
   { d: 1, label: 'Also made at NUMMI', items: ['Prizm', 'Vibe', 'Voltz', 'Hilux'] },
   { d: 1, label: 'Fremont’s historic parks', items: ['Shinn', 'Vallejo Mill', 'Sabercat', 'Ardenwood'] },
   { d: 1, label: 'Rail stops, past and present', items: ['Niles', 'Centerville', 'Irvington', 'Decoto'] },
@@ -74,7 +74,7 @@ export const GROUPS = [
 
   // ── difficulty 2 — the one that costs you a life ────────────
   { d: 2, label: 'Townships that became Fremont in 1956', items: ['Centerville', 'Niles', 'Warm Springs', 'Irvington'] },
-  { d: 2, label: 'Fremont districts that are also streets', items: ['Niles', 'Irvington', 'Centerville', 'Warm Springs'] },
+  { d: 2, label: 'Fremont districts that are also streets', items: ['Niles', 'Peralta', 'Decoto', 'Grimmer'] },
   { d: 2, label: 'Named for a Californio family', items: ['Peralta', 'Vallejo', 'Alviso', 'Castro'] },
   { d: 2, label: 'BART stations that opened after 2010', items: ['Warm Springs', 'Milpitas', 'Berryessa', 'Antioch'] },
   { d: 2, label: 'Lakes you can walk around here', items: ['Elizabeth', 'Quarry', 'Shinn', 'Horseshoe'] },
@@ -100,23 +100,23 @@ export const GROUPS = [
   { d: 2, label: 'What a shellmound became', items: ['A parking lot', 'A quarry', 'A park', 'A dispute'] },
 
   // ── difficulty 3 — only by elimination ──────────────────────
-  { d: 3, label: 'Hiding a bird', items: ['Sheronda', 'Crowded', 'Ternary', 'Gullible'] },
+  { d: 3, label: 'Hiding a bird', items: ['Sheraton', 'Crowded', 'Ternary', 'Gullible'] },
   { d: 3, label: 'Hiding a tree', items: ['Oakland', 'Palmdale', 'Elmhurst', 'Ashby'] },
   { d: 3, label: 'Hiding a body of water', items: ['Baywatch', 'Seabed', 'Lakeside', 'Poncho'] },
   { d: 3, label: 'Precede “Ford”', items: ['Stan', 'Craw', 'Ox', 'Hart'] },
   { d: 3, label: 'Letters you do not pronounce', items: ['Salmon', 'Island', 'Debris', 'Column'] },
-  { d: 3, label: 'A peak and a street in Fremont', items: ['Mission', 'Walnut', 'Olive', 'Palm'] },
+  { d: 3, label: 'A tree and a Fremont street', items: ['Olive', 'Palm', 'Walnut', 'Cedar'] },
   { d: 3, label: 'A park and the person it is named for', items: ['Shinn', 'Vallejo', 'Patterson', 'Edwards'] },
   { d: 3, label: 'A lake somewhere, and a queen', items: ['Elizabeth', 'Victoria', 'Anne', 'Mary'] },
   { d: 3, label: 'A Chevrolet and something in the sky', items: ['Nova', 'Vega', 'Astro', 'Celebrity'] },
   { d: 3, label: 'A mission and the city named after it', items: ['San José', 'San Rafael', 'Santa Clara', 'San Francisco'] },
-  { d: 3, label: 'A fault and a place on the map', items: ['Hayward', 'Calaveras', 'Mission', 'Silver Creek'] },
+  { d: 3, label: 'A fault and a place on the map', items: ['San Andreas', 'Hayward', 'Greenville', 'Concord'] },
   { d: 3, label: 'All mean “a tree-lined walk”', items: ['Alameda', 'Promenade', 'Esplanade', 'Mall'] },
   { d: 3, label: 'Newcomers say these wrong', items: ['Paseo Padre', 'Alviso', 'Decoto', 'Vallejo'] },
   { d: 3, label: 'Can follow “Fremont”', items: ['Boulevard', 'Hub', 'Peak', 'Bank'] },
   { d: 3, label: 'Kinds of mission', items: ['Religious', 'Military', 'Corporate', 'Space'] },
   { d: 3, label: 'A Fremont school and a president', items: ['Washington', 'Kennedy', 'Lincoln', 'Hoover'] },
-  { d: 3, label: 'A California county and a Fremont street', items: ['Alameda', 'Mono', 'Napa', 'Sonoma'] },
+  { d: 3, label: 'A California county and a bay', items: ['Alameda', 'Marin', 'Sonoma', 'Monterey'] },
   { d: 3, label: 'Words for the edge of the bay', items: ['Shore', 'Strand', 'Bank', 'Margin'] },
   { d: 3, label: 'A quarry, then a lake, now a park', items: ['Horseshoe', 'Rainbow', 'Willow', 'Lago Los Osos'] },
   { d: 3, label: 'An orchard fruit and a paint color', items: ['Apricot', 'Cherry', 'Plum', 'Peach'] },
