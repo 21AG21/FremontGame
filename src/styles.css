@@ -1,0 +1,769 @@
+/* ─────────────────────────────────────────────────────────────
+   Fremont — one screen, five games.
+
+   Built to the design doc (turn 5, options a–j): flat squircle
+   panels on a faint Mission Peak ridge, the section bar pinned at
+   the bottom, and three colours that each mean one thing.
+
+     navy   the thing you have selected right now
+     green  correct
+     amber  right letter, wrong place
+
+   Nothing else is coloured. Light and dark are the same layout
+   with a different set of nine values.
+   ───────────────────────────────────────────────────────────── */
+
+:root {
+  color-scheme: light dark;
+
+  --bg: #f1f5f8;
+  --ink: #0c2033;
+  --muted: #5b7794;
+
+  --panel: #ffffff;
+  --line: rgba(4, 55, 100, 0.12);
+  --line-2: rgba(4, 55, 100, 0.22);
+  --sunk: rgba(4, 55, 100, 0.06);
+
+  --navy: #043764;
+  --green: #33632e;
+  --amber: #c8971b;
+  /* Green as a fill and green as type are not the same value: #33632E
+     on the dark panel is barely above it. This is the type one. */
+  --green-ink: #33632e;
+  --on-amber: #12212e;
+  --on-navy: #ffffff;
+  --on-green: #ffffff;
+
+  --ridge: #043764;
+  --scrim: rgba(4, 55, 100, 0.45);
+  --glass: rgba(255, 255, 255, 0.9);
+
+  /* The engravings are ink on paper in both modes — inverting a line
+     drawing turns it into a negative, which reads as a mistake. Dark
+     mode only cools the ink so the white plate stops glaring. */
+  --art-ink: #043764;
+  --art-paper: #ffffff;
+
+  --gap: 12px;
+  --pad: 22px;
+  --bar: 94px;
+
+  --r-lg: 26px;
+  --r-md: 18px;
+  --r-sm: 16px;
+  --r-xs: 12px;
+
+  --serif: 'Newsreader', Georgia, 'Times New Roman', serif;
+  --sans: 'Work Sans', system-ui, -apple-system, sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #07203a;
+    --ink: #eaf1f8;
+    --muted: #93aec7;
+
+    --panel: #0d2c4a;
+    --line: rgba(255, 255, 255, 0.14);
+    --line-2: rgba(255, 255, 255, 0.24);
+    --sunk: rgba(255, 255, 255, 0.05);
+
+    --navy: #0a4c87;
+    --amber: #d9a72a;
+    --green-ink: #7cb46c;
+
+    --ridge: #9fd6ff;
+    --scrim: rgba(4, 25, 45, 0.4);
+    --glass: rgba(13, 44, 74, 0.9);
+
+    --art-ink: #08203a;
+  }
+}
+
+* { box-sizing: border-box; }
+
+html, body, #root { height: 100%; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.4;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+}
+
+button, input { font: inherit; color: inherit; }
+button { cursor: pointer; }
+
+/* One focus ring, in the palette. The UA default is a yellow-orange
+   that belongs to no part of this design. */
+:focus-visible {
+  outline: 2px solid var(--navy);
+  outline-offset: 2px;
+}
+
+.index-item:focus-visible { outline-color: var(--ink); }
+h1, h2, h3, p, dl, dd, ul { margin: 0; padding: 0; }
+ul { list-style: none; }
+
+/* ── shell ───────────────────────────────────────────────────── */
+
+.sheet {
+  position: relative;
+  height: 100dvh;
+  max-width: 440px;
+  margin: 0 auto;
+  padding: var(--pad) var(--pad) calc(var(--bar) + env(safe-area-inset-bottom));
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
+  overflow: hidden;
+}
+
+/* The ridge is the only decoration in the app and it sits at 9% —
+   present when you look for it, gone when you are playing. */
+.ridge {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  opacity: 0.09;
+  pointer-events: none;
+}
+
+.lockup {
+  position: relative;
+  display: flex;
+  align-items: baseline;
+  gap: 9px;
+  flex: none;
+}
+
+.flag {
+  flex: none;
+  font-family: var(--serif);
+  font-size: 23px;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+
+.lockup-rule {
+  flex: none;
+  width: 1px;
+  height: 17px;
+  background: var(--line-2);
+}
+
+.prompt {
+  min-width: 0;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  color: var(--muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+main {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+}
+
+.puzzle {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
+}
+
+/* ── section bar ─────────────────────────────────────────────── */
+
+.index {
+  position: absolute;
+  left: var(--pad);
+  right: var(--pad);
+  bottom: calc(18px + env(safe-area-inset-bottom));
+  display: flex;
+  gap: 2px;
+  padding: 4px;
+  border-radius: var(--r-md);
+  corner-shape: squircle;
+  background: var(--panel);
+  border: 1px solid var(--line);
+}
+
+.index-item {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 7px 2px;
+  border: 0;
+  border-radius: 14px;
+  corner-shape: squircle;
+  background: transparent;
+  color: var(--muted);
+}
+
+.index-item.is-active {
+  background: var(--navy);
+  color: var(--on-navy);
+}
+
+.index-name {
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 1.1;
+  text-align: center;
+}
+
+/* A game you have already finished today keeps its label but loses
+   the pull — the dot is the whole notification. */
+.index-item.is-done:not(.is-active) .index-name::after {
+  content: '·';
+  margin-left: 3px;
+  color: var(--green-ink);
+  font-weight: 700;
+}
+
+/* ── shared parts ────────────────────────────────────────────── */
+
+.caption {
+  flex: none;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--muted);
+}
+
+.btn {
+  min-height: 50px;
+  padding: 0 24px;
+  border-radius: var(--r-sm);
+  corner-shape: squircle;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.btn-primary {
+  background: var(--navy);
+  border-color: var(--navy);
+  color: var(--on-navy);
+}
+
+.btn:disabled { opacity: 0.4; cursor: default; }
+
+/* The plate an engraving sits on. Fixed aspect so the crop is the
+   same shape on every screen — a Zoom whose frame changes shape
+   shows a different part of the drawing to different players. */
+.plate {
+  position: relative;
+  flex: none;
+  height: clamp(170px, 30vh, 264px);
+  overflow: hidden;
+  border-radius: var(--r-lg);
+  corner-shape: squircle;
+  background: var(--art-paper);
+  border: 1px solid var(--line);
+}
+
+.plate svg { display: block; width: 100%; height: 100%; }
+
+.tag {
+  position: absolute;
+  bottom: 8px;
+  padding: 4px 9px;
+  border-radius: 999px;
+  background: var(--scrim);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.tag-left { left: 8px; }
+.tag-right { right: 8px; }
+
+/* Tiles: the one shape shared by Groups and the year row. */
+.tile {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  border-radius: var(--r-sm);
+  corner-shape: squircle;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  color: var(--ink);
+  text-align: center;
+  /* "Washington" and "Mission San Jose" are the two that decide this —
+     at a quarter of a 375px screen they have about 76px to live in. */
+  font-size: clamp(11px, 3.3vw, 13px);
+  font-weight: 600;
+  line-height: 1.25;
+  overflow-wrap: break-word;
+  hyphens: auto;
+}
+
+.tile.is-selected {
+  background: var(--navy);
+  border-color: var(--navy);
+  color: var(--on-navy);
+}
+
+.tile.is-spent {
+  background: var(--sunk);
+  border-color: var(--line);
+  color: var(--muted);
+}
+
+/* A rejected quad has to read as rejected without moving — the
+   border thickens to the strong rule and the fill drops out. */
+.tile.is-rejected { border-color: var(--line-2); background: var(--sunk); }
+
+.tile:disabled { cursor: default; }
+
+/* ── I. Zoom ─────────────────────────────────────────────────── */
+
+.plate-inner {
+  width: 100%;
+  height: 100%;
+  transform-origin: center;
+}
+
+.search { position: relative; flex: none; }
+
+.search-input {
+  display: block;
+  width: 100%;
+  padding: 16px 18px;
+  border-radius: var(--r-md);
+  corner-shape: squircle;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  font-size: 17px;
+  outline: none;
+}
+
+.search-input:focus { border-color: var(--navy); }
+.search-input::placeholder { color: var(--muted); }
+
+.search-list {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: calc(100% + 6px);
+  z-index: 5;
+  padding: 4px;
+  border-radius: var(--r-md);
+  corner-shape: squircle;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  box-shadow: 0 10px 30px rgba(4, 25, 45, 0.14);
+}
+
+.search-item {
+  display: block;
+  width: 100%;
+  padding: 11px 14px;
+  border: 0;
+  border-radius: var(--r-xs);
+  corner-shape: squircle;
+  background: transparent;
+  text-align: left;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.search-item.is-cursor { background: var(--navy); color: var(--on-navy); }
+
+.search-empty { padding: 11px 14px; color: var(--muted); font-size: 15px; }
+
+.guesses {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
+}
+
+.guess-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
+  overflow-y: auto;
+}
+
+.guess {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: var(--r-md);
+  corner-shape: squircle;
+  background: var(--panel);
+  border: 1px solid var(--line);
+}
+
+.guess-name { font-size: 19px; font-weight: 600; line-height: 1.2; }
+
+.guess-meta {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 16px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--muted);
+}
+
+.guess-arrow { display: inline-block; font-size: 14px; line-height: 1; }
+
+.guess.is-correct {
+  background: var(--green);
+  border-color: var(--green);
+  color: var(--on-green);
+}
+
+.guess.is-correct .guess-meta { color: var(--on-green); }
+
+/* ── II. Groups ──────────────────────────────────────────────── */
+
+.bands { flex: none; display: flex; flex-direction: column; gap: 8px; }
+
+.band {
+  padding: 14px 16px;
+  border-radius: var(--r-md);
+  corner-shape: squircle;
+  background: var(--green);
+  border: 1px solid var(--green);
+  color: var(--on-green);
+}
+
+.band-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  opacity: 0.85;
+}
+
+.band-items { display: block; margin-top: 4px; font-size: 17px; font-weight: 600; }
+
+/* Four columns, not three: the grid holds 16, 12, 8 then 4 tiles and
+   only four divides all of them. Three would orphan a tile on the
+   opening board. */
+.conn-grid {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  /* Capped, then centred in whatever's left. Letting the rows take 1fr
+     of a tall phone turns every tile into a portrait card. */
+  grid-auto-rows: minmax(58px, 104px);
+  align-content: center;
+  gap: 8px;
+}
+
+.conn-bar {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.mistakes { display: flex; gap: 7px; }
+
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--green);
+  border: 1px solid var(--green);
+}
+
+.dot.is-spent { background: transparent; border-color: var(--line-2); }
+
+/* ── III. Then & Now ─────────────────────────────────────────── */
+
+.wipe { touch-action: none; cursor: ew-resize; }
+
+.wipe-layer { position: absolute; inset: 0; }
+.wipe-top { z-index: 2; }
+
+/* The seam and its handle sit on the engraving, not on the page, so
+   they take the plate's colours in both themes — a dark-mode handle
+   would be a black dot in the middle of a white drawing. */
+.wipe-seam {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: 3;
+  width: 2px;
+  background: var(--art-ink);
+  transform: translateX(-1px);
+}
+
+.wipe-handle {
+  position: absolute;
+  top: 50%;
+  z-index: 4;
+  transform: translate(-50%, -50%);
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--art-paper);
+  border: 2px solid var(--art-ink);
+  color: var(--art-ink);
+  font-size: 16px;
+}
+
+.wipe .tag { z-index: 3; }
+
+.quote {
+  flex: none;
+  text-align: center;
+  font-family: var(--serif);
+  font-size: 18px;
+  font-style: italic;
+  line-height: 1.35;
+}
+
+.year-grid {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-auto-rows: minmax(54px, 88px);
+  align-content: center;
+  gap: 8px;
+}
+
+.year-grid .tile { font-size: 16px; font-variant-numeric: tabular-nums; }
+
+.year-hint { font-size: 11px; font-weight: 500; opacity: 0.75; }
+
+/* ── IV. Higher or Lower ─────────────────────────────────────── */
+
+.hl-progress { flex: none; display: flex; gap: 6px; }
+
+.pip {
+  flex: 1;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--sunk);
+}
+
+.pip.is-hit { background: var(--green); }
+.pip.is-miss { background: var(--muted); }
+.pip.is-current { background: var(--navy); }
+
+.hl-card {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: var(--r-lg);
+  corner-shape: squircle;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  text-align: center;
+}
+
+.hl-half {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 22px 18px;
+}
+
+.hl-half + .hl-half { border-top: 1px solid var(--line); }
+
+.hl-name { font-family: var(--serif); font-size: 20px; }
+
+.hl-value {
+  display: block;
+  margin: 10px 0 6px;
+  font-size: clamp(38px, 12vw, 58px);
+  font-weight: 600;
+  line-height: 0.95;
+  font-variant-numeric: tabular-nums;
+}
+
+.hl-unit { font-size: 13px; font-weight: 600; color: var(--muted); }
+
+.hl-buttons { flex: none; display: flex; gap: 10px; }
+
+.hl-buttons .btn { flex: 1; min-height: 58px; border-radius: var(--r-md); font-size: 16px; }
+
+.hl-buttons .btn.is-right { background: var(--green); border-color: var(--green); color: var(--on-green); opacity: 1; }
+.hl-buttons .btn.is-wrong { background: var(--sunk); border-color: var(--line-2); color: var(--muted); opacity: 1; }
+
+.hl-than { flex: none; text-align: center; font-size: 15px; font-weight: 600; color: var(--muted); }
+
+/* ── V. The Word ─────────────────────────────────────────────── */
+
+.wg-grid { flex: none; display: flex; flex-direction: column; gap: 6px; }
+.wg-row { display: flex; gap: 6px; }
+
+.wg-cell {
+  flex: 1;
+  min-width: 0;
+  height: clamp(42px, 7.2vh, 52px);
+  display: grid;
+  place-items: center;
+  border-radius: var(--r-xs);
+  corner-shape: squircle;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  font-family: var(--serif);
+  font-size: 23px;
+  font-weight: 600;
+}
+
+.wg-cell.is-typing.has-letter { border-color: var(--line-2); }
+.wg-cell.is-absent { background: var(--sunk); border-color: var(--line); color: var(--muted); }
+.wg-cell.is-present { background: var(--amber); border-color: var(--amber); color: var(--on-amber); }
+.wg-cell.is-correct { background: var(--green); border-color: var(--green); color: var(--on-green); }
+
+/* The one thing the grid has to say out loud: a guess that isn't a
+   word. It sits in the gap instead of shaking the row. */
+.wg-notice {
+  flex: none;
+  align-self: center;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: var(--sunk);
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.wg-keys {
+  margin-top: auto;
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.wg-keyrow { display: flex; gap: 6px; }
+.wg-keyrow:nth-child(2) { padding: 0 10px; }
+
+.wg-key {
+  flex: 1;
+  min-width: 0;
+  min-height: clamp(46px, 6.6vh, 52px);
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border-radius: var(--r-xs);
+  corner-shape: squircle;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.wg-key-wide { flex: 1.6; font-size: 11px; letter-spacing: 0.04em; text-transform: uppercase; }
+
+.wg-key.is-absent { background: var(--sunk); border-color: var(--line); color: var(--muted); }
+.wg-key.is-present { background: var(--amber); border-color: var(--amber); color: var(--on-amber); }
+.wg-key.is-correct { background: var(--green); border-color: var(--green); color: var(--on-green); }
+
+/* ── result ──────────────────────────────────────────────────── */
+
+.result {
+  flex: none;
+  margin-top: auto;
+  padding: 18px;
+  border-radius: var(--r-lg);
+  corner-shape: squircle;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  text-align: center;
+}
+
+.result-answer {
+  font-family: var(--serif);
+  font-size: 26px;
+  font-weight: 600;
+  line-height: 1.15;
+}
+
+.result.is-won .result-answer { color: var(--green-ink); }
+
+.marks { display: flex; flex-direction: column; align-items: center; gap: 4px; margin: 14px 0; }
+.marks-row { display: flex; gap: 4px; }
+
+.mark {
+  width: 15px;
+  height: 15px;
+  border-radius: 4px;
+  corner-shape: squircle;
+  background: var(--sunk);
+  border: 1px solid var(--line);
+}
+
+.mark.is-d2 { background: var(--navy); border-color: var(--navy); }
+.mark.is-d3 { background: var(--amber); border-color: var(--amber); }
+.mark.is-d4 { background: var(--green); border-color: var(--green); }
+
+.record { display: flex; justify-content: center; gap: 28px; margin-bottom: 14px; }
+.record dt { font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.record dd {
+  font-family: var(--serif);
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+
+.result-actions { display: flex; gap: 10px; }
+.result-actions .btn { flex: 1; padding: 0 12px; }
+
+/* ── short screens ───────────────────────────────────────────── */
+
+@media (max-height: 700px) {
+  :root { --pad: 16px; --gap: 9px; --bar: 84px; }
+  .plate { height: clamp(140px, 24vh, 200px); }
+  .quote { font-size: 16px; }
+  .result { padding: 14px; }
+  .record dd { font-size: 24px; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .index-item, .tile, .btn, .wg-key, .wg-cell, .guess {
+    transition: background-color 120ms ease, border-color 120ms ease, color 120ms ease;
+  }
+}
