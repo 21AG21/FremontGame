@@ -68,7 +68,7 @@ export const GROUPS = [
   { d: 1, label: 'Words before “Springs”', items: ['Warm', 'Palm', 'Colorado', 'Hot'] },
   { d: 1, label: 'Words before “Creek”', items: ['Alameda', 'Battle', 'Walnut', 'Cripple'] },
   { d: 1, label: 'Found in a shellmound', items: ['Oyster', 'Mussel', 'Abalone', 'Charcoal'] },
-  { d: 1, label: 'A Victorian farmhouse has one', items: ['Cupola', 'Parlour', 'Veranda', 'Widow’s walk'] },
+  { d: 1, label: 'A Victorian farmhouse has one', items: ['Cupola', 'Parlor', 'Veranda', 'Gable'] },
   { d: 1, label: 'Things named for John C. Frémont', items: ['A city', 'A peak', 'A county', 'A street'] },
   { d: 1, label: 'What the plant needed by the trainload', items: ['Steel', 'Glass', 'Paint', 'Rubber'] },
 
@@ -119,7 +119,7 @@ export const GROUPS = [
   { d: 3, label: 'A California county and a Fremont street', items: ['Alameda', 'Mono', 'Napa', 'Sonoma'] },
   { d: 3, label: 'Words for the edge of the bay', items: ['Shore', 'Strand', 'Bank', 'Margin'] },
   { d: 3, label: 'A quarry, then a lake, now a park', items: ['Horseshoe', 'Rainbow', 'Willow', 'Lago Los Osos'] },
-  { d: 3, label: 'An orchard fruit and a paint colour', items: ['Apricot', 'Cherry', 'Plum', 'Peach'] },
+  { d: 3, label: 'An orchard fruit and a paint color', items: ['Apricot', 'Cherry', 'Plum', 'Peach'] },
   { d: 3, label: 'Things a “tramp” can be', items: ['A vagrant', 'A cargo ship', 'A long walk', 'A Chaplin role'] },
   { d: 3, label: 'Both a saint and a bay-area city', items: ['Clara', 'Rafael', 'Mateo', 'Bruno'] },
   { d: 3, label: 'Anagrams of one another', items: ['Slate', 'Least', 'Steal', 'Tales'] },
@@ -153,19 +153,38 @@ const dealItems = (g, day, d) => {
   return g.items.filter((_, i) => i !== drop)
 }
 
-// One group at each difficulty, picked by day number. Two groups that
-// share a tile can never sit on the same board — that is what keeps
-// "Mission San Jose is a school AND a township" a trap rather than a
-// bug — so a collision walks to the next candidate at that difficulty.
-// The check is on the dealt three, not on all four, or a clash that
-// never reaches the board would still cost us a category.
+// Largest number coprime with 25 that isn't 1 — any coprime step walks
+// the whole tier before repeating, this one just doesn't walk it in an
+// order you'd notice.
+const STEP = 7
+
+// Which group a tier serves on a given day.
+//
+// Picking at random from 25 looks fine day to day and is wrong across a
+// week: with 25 candidates a repeat inside four days is likely, not
+// rare, and "Precede Ford" showing up twice running reads as laziness
+// even when the tiles differ. So each tier walks a fixed cycle instead,
+// every group exactly once per 25 days.
+//
+// The cycle is deliberately NOT re-offset each lap. Shifting it puts a
+// group at the end of one lap and the start of the next, which is the
+// two-day repeat this was meant to kill. Boards stay varied anyway: the
+// four tiers walk independently, and which item sits out rotates daily.
+const cycleSlot = (day, d, n) => ((day % n) * STEP + d * 5) % n
+
+// One group at each difficulty. Two groups that share a tile can never
+// sit on the same board — that is what keeps "Mission San Jose is a
+// school AND a township" a trap rather than a bug — so a collision walks
+// forward in the cycle. The check is on the dealt three, not on all
+// four, or a clash that never reaches the board would still cost us a
+// category.
 export function groupsForDay(day) {
   const chosen = []
   const taken = new Set()
 
   for (let d = 0; d < 4; d++) {
     const pool = byDifficulty[d]
-    const start = mix(day * 7919 + d * 104729) % pool.length
+    const start = cycleSlot(day, d, pool.length)
 
     for (let step = 0; step < pool.length; step++) {
       const g = pool[(start + step) % pool.length]

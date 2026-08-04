@@ -737,6 +737,29 @@ main {
   font-weight: 600;
 }
 
+/* Colour alone is not the feedback channel. Wordle's green and amber sit
+   close in luminance, and a first-time player who cannot separate them
+   reasonably concludes the game is broken rather than that they are
+   colour-blind. Every scored cell carries a mark as well as a fill. */
+.wg-cell { position: relative; }
+
+.wg-cell.is-correct::after,
+.wg-cell.is-present::after,
+.wg-cell.is-absent::after {
+  position: absolute;
+  top: 2px;
+  right: 4px;
+  font-family: var(--sans);
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1;
+  opacity: 0.8;
+}
+
+.wg-cell.is-correct::after { content: '✓'; }
+.wg-cell.is-present::after { content: '~'; }
+.wg-cell.is-absent::after { content: '×'; }
+
 .wg-cell.is-typing.has-letter { border-color: var(--line-2); }
 .wg-cell.is-absent { background: var(--sunk); border-color: var(--line); color: var(--muted); }
 .wg-cell.is-present { background: var(--amber); border-color: var(--amber); color: var(--on-amber); }
