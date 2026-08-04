@@ -189,8 +189,12 @@ export function groupsForDay(day) {
     for (let step = 0; step < pool.length; step++) {
       const g = pool[(start + step) % pool.length]
       const items = dealItems(g, day, d)
-      if (items.some((i) => taken.has(i))) continue
-      items.forEach((i) => taken.add(i))
+      // Reserve all FOUR, not the three dealt. The dropped item is still
+      // a member of this category, so if it turns up on the board inside
+      // another group the player can group three tiles that this board's
+      // own printed label says belong together — and be marked wrong.
+      if (g.items.some((i) => taken.has(i))) continue
+      g.items.forEach((i) => taken.add(i))
       chosen.push({ label: g.label, difficulty: d, items })
       break
     }

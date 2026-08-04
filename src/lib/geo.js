@@ -38,10 +38,15 @@ export function compassFrom(degrees) {
   return { label: COMPASS[Math.round(degrees / 45) % 8] }
 }
 
+// Deliberately coarse. Reporting to 100 feet made one guess from the
+// middle of town emit 95 distinct strings across 113 places, which
+// pinned most answers outright — the puzzle was solvable in two guesses
+// with the drawing switched off, which makes the drawing decorative.
+// Quarter-mile bands leave the picture doing the work.
 export function formatDistance(miles) {
-  if (miles < 0.1) return 'right there'
-  if (miles < 1) return `${Math.round(miles * 5280 / 100) * 100} ft`
-  return `${miles.toFixed(1)} mi`
+  if (miles < 0.2) return 'right about there'
+  if (miles < 1) return 'under a mile'
+  return `${(Math.round(miles * 4) / 4).toFixed(2).replace(/\.?0+$/, '')} mi`
 }
 
 // How "warm" a guess is, 0 (cold) to 1 (basically on top of it).

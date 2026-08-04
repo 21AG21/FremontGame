@@ -174,7 +174,16 @@ function optionsFor(scene, day) {
   tryFill(4) // a scene near 1797 or 2017 has less room; take what fits
   tryFill(1)
 
-  return picked.sort((a, b) => a - b)
+  // Deliberately NOT sorted. Sorted years turn the earlier/later hint
+  // into a binary search: pick the middle button and a player who knows
+  // nothing at all wins 100% of the time, without looking at the
+  // drawing. Shuffled, the hint still helps but you have to read the
+  // picture to use it.
+  const order = mix(day * 7717 + scene.year)
+  return picked
+    .map((y, i) => ({ y, k: mix(order + i * 2654435761) }))
+    .sort((a, b) => a.k - b.k)
+    .map((o) => o.y)
 }
 
 // Fourteen scenes hashed at random repeated back-to-back 39 times in 400
