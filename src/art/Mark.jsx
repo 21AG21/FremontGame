@@ -26,6 +26,29 @@ export function Ridge() {
   )
 }
 
+// The theme control. Shows where pressing it takes you, not where you
+// are — a sun on the dark theme, a moon on the light one.
+export function ThemeIcon({ dark }) {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      {dark ? (
+        <g fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round">
+          <circle cx="12" cy="12" r="4" />
+          <path d="M12 2.6v2.2M12 19.2v2.2M2.6 12h2.2M19.2 12h2.2M5.4 5.4l1.6 1.6M17 17l1.6 1.6M18.6 5.4L17 7M7 17l-1.6 1.6" />
+        </g>
+      ) : (
+        <path
+          d="M20 14.2A8.2 8.2 0 0 1 9.8 4 8.4 8.4 0 1 0 20 14.2z"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.9"
+          strokeLinejoin="round"
+        />
+      )}
+    </svg>
+  )
+}
+
 // Section icons, 18px, drawn in currentColor so the active item can
 // flip the whole thing to white against navy without a second asset.
 const line = {

@@ -52,8 +52,17 @@ interface is coloured:
 | green | `#33632E` | `#33632E` | correct |
 | amber | `#C8971B` | `#D9A72A` | right letter, wrong place |
 
-Light and dark are the same layout with a different set of nine values, all
-declared at the top of `styles.css`. Two of them are not mirror images:
+Light and dark are the same layout with a different set of values, all
+declared at the top of `styles.css`.
+
+With nothing saved, the CSS media query governs and the app follows the
+system live. The toggle in the header writes `[data-theme]` on `<html>`,
+which outranks the media query, and remembers the choice — so the dark
+block is written twice on purpose. An inline script in `index.html`
+applies a saved theme before first paint so it doesn't flash. See
+`src/lib/theme.js`.
+
+Two values are not mirror images:
 
 *The engravings keep a light plate in both modes.* `--art-ink` cools from
 `#043764` to `#08203A` on dark, but `--art-paper` stays white — inverting a
@@ -78,14 +87,23 @@ marks are `<span>`s; the characters appear only in the clipboard text.
 Swap the engravings for real photographs and nothing else changes: the zoom
 is a CSS `transform-origin`, and it does not care what it is scaling.
 
-Two deliberate departures from the mock, both because it only ever showed
-one state:
+Every measurement in `styles.css` is the doc's, not a rounded-off version
+of it — 236px plates, 46px word cells, 52px keys, `minmax(64px, 1fr)`
+group tiles, keyboard rows inset 0 / 10 / 22px.
 
-- **Groups is four columns, not three.** The board holds 16, then 12, 8, 4
-  tiles and only four divides all of them; three orphans a tile on the
-  opening board, which the mock (drawn at 12 tiles) never showed.
-- **The Word's keyboard has Enter and ⌫.** The mock draws 26 letters and
-  no action keys, which is unplayable on a phone.
+Two things exist that the doc does not draw:
+
+- **A fourth keyboard row, with Delete and Enter.** The doc draws 26
+  letters and no action keys, which cannot be played on a phone. It is a
+  separate row so the three lettered rows still match the drawing exactly.
+- **The theme toggle** in the top right, sized to the section-bar icons.
+
+And one known consequence of matching exactly: **Groups opens with an
+orphan tile.** The doc specifies three columns, and it was drawn at 12
+tiles, where three divides cleanly. The real board opens at 16, so the
+last row holds one. Change `repeat(3, …)` to `repeat(4, …)` in `.conn-grid`
+if you would rather have the even board than the drawing — four divides
+16, 12, 8 and 4.
 
 ## Phone
 

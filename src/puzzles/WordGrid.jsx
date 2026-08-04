@@ -130,13 +130,11 @@ export default function WordGrid() {
         />
       ) : (
         <div className="wg-keys">
+          {/* Three lettered rows, exactly as drawn: ten, nine inset, seven
+              inset further. The action keys go on a fourth row of their
+              own rather than squeezing these. */}
           {ROWS.map((r, i) => (
             <div key={i} className="wg-keyrow">
-              {i === 2 && (
-                <button className="wg-key wg-key-wide" onClick={() => press('ENTER')}>
-                  Enter
-                </button>
-              )}
               {r.split('').map((k) => (
                 <button
                   key={k}
@@ -146,13 +144,16 @@ export default function WordGrid() {
                   {k}
                 </button>
               ))}
-              {i === 2 && (
-                <button className="wg-key wg-key-wide" aria-label="Delete" onClick={() => press('BACK')}>
-                  ⌫
-                </button>
-              )}
             </div>
           ))}
+          <div className="wg-keyrow wg-keyrow-actions">
+            <button className="wg-key" aria-label="Delete" onClick={() => press('BACK')}>
+              Delete
+            </button>
+            <button className="wg-key" onClick={() => press('ENTER')}>
+              Enter
+            </button>
+          </div>
         </div>
       )}
     </div>

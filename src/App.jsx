@@ -2,7 +2,8 @@ import { useState } from 'react'
 import { TOWN } from './data/town.js'
 import { PUZZLE_TYPES, DAY_KEY } from './data/puzzles.js'
 import { getRecord } from './lib/storage.js'
-import { Ridge, ICONS } from './art/Mark.jsx'
+import { readTheme, applyTheme } from './lib/theme.js'
+import { Ridge, ICONS, ThemeIcon } from './art/Mark.jsx'
 import Zoom from './puzzles/Zoom.jsx'
 import Connections from './puzzles/Connections.jsx'
 import ThenNow from './puzzles/ThenNow.jsx'
@@ -19,8 +20,15 @@ const VIEWS = {
 
 export default function App() {
   const [active, setActive] = useState('zoom')
+  const [theme, setTheme] = useState(readTheme)
   const View = VIEWS[active]
   const type = PUZZLE_TYPES.find((t) => t.id === active)
+
+  const flipTheme = () => {
+    const next = theme === 'dark' ? 'light' : 'dark'
+    setTheme(next)
+    applyTheme(next)
+  }
 
   return (
     <>
@@ -31,6 +39,13 @@ export default function App() {
           <h1 className="flag">{TOWN.name}</h1>
           <span className="lockup-rule" aria-hidden="true" />
           <span className="prompt">{type.prompt}</span>
+          <button
+            className="theme"
+            onClick={flipTheme}
+            aria-label={theme === 'dark' ? 'Switch to the light theme' : 'Switch to the dark theme'}
+          >
+            <ThemeIcon dark={theme === 'dark'} />
+          </button>
         </header>
 
         <main>
