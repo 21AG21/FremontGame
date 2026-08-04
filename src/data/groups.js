@@ -139,10 +139,26 @@ const mix = (n) => {
 
 const byDifficulty = [0, 1, 2, 3].map((d) => GROUPS.filter((g) => g.d === d))
 
+// Groups hold four items but a board deals three of them, which is what
+// makes the board twelve tiles — four clean rows of three, no orphan
+// hanging off the bottom of the doc's three-column grid.
+//
+// The fourth item is not wasted: which one sits out rotates by day, so
+// the same category plays differently the next time it comes round, and
+// the pool carries more content than the board can show.
+export const ITEMS_PER_GROUP = 3
+
+const dealItems = (g, day, d) => {
+  const drop = mix(day * 31337 + d * 7717) % g.items.length
+  return g.items.filter((_, i) => i !== drop)
+}
+
 // One group at each difficulty, picked by day number. Two groups that
 // share a tile can never sit on the same board — that is what keeps
 // "Mission San Jose is a school AND a township" a trap rather than a
 // bug — so a collision walks to the next candidate at that difficulty.
+// The check is on the dealt three, not on all four, or a clash that
+// never reaches the board would still cost us a category.
 export function groupsForDay(day) {
   const chosen = []
   const taken = new Set()
@@ -153,9 +169,10 @@ export function groupsForDay(day) {
 
     for (let step = 0; step < pool.length; step++) {
       const g = pool[(start + step) % pool.length]
-      if (g.items.some((i) => taken.has(i))) continue
-      g.items.forEach((i) => taken.add(i))
-      chosen.push({ label: g.label, difficulty: d, items: g.items })
+      const items = dealItems(g, day, d)
+      if (items.some((i) => taken.has(i))) continue
+      items.forEach((i) => taken.add(i))
+      chosen.push({ label: g.label, difficulty: d, items })
       break
     }
   }

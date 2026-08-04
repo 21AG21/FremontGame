@@ -1,5 +1,6 @@
 import { useState, useMemo } from 'react'
 import { connectionsPuzzle as P, DAY_KEY } from '../data/puzzles.js'
+import { ITEMS_PER_GROUP as PER } from '../data/groups.js'
 import { saveResult, getRecord } from '../lib/storage.js'
 import Result from '../components/Result.jsx'
 
@@ -36,7 +37,7 @@ export default function Connections() {
     if (done) return
     setRejected([])
     setSelected((s) =>
-      s.includes(item) ? s.filter((x) => x !== item) : s.length < 4 ? [...s, item] : s
+      s.includes(item) ? s.filter((x) => x !== item) : s.length < PER ? [...s, item] : s
     )
   }
 
@@ -46,7 +47,7 @@ export default function Connections() {
   }
 
   const submit = () => {
-    if (selected.length !== 4) return
+    if (selected.length !== PER) return
 
     const row = selected.map((i) => DIFFICULTY_SQUARE[groupOf(i).difficulty]).join('')
     const nextRows = [...rows, row]
@@ -127,7 +128,7 @@ export default function Connections() {
               <span key={i} className={'dot' + (i < mistakes ? ' is-spent' : '')} />
             ))}
           </div>
-          <button className="btn btn-primary" disabled={selected.length !== 4} onClick={submit}>
+          <button className="btn btn-primary" disabled={selected.length !== PER} onClick={submit}>
             Submit
           </button>
         </div>
