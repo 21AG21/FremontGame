@@ -63,7 +63,11 @@ export default function HigherLower() {
 
   return (
     <div className="puzzle">
-      <div className="hl-progress">
+      <div
+        className="hl-progress"
+        role="img"
+        aria-label={`Round ${round + 1} of ${P.rounds.length}. ${results.filter(Boolean).length} right so far.`}
+      >
         {P.rounds.map((_, i) => (
           <span
             key={i}

@@ -83,7 +83,7 @@ export default function Connections() {
   return (
     <div className="puzzle">
       {solved.length > 0 && (
-        <div className="bands">
+        <div className="bands" aria-live="polite">
           {solved.map((g) => (
             <div key={g.label} className="band">
               <span className="band-label">{g.label}</span>

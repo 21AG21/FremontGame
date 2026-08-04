@@ -54,7 +54,14 @@ export default function Zoom() {
             transformOrigin: `${P.focus.x * 100}% ${P.focus.y * 100}%`,
           }}
         >
-          <Engraving place={answer} />
+          <Engraving
+            place={answer}
+            alt={
+              done
+                ? `A line engraving of ${answer.name}.`
+                : `A line engraving of somewhere in Fremont, magnified ${scale.toFixed(1)} times. Name the place.`
+            }
+          />
         </div>
         {!done && <span className="tag tag-right">{scale.toFixed(1)}×</span>}
       </div>
@@ -75,7 +82,7 @@ export default function Zoom() {
       ) : (
         <div className="guesses">
           <span className="caption">How far off you were</span>
-          <ul className="guess-list">
+          <ul className="guess-list" aria-live="polite">
             {guesses.map((g, i) => {
               const c = compassFrom(g.bearing)
               return (

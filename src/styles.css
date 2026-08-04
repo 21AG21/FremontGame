@@ -21,7 +21,10 @@
 
   --bg: #f1f5f8;
   --ink: #0c2033;
-  --muted: #5b7794;
+  /* 4.56:1 on the page background, 5.00:1 on a panel. The design doc's
+     #5B7794 measured 4.25:1 on the background, which is a fail for the
+     captions that sit directly on it. */
+  --muted: #57728e;
 
   --panel: #ffffff;
   --line: rgba(4, 55, 100, 0.12);
@@ -39,7 +42,9 @@
   --on-green: #ffffff;
 
   --ridge: #043764;
-  --scrim: rgba(4, 55, 100, 0.45);
+  /* White on the doc's 0.45 scrim measured 2.55:1 over a white plate.
+     0.78 puts it at 6.33:1 and still reads as glass. */
+  --scrim: rgba(4, 55, 100, 0.78);
 
   /* The engravings are ink on paper in both themes — inverting a line
      drawing turns it into a photographic negative, which reads as a
@@ -75,7 +80,7 @@
   --amber: #d9a72a;
 
   --ridge: #9fd6ff;
-  --scrim: rgba(4, 25, 45, 0.4);
+  --scrim: rgba(4, 25, 45, 0.72);
 
   --art-ink: #08203a;
 
@@ -104,7 +109,7 @@
     --amber: #d9a72a;
 
     --ridge: #9fd6ff;
-    --scrim: rgba(4, 25, 45, 0.4);
+    --scrim: rgba(4, 25, 45, 0.72);
 
     --art-ink: #08203a;
 
@@ -240,16 +245,30 @@ ul { list-style: none; }
   flex: none;
   margin-left: auto;
   align-self: center;
-  width: 32px;
-  height: 32px;
+  /* 44px is the minimum target, even though the visible pill is 32 —
+     the padding does the work so the header doesn't grow. */
+  width: 44px;
+  height: 44px;
   display: grid;
   place-items: center;
   padding: 0;
+  border: 0;
+  background: none;
+  color: var(--muted);
+}
+
+.theme::before {
+  content: '';
+  position: absolute;
+  width: 32px;
+  height: 32px;
   border: 1px solid var(--line);
   border-radius: 999px;
   background: var(--panel);
-  color: var(--muted);
 }
+
+.theme { position: relative; }
+.theme svg { position: relative; }
 
 main {
   position: relative;
@@ -917,22 +936,32 @@ main {
   flex: none;
   margin-left: auto;
   align-self: center;
-  width: 32px;
-  height: 32px;
+  position: relative;
+  width: 44px;
+  height: 44px;
   display: grid;
   place-items: center;
   padding: 0;
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  background: var(--panel);
+  border: 0;
+  background: none;
   color: var(--muted);
   font-size: 15px;
   font-weight: 700;
   line-height: 1;
 }
 
+.howto-open::before {
+  content: '';
+  position: absolute;
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--panel);
+}
+
 /* the theme button already claimed the auto margin */
-.howto-open + .theme { margin-left: 6px; }
+.howto-open + .theme { margin-left: 0; }
 
 .howto-scrim {
   position: fixed;
@@ -986,3 +1015,77 @@ main {
 }
 
 .howto .btn { width: 100%; }
+
+/* ── privacy / terms / accessibility ─────────────────────────── */
+
+.howto-legal { margin-top: 14px; text-align: center; }
+
+.linkish {
+  padding: 6px 4px;
+  border: 0;
+  background: none;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.legal { max-width: 520px; max-height: 82dvh; display: flex; flex-direction: column; }
+
+.legal-tabs {
+  flex: none;
+  display: flex;
+  gap: 4px;
+  margin-bottom: 14px;
+  padding: 4px;
+  border-radius: var(--r-sm);
+  corner-shape: squircle;
+  background: var(--sunk);
+}
+
+.legal-tab {
+  flex: 1;
+  min-height: 44px;
+  padding: 0 8px;
+  border: 0;
+  border-radius: var(--r-xs);
+  corner-shape: squircle;
+  background: transparent;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.legal-tab.is-active { background: var(--navy); color: var(--on-navy); }
+
+.legal-body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  margin-bottom: 14px;
+  -webkit-overflow-scrolling: touch;
+}
+
+.legal-heading {
+  margin: 16px 0 6px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.legal-para { margin-bottom: 8px; font-size: 14px; line-height: 1.5; }
+
+.legal-note {
+  margin-top: 20px;
+  padding: 12px 14px;
+  border-radius: var(--r-sm);
+  corner-shape: squircle;
+  background: var(--sunk);
+  border: 1px solid var(--line);
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--muted);
+}

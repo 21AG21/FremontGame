@@ -64,10 +64,10 @@ export default function ThenNow() {
         onTouchMove={(e) => moveTo(e.touches[0].clientX)}
       >
         <div className="wipe-layer">
-          <Engraving place={place} motifs={P.scene.now} variant="-now" />
+          <Engraving place={place} motifs={P.scene.now} variant="-now" alt={`${P.place}, today.`} />
         </div>
         <div className="wipe-layer wipe-top" style={{ clipPath: `inset(0 ${100 - wipe}% 0 0)` }}>
-          <Engraving place={place} motifs={P.scene.then} variant="-then" />
+          <Engraving place={place} motifs={P.scene.then} variant="-then" alt={`${P.place}, in the earlier view.`} />
         </div>
 
         <div className="wipe-seam" style={{ left: `${wipe}%` }} />

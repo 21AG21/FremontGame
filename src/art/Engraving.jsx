@@ -23,7 +23,7 @@ const hashId = (id) => {
 // `motifs` overrides what the place is made of, which is how Then & Now
 // draws the same location in two eras: same seed, same layout, different
 // parts. `variant` keeps the two plates' pattern ids apart.
-export default function Engraving({ place, motifs: override, variant = '' }) {
+export default function Engraving({ place, motifs: override, variant = '', alt }) {
   const motifs = override || place.motifs || ['ridge', 'shops', 'road']
   const p = `e-${place.id}${variant}`
 
@@ -39,7 +39,13 @@ export default function Engraving({ place, motifs: override, variant = '' }) {
   const r = seededRandom(hashId(place.id))
 
   return (
-    <svg viewBox="0 0 800 600" className="scene" preserveAspectRatio="xMidYMid slice">
+    <svg
+      viewBox="0 0 800 600"
+      className="scene"
+      preserveAspectRatio="xMidYMid slice"
+      role={alt ? 'img' : 'presentation'}
+      aria-label={alt || undefined}
+    >
       <Plates p={p} />
       <Sky p={p} />
       {ordered.map(({ name, part }) => (

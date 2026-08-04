@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import Legal from './Legal.jsx'
 
 // How to play.
 //
@@ -72,6 +73,7 @@ function read() {
 export default function HowTo({ game }) {
   const rules = RULES[game]
   const [open, setOpen] = useState(false)
+  const [legal, setLegal] = useState(false)
 
   // First visit to this game opens it unasked. After that it is on the
   // button, where someone who wants it can find it.
@@ -114,9 +116,17 @@ export default function HowTo({ game }) {
             <button className="btn btn-primary" onClick={close} autoFocus>
               Play
             </button>
+
+            <p className="howto-legal">
+              <button className="linkish" onClick={() => setLegal(true)}>
+                Privacy, terms and accessibility
+              </button>
+            </p>
           </div>
         </div>
       )}
+
+      <Legal open={legal} onClose={() => setLegal(false)} />
     </>
   )
 }
