@@ -59,8 +59,8 @@ export default function Result({ won, title, subtitle, squares, stats, onReplay 
       )}
 
       <div className="result-actions">
-        <button className="btn btn-primary" onClick={copy}>{copied ? 'Copied' : 'Copy'}</button>
-        <button className="btn" onClick={onReplay}>Again</button>
+        <button className="btn btn-primary" onClick={copy}>{copied ? 'Copied' : 'Copy result'}</button>
+        <button className="btn" onClick={onReplay}>Play again</button>
       </div>
     </div>
   )

@@ -1,16 +1,19 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect, useMemo } from 'react'
 import Engraving from '../art/Engraving.jsx'
 import { placeById } from '../data/town.js'
 import { thenNowPuzzle as P, DAY_KEY, MARK } from '../data/puzzles.js'
-import { saveResult, getRecord } from '../lib/storage.js'
+import { saveResult, getRecord, loadState, saveState } from '../lib/storage.js'
 import Result from '../components/Result.jsx'
 
 export default function ThenNow() {
   const place = placeById(P.scene.placeId)
   const [wipe, setWipe] = useState(50)
-  const [guesses, setGuesses] = useState([])
-  const [done, setDone] = useState(null)
+  const saved = useMemo(() => loadState('thennow', DAY_KEY), [])
+  const [guesses, setGuesses] = useState(saved?.guesses ?? [])
+  const [done, setDone] = useState(saved?.done ?? null)
   const [stats, setStats] = useState(() => getRecord('thennow'))
+
+  useEffect(() => saveState('thennow', DAY_KEY, { guesses, done }), [guesses, done])
   const dragging = useRef(false)
   const frame = useRef(null)
 
@@ -45,7 +48,7 @@ export default function ThenNow() {
         ref={frame}
         role="slider"
         tabIndex={0}
-        aria-label="Wipe between the old photograph and today"
+        aria-label="Wipe between the earlier view and today"
         aria-valuemin={0}
         aria-valuemax={100}
         aria-valuenow={Math.round(wipe)}
@@ -92,7 +95,7 @@ export default function ThenNow() {
         />
       ) : (
         <>
-          <span className="caption">Pick the year this was taken</span>
+          <span className="caption">Pick the year of the earlier view</span>
           {/* the row stays after the round ends — the years you tried are
               the record of how you got there */}
           <div className="year-grid">

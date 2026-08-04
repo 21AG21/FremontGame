@@ -1,9 +1,9 @@
-import { useState } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import Engraving from '../art/Engraving.jsx'
 import { placeById } from '../data/town.js'
 import { zoomPuzzle as P, DAY_KEY, MARK } from '../data/puzzles.js'
 import { distanceMiles, bearingDegrees, compassFrom, formatDistance, warmth, warmthWord } from '../lib/geo.js'
-import { saveResult, getRecord } from '../lib/storage.js'
+import { saveResult, getRecord, loadState, saveState } from '../lib/storage.js'
 import PlaceSearch from '../components/PlaceSearch.jsx'
 import Result from '../components/Result.jsx'
 
@@ -17,9 +17,14 @@ const squareFor = (miles) => {
 export default function Zoom() {
   const answer = placeById(P.answerId)
 
-  const [guesses, setGuesses] = useState([])
-  const [done, setDone] = useState(null) // null | 'won' | 'lost'
+  // Today's round is restored, so switching tabs to peek at another
+  // game — or reloading — does not wipe five guesses.
+  const saved = useMemo(() => loadState('zoom', DAY_KEY), [])
+  const [guesses, setGuesses] = useState(saved?.guesses ?? [])
+  const [done, setDone] = useState(saved?.done ?? null) // null | 'won' | 'lost'
   const [stats, setStats] = useState(() => getRecord('zoom'))
+
+  useEffect(() => saveState('zoom', DAY_KEY, { guesses, done }), [guesses, done])
 
   const level = P.levels[Math.min(guesses.length, P.levels.length - 1)]
   const scale = done ? 1 : level

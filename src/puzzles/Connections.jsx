@@ -1,7 +1,7 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import { connectionsPuzzle as P, DAY_KEY } from '../data/puzzles.js'
 import { ITEMS_PER_GROUP as PER } from '../data/groups.js'
-import { saveResult, getRecord } from '../lib/storage.js'
+import { saveResult, getRecord, loadState, saveState } from '../lib/storage.js'
 import Result from '../components/Result.jsx'
 
 // Easiest group to hardest — the share card has to say which group each
@@ -20,16 +20,22 @@ const shuffle = (arr) => {
 export default function Connections() {
   const allItems = useMemo(() => shuffle(P.groups.flatMap((g) => g.items)), [])
 
-  const [tiles, setTiles] = useState(allItems)
-  const [selected, setSelected] = useState([])
-  const [solved, setSolved] = useState([])
-  const [mistakes, setMistakes] = useState(0)
+  const saved = useMemo(() => loadState('connections', DAY_KEY), [])
+  const [tiles, setTiles] = useState(saved?.tiles ?? allItems)
+  const [selected, setSelected] = useState(saved?.selected ?? [])
+  const [solved, setSolved] = useState(saved?.solved ?? [])
+  const [mistakes, setMistakes] = useState(saved?.mistakes ?? 0)
   // the quad that just failed, held until the next pick — with no
   // animation, this is what tells you the guess was rejected
   const [rejected, setRejected] = useState([])
-  const [rows, setRows] = useState([]) // share-card rows, in guess order
-  const [done, setDone] = useState(null)
+  const [rows, setRows] = useState(saved?.rows ?? []) // share-card rows, in guess order
+  const [done, setDone] = useState(saved?.done ?? null)
   const [stats, setStats] = useState(() => getRecord('connections'))
+
+  useEffect(
+    () => saveState('connections', DAY_KEY, { tiles, selected, solved, mistakes, rows, done }),
+    [tiles, selected, solved, mistakes, rows, done]
+  )
 
   const groupOf = (item) => P.groups.find((g) => g.items.includes(item))
 

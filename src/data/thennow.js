@@ -7,7 +7,7 @@
 //  sourcing job. The engraving composer removes that: both sides are
 //  drawn from motifs, so a pair is two motif lists and a date.
 //
-//  Sixteen entries, not a hundred. Every year below is one I could
+//  Fourteen entries, not a hundred. Every year below is one I could
 //  stand behind — where I could not pin a date (when Lake Elizabeth
 //  was dedicated, when the California Nursery moved to Niles) the
 //  entry is not here. A wrong date in a history game is worse than a
@@ -42,7 +42,7 @@ export const SCENES = [
   {
     id: 'patterson-house',
     placeId: 'patterson-house',
-    caption: 'The Patterson house, new on the Ardenwood ranch',
+    caption: 'The Patterson house, new on the ranch',
     year: 1857,
     then: ['victorian', 'orchard', 'lawn'],
     now: ['victorian', 'windmill', 'orchard'],
@@ -80,14 +80,6 @@ export const SCENES = [
     now: ['bay', 'bridge', 'levee'],
   },
   {
-    id: 'new-dumbarton',
-    placeId: 'dumbarton',
-    caption: 'The high span that replaced the drawbridge',
-    year: 1982,
-    then: ['bay', 'trestle', 'levee'],
-    now: ['bay', 'bridge', 'levee'],
-  },
-  {
     id: 'incorporation',
     placeId: 'city-hall',
     caption: 'Five townships vote to become one city',
@@ -112,14 +104,6 @@ export const SCENES = [
     now: ['factory', 'stacks', 'lot'],
   },
   {
-    id: 'tesla',
-    placeId: 'tesla-factory',
-    caption: 'The plant changes hands again',
-    year: 2010,
-    then: ['factory', 'lot', 'poles'],
-    now: ['factory', 'stacks', 'lot'],
-  },
-  {
     id: 'bart-arrives',
     placeId: 'fremont-bart',
     caption: 'The first train reaches the end of the line',
@@ -130,7 +114,7 @@ export const SCENES = [
   {
     id: 'warm-springs-bart',
     placeId: 'warm-springs-bart',
-    caption: 'The line finally pushes south again',
+    caption: 'The line pushes south past the old end of the road',
     year: 2017,
     then: ['warehouse', 'road', 'poles'],
     now: ['guideway', 'train', 'lot'],
@@ -138,7 +122,7 @@ export const SCENES = [
   {
     id: 'ohlone-college',
     placeId: 'ohlone-college',
-    caption: 'A college on the hill above the mission',
+    caption: 'A college is founded above the mission',
     year: 1967,
     then: ['ridge', 'orchard', 'oaks'],
     now: ['ridge', 'civic', 'dome', 'oaks'],

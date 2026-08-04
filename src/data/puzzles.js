@@ -34,7 +34,7 @@ export const DAY_KEY = new Date().toISOString().slice(0, 10)
 export const PUZZLE_TYPES = [
   { id: 'zoom', name: 'Zoom', short: 'Zoom', prompt: 'Which place is this?' },
   { id: 'connections', name: 'Groups', short: 'Groups', prompt: 'Find the groups' },
-  { id: 'thennow', name: 'Then & Now', short: 'Then/Now', prompt: 'When was this taken?' },
+  { id: 'thennow', name: 'Then & Now', short: 'Then/Now', prompt: 'When was this?' },
   { id: 'higherlower', name: 'Higher or Lower', short: 'Higher?', prompt: 'Higher or lower?' },
   { id: 'wordgrid', name: 'The Word', short: 'Word', prompt: 'Guess the word' },
 ]

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import Legal from './Legal.jsx'
 
 // How to play.
@@ -9,10 +9,10 @@ import Legal from './Legal.jsx'
 // concluded the fifth was *broken* — five yellow squares with no legend
 // is not obviously feedback if you have never seen it before.
 //
-// It opens by itself the first time you meet a game and never again,
-// which is the only version of this that isn't nagging.
-
-const SEEN_KEY = 'fremont.seen'
+// It does NOT open by itself. Rules that greet you before the board
+// does are read with nothing to attach them to, and five modals in a
+// first session is a wall between the player and the game. The board
+// goes first; the ? is there the moment anyone wants it.
 
 const RULES = {
   zoom: {
@@ -45,29 +45,22 @@ const RULES = {
   higherlower: {
     title: 'Higher or Lower',
     lines: [
-      'Two Fremont things, measured the same way. One number is shown.',
+      'Two things, measured the same way, at least one of them local. One number is shown.',
       'Say whether the hidden one is higher or lower.',
-      'The shown side is always somewhere you can picture, so you can reason from it.',
+      'The side you can see is always something you can picture, so you have somewhere to reason from.',
       'Five rounds, four right to win.',
     ],
   },
   wordgrid: {
     title: 'The Word',
     lines: [
-      'Guess a five-letter word in six tries. It is usually a Fremont word.',
+      'Guess a five-letter word in six tries. Often a word from around here.',
       'After each guess every letter is marked: ✓ right letter, right place. ~ right letter, wrong place. × not in the word.',
       'The mark is on the tile as well as the colour, so you do not have to tell green from amber.',
+      'The same word for everybody in town, today only.',
       'Guesses have to be real words.',
     ],
   },
-}
-
-function read() {
-  try {
-    return JSON.parse(localStorage.getItem(SEEN_KEY) || '{}')
-  } catch {
-    return {}
-  }
 }
 
 export default function HowTo({ game }) {
@@ -75,20 +68,7 @@ export default function HowTo({ game }) {
   const [open, setOpen] = useState(false)
   const [legal, setLegal] = useState(false)
 
-  // First visit to this game opens it unasked. After that it is on the
-  // button, where someone who wants it can find it.
-  useEffect(() => {
-    if (!read()[game]) setOpen(true)
-  }, [game])
-
-  const close = () => {
-    setOpen(false)
-    try {
-      localStorage.setItem(SEEN_KEY, JSON.stringify({ ...read(), [game]: 1 }))
-    } catch {
-      /* the panel simply opens again next time */
-    }
-  }
+  const close = () => setOpen(false)
 
   if (!rules) return null
 
@@ -114,7 +94,7 @@ export default function HowTo({ game }) {
               ))}
             </ul>
             <button className="btn btn-primary" onClick={close} autoFocus>
-              Play
+              Got it
             </button>
 
             <p className="howto-legal">

@@ -1,14 +1,22 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef, useMemo } from 'react'
 import { higherLowerPuzzle as P, DAY_KEY, MARK } from '../data/puzzles.js'
-import { saveResult, getRecord } from '../lib/storage.js'
+import { saveResult, getRecord, loadState, saveState } from '../lib/storage.js'
 import Result from '../components/Result.jsx'
 
 export default function HigherLower() {
-  const [round, setRound] = useState(0)
-  const [results, setResults] = useState([])
+  const saved = useMemo(() => loadState('higherlower', DAY_KEY), [])
+  const [round, setRound] = useState(saved?.round ?? 0)
+  const [results, setResults] = useState(saved?.results ?? [])
   const [reveal, setReveal] = useState(null) // { choice, correct }
-  const [done, setDone] = useState(null)
+  const [done, setDone] = useState(saved?.done ?? null)
   const [stats, setStats] = useState(() => getRecord('higherlower'))
+  const timer = useRef(null)
+
+  useEffect(() => saveState('higherlower', DAY_KEY, { round, results, done }), [round, results, done])
+
+  // The reveal timer outlived the component, firing setState into a
+  // unmounted tree every time you switched tabs mid-round.
+  useEffect(() => () => clearTimeout(timer.current), [])
 
   const r = P.rounds[round]
 
@@ -18,7 +26,7 @@ export default function HigherLower() {
     const correct = (choice === 'higher') === isHigher
     setReveal({ choice, correct })
 
-    setTimeout(() => {
+    timer.current = setTimeout(() => {
       const next = [...results, correct]
       setResults(next)
       setReveal(null)

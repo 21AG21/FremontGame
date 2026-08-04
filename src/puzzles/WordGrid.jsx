@@ -1,7 +1,7 @@
-import { useState, useEffect, useCallback, useRef } from 'react'
+import { useState, useEffect, useCallback, useRef, useMemo } from 'react'
 import { wordPuzzle as P, DAY_KEY } from '../data/puzzles.js'
 import { isWord } from '../data/words.js'
-import { saveResult, getRecord } from '../lib/storage.js'
+import { saveResult, getRecord, loadState, saveState } from '../lib/storage.js'
 import Result from '../components/Result.jsx'
 
 const LEN = 5
@@ -26,11 +26,14 @@ function score(guess, answer) {
 const SQUARE = { correct: '█', present: '▓', absent: '░' }
 
 export default function WordGrid() {
-  const [rows, setRows] = useState([])
-  const [current, setCurrent] = useState('')
+  const saved = useMemo(() => loadState('wordgrid', DAY_KEY), [])
+  const [rows, setRows] = useState(saved?.rows ?? [])
+  const [current, setCurrent] = useState(saved?.current ?? '')
   const [notice, setNotice] = useState('')
-  const [done, setDone] = useState(null)
+  const [done, setDone] = useState(saved?.done ?? null)
   const [stats, setStats] = useState(() => getRecord('wordgrid'))
+
+  useEffect(() => saveState('wordgrid', DAY_KEY, { rows, current, done }), [rows, current, done])
   const noticeTimer = useRef(null)
 
   const say = useCallback((msg) => {

@@ -17,22 +17,23 @@ const UPDATED = 'August 2026'
 
 const PRIVACY = [
   ['What this site collects', [
-    'Nothing is sent anywhere. There is no server that stores anything about you: no account, no email address, no name, no login.',
-    'There are no analytics, no advertising, no trackers and no third-party scripts of any kind. No data is sold or shared, because none is collected.',
+    'This site has no accounts. It never asks for an email address, a name or a password, and there is nothing to log in to.',
+    'There are no analytics, no advertising, no trackers and no third-party scripts of any kind. Nothing about your play is transmitted anywhere, and nothing is sold or shared.',
+    'The one exception is the ordinary web server request needed to load the page, which is covered under Server logs below.',
   ]],
   ['What is stored on your device', [
     'Your puzzle results, streaks and theme choice are kept in your browser’s local storage, under keys beginning “fremont.”. That data never leaves your device and is not readable by this site’s operator.',
-    'These are not cookies. Nothing is transmitted with your requests, so there is no cross-site tracking and nothing to consent to under the ePrivacy rules — the storage is strictly necessary for the game to remember your own progress.',
+    'These are not cookies: nothing is attached to your requests, so nothing about you travels to a server and there is no cross-site tracking. We have not put a consent banner in front of it. Whether that is the right call under the ePrivacy rules is a legal question, and this document does not pretend to answer legal questions.',
     'Clearing your browser’s site data erases it. Doing so resets your streaks, which cannot then be recovered by anyone, including us.',
   ]],
   ['Server logs', [
     'Whoever hosts this site may keep ordinary web server logs, which typically include IP addresses, timestamps and requested URLs. That is standard hosting behaviour and outside this site’s code. Check your host’s own policy for how long they keep them.',
   ]],
   ['Children', [
-    'The site collects no personal information from anyone, of any age, so there is nothing to obtain parental consent for under COPPA.',
+    'The site asks no one for personal information, at any age. Server logs, described above, are kept by the host rather than by this site.',
   ]],
   ['Your rights', [
-    'Rights to access, correct, delete or port your personal data — under the GDPR, the CCPA/CPRA or anything similar — apply to data a business holds about you. This site holds none. The only data that exists is in your own browser, where you can inspect or delete it yourself at any time.',
+    'Your game data lives in your own browser, where you can inspect or delete it yourself at any time, without asking anyone. This site holds no database of players. If you want to know what your host retains in its request logs — IP addresses count as personal data under the GDPR — that is a question for whoever you host with.',
   ]],
   ['Changes', [
     `Last updated ${UPDATED}. If this ever changes to collect anything, that has to be written here before it starts.`,
@@ -53,7 +54,7 @@ const TERMS = [
     'To the fullest extent permitted by law, the operator is not liable for any damages arising from use of the site.',
   ]],
   ['Content', [
-    'Place names, historical facts and public data are not owned by anyone. The code and the drawings are the operator’s. Do not present the site as your own.',
+    'Facts, dates and place names are not copyrightable. The code and the drawings are the operator’s. Some tiles name real businesses — those names belong to their owners and appear here only to refer to them, which is nominative use and not a claim of any association. Do not present the site as your own.',
   ]],
   ['Acceptable use', [
     'Do not attempt to disrupt the site or use it to harm others. There are no accounts, so there is nothing to ban — but this is the line.',
@@ -70,7 +71,7 @@ const ACCESS = [
     'Every control is at least 44 by 44 pixels.',
     'Everything is reachable and operable by keyboard, with a visible focus ring in the site’s own colours. The Then & Now slider takes arrow keys, Home and End, and can also be positioned by tapping the picture rather than dragging it.',
     'The drawings carry text alternatives that describe them without giving away the answer.',
-    'Game state changes are announced to screen readers.',
+    'Guesses, solved groups and invalid words are announced to screen readers through live regions. Not every state change is covered yet.',
     'Animation is limited to colour fades, and those are switched off entirely when your system asks for reduced motion.',
     'The layout scales with the viewport and reflows without loss of content down to 320 pixels wide.',
   ]],
@@ -79,7 +80,7 @@ const ACCESS = [
     'Automated checks have been run against the code, but the site has not been tested by actual screen reader users. That testing is the thing most worth doing next.',
   ]],
   ['Telling us', [
-    'If something here is unusable for you, that is a bug and worth reporting. Contact details belong here — fill them in before launch.',
+    'If something here is unusable for you, that is a bug and we want to hear about it. Reports go to the address on the site’s contact page.',
   ]],
 ]
 
