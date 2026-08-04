@@ -5,8 +5,8 @@ import { TOWN } from '../data/town.js'
 //
 // These are drafts written to describe what this site actually does,
 // which is very little: no accounts, no analytics, no cookies, no
-// third-party anything, and one localStorage key holding your own
-// streaks. Most boilerplate policies describe tracking the site does
+// third-party anything, and three localStorage keys holding your own
+// streaks, today's board and your theme. Most boilerplate policies describe tracking the site does
 // not do, which is worse than nothing — it claims practices you would
 // then have to honour.
 //
@@ -22,7 +22,7 @@ const PRIVACY = [
     'The one exception is the ordinary web server request needed to load the page, which is covered under Server logs below.',
   ]],
   ['What is stored on your device', [
-    'Your puzzle results, streaks and theme choice are kept in your browser’s local storage, under keys beginning “fremont.”. That data never leaves your device and is not readable by this site’s operator.',
+    'Your puzzle results, streaks, the board you are part way through and your theme choice are kept in your browser’s local storage, under three keys beginning “fremont.”. That data never leaves your device and is not readable by this site’s operator.',
     'These are not cookies: nothing is attached to your requests, so nothing about you travels to a server and there is no cross-site tracking. We have not put a consent banner in front of it. Whether that is the right call under the ePrivacy rules is a legal question, and this document does not pretend to answer legal questions.',
     'Clearing your browser’s site data erases it. Doing so resets your streaks, which cannot then be recovered by anyone, including us.',
   ]],
@@ -66,21 +66,22 @@ const ACCESS = [
     'This site targets WCAG 2.1 Level AA. That is the standard US courts have generally treated as the benchmark for ADA Title III claims about websites, and the one referenced by California’s Unruh Act cases.',
   ]],
   ['What has been done', [
-    'All text and interface colours have been measured, not eyeballed, and meet the 4.5:1 minimum for body text and 3:1 for interface elements, in both the light and dark themes.',
+    'Colours are measured rather than eyeballed. Body text meets the 4.5:1 minimum throughout, in both themes. Most interface elements meet 3:1; a few thin dividers and inactive states do not, and are listed under Known gaps.',
     'The Word puzzle marks every scored tile with a symbol (✓, ~, ×) as well as a colour, so its feedback does not depend on telling green from amber.',
-    'Every control is at least 44 by 44 pixels.',
+    'Buttons, tabs and the section bar meet the 44-pixel minimum target size. The on-screen keyboard does not: at a 320-pixel screen width its keys are about 23 pixels wide, because ten of them have to share the row. They meet the spacing exception rather than the size rule.',
     'Everything is reachable and operable by keyboard, with a visible focus ring in the site’s own colours. The Then & Now slider takes arrow keys, Home and End, and can also be positioned by tapping the picture rather than dragging it.',
-    'The drawings carry text alternatives that describe them without giving away the answer.',
-    'Guesses, solved groups and invalid words are announced to screen readers through live regions. Not every state change is covered yet.',
+    'The drawings carry text alternatives. On four of the five games these name the subject; on Zoom the alternative deliberately withholds it, because naming it is the puzzle — which means a screen reader user is told a drawing is present but not what it shows.',
+    'Some state changes are announced through live regions. This is not complete and not reliable: several regions are created at the same moment as their first message, which many screen readers do not announce.',
     'Animation is limited to colour fades, and those are switched off entirely when your system asks for reduced motion.',
-    'The layout scales with the viewport and reflows without loss of content down to 320 pixels wide.',
+    'The layout scales with the viewport and scrolls rather than clipping, so enlarging text or forcing your own line spacing does not destroy content. It has been checked by calculation down to 320 by 568.',
   ]],
   ['Known gaps', [
-    'The Zoom puzzle is visual by nature. A screen reader user is told what kind of place is drawn, but the game cannot be fully played without sight, and there is currently no non-visual equivalent.',
-    'Automated checks have been run against the code, but the site has not been tested by actual screen reader users. That testing is the thing most worth doing next.',
+    'The Zoom puzzle is visual by nature and cannot be played without sight. There is no non-visual equivalent.',
+    'The Word grid conveys its result through colour, a symbol, and the tile text — but the symbol is drawn in CSS, which screen readers do not reliably expose. The autocomplete on Zoom is not marked up as a combobox. Neither dialog traps focus, handles Escape, or returns focus on close.',
+    'Contrast and structure have been checked by hand and by calculation. The site has NOT been tested by a screen reader user, and no automated accessibility test suite runs against it. Both are worth more than anything already done.',
   ]],
   ['Telling us', [
-    'If something here is unusable for you, that is a bug and we want to hear about it. Reports go to the address on the site’s contact page.',
+    'If something here is unusable for you, that is a bug and we want to hear about it. Add a contact address here before launch — this sentence is a placeholder and the site has no contact page yet.',
   ]],
 ]
 

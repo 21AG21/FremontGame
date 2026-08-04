@@ -24,7 +24,7 @@
   /* 4.56:1 on the page background, 5.00:1 on a panel. The design doc's
      #5B7794 measured 4.25:1 on the background, which is a fail for the
      captions that sit directly on it. */
-  --muted: #57728e;
+  --muted: #4e6880;
 
   --panel: #ffffff;
   --line: rgba(4, 55, 100, 0.12);
@@ -509,7 +509,12 @@ main {
 
 /* A rejected quad has to read as rejected without moving — the border
    goes to the strong rule and the fill drops out. */
-.tile.is-rejected { border-color: var(--line-2); background: var(--sunk); }
+.tile.is-rejected {
+  border-color: var(--muted);
+  border-width: 2px;
+  background: var(--sunk);
+  color: var(--muted);
+}
 
 .tile:disabled { cursor: default; }
 
@@ -664,7 +669,7 @@ main {
   border: 1px solid var(--green);
 }
 
-.dot.is-spent { background: transparent; border-color: var(--line-2); }
+.dot.is-spent { background: transparent; border-color: var(--muted); border-width: 2px; }
 
 /* ── III. Then & Now ─────────────────────────────────────────── */
 
@@ -727,7 +732,13 @@ main {
 
 .hl-progress { flex: none; display: flex; gap: 6px; }
 
-.pip { flex: 1; height: 6px; border-radius: 3px; background: var(--sunk); }
+.pip {
+  flex: 1;
+  height: 8px;
+  border-radius: 4px;
+  background: var(--sunk);
+  border: 1px solid var(--line-2);
+}
 
 .pip.is-hit { background: var(--green); }
 .pip.is-miss { background: var(--muted); }
@@ -890,9 +901,15 @@ main {
 /* Six rows of cells plus four rows of keys is the tallest screen in the
    app, and the added action row costs it 59px. Scoped to the Word so a
    small phone doesn't shrink the four screens that already fit. */
-@media (max-height: 700px) {
-  .wg-cell { min-height: 38px; font-size: var(--t-xl); }
-  .wg-key { min-height: 46px; font-size: var(--t-md); }
+/* These RELAX the floors. The previous version raised them, which made
+   the Word need more room on exactly the phones that had least — it
+   overflowed by 63px at 320x568, the size the commit claimed to have
+   checked. Nothing here sets a min-height the layout cannot honour. */
+@media (max-height: 760px) {
+  .wg-cell { min-height: 0; font-size: var(--t-lg); }
+  .wg-key { min-height: 34px; font-size: var(--t-sm); }
+  .wg-grid, .wg-row, .wg-keyrow { gap: 4px; }
+  .wg-keys { gap: 5px; }
 }
 
 /* ── result ──────────────────────────────────────────────────── */
@@ -970,8 +987,8 @@ main {
   .plate { height: 180px; }
   .quote { font-size: var(--t-lg); }
   .hl-value { font-size: clamp(38px, 12vw, 48px); }
-  .wg-cell { min-height: 40px; font-size: var(--t-xl); }
-  .wg-key { min-height: 42px; }
+  .wg-cell { min-height: 0; font-size: var(--t-md); }
+  .wg-key { min-height: 30px; font-size: var(--t-xs); }
   .result { padding: 14px; }
   .record dd { font-size: var(--t-xl); }
 }
@@ -1007,7 +1024,7 @@ main {
   letter-spacing: 0.02em;
 }
 
-.guess.is-correct .guess-warmth { background: rgba(255, 255, 255, 0.22); color: #fff; }
+.guess.is-correct .guess-warmth { background: rgba(0, 0, 0, 0.28); color: #fff; }
 
 /* ── how to play ─────────────────────────────────────────────── */
 

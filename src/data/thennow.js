@@ -101,7 +101,10 @@ export const SCENES = [
     caption: 'The plant reopens under two flags',
     year: 1984,
     then: ['factory', 'lot', 'poles'],
-    now: ['factory', 'stacks', 'lot'],
+    // Deliberately not the same `now` as gm-plant: two scenes sharing a
+    // placeId and an identical now-list render the same Today half with
+    // two different correct answers.
+    now: ['factory', 'stacks', 'guideway'],
   },
   {
     id: 'bart-arrives',
