@@ -46,6 +46,12 @@
      bug. Dark only cools the ink so the white plate stops glaring. */
   --art-ink: #043764;
   --art-paper: #ffffff;
+
+  /* the bar floats over the board rather than sitting behind it */
+  --bar-glass: rgba(255, 255, 255, 0.62);
+  --bar-edge: rgba(255, 255, 255, 0.85);
+  --bar-sheen: rgba(255, 255, 255, 0.75);
+  --bar-shadow: rgba(4, 25, 45, 0.16);
 }
 
 /* Written twice on purpose: once for the system preference, once for an
@@ -72,6 +78,11 @@
   --scrim: rgba(4, 25, 45, 0.4);
 
   --art-ink: #08203a;
+
+  --bar-glass: rgba(13, 44, 74, 0.58);
+  --bar-edge: rgba(255, 255, 255, 0.18);
+  --bar-sheen: rgba(255, 255, 255, 0.14);
+  --bar-shadow: rgba(0, 0, 0, 0.38);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -96,6 +107,11 @@
     --scrim: rgba(4, 25, 45, 0.4);
 
     --art-ink: #08203a;
+
+    --bar-glass: rgba(13, 44, 74, 0.58);
+    --bar-edge: rgba(255, 255, 255, 0.18);
+    --bar-sheen: rgba(255, 255, 255, 0.14);
+    --bar-shadow: rgba(0, 0, 0, 0.38);
   }
 }
 
@@ -110,6 +126,9 @@
 
   --serif: 'Newsreader', Georgia, 'Times New Roman', serif;
   --sans: 'Work Sans', system-ui, -apple-system, sans-serif;
+
+  /* how much bigger than the phone layout we are running */
+  --z: 1;
 }
 
 * { box-sizing: border-box; }
@@ -141,7 +160,11 @@ ul { list-style: none; }
 
 .sheet {
   position: relative;
-  height: 100dvh;
+  /* zoom, not transform: transform would scale a finished layout and
+     leave the text soft. zoom re-lays-out at the new size, so 23px type
+     is really 23px at whatever step we're on. */
+  zoom: var(--z);
+  height: calc(100dvh / var(--z));
   max-width: 440px;
   margin: 0 auto;
   padding: var(--pad) var(--pad) calc(94px + env(safe-area-inset-bottom));
@@ -150,6 +173,16 @@ ul { list-style: none; }
   gap: var(--gap);
   overflow: hidden;
 }
+
+/* A 440px column on a 27-inch monitor is a postage stamp, and asking
+   someone to hit ⌘+ is not a design. The steps key off height as well
+   as width because this is a one-screen app — a wide, short window has
+   no room to grow into. */
+@media (min-width: 720px) and (min-height: 840px) { :root { --z: 1.2; } }
+@media (min-width: 820px) and (min-height: 1000px) { :root { --z: 1.45; } }
+@media (min-width: 980px) and (min-height: 1180px) { :root { --z: 1.7; } }
+@media (min-width: 1120px) and (min-height: 1360px) { :root { --z: 1.95; } }
+@media (min-width: 1280px) and (min-height: 1560px) { :root { --z: 2.2; } }
 
 /* Fixed to the viewport, not to the column: a ridge scoped to the sheet
    reads as a grey slab with two hard edges once the window is wider
@@ -245,8 +278,22 @@ main {
   padding: 4px;
   border-radius: var(--r-md);
   corner-shape: squircle;
-  background: var(--panel);
-  border: 1px solid var(--line);
+  /* Liquid glass: a pane you can see the board through, lifted off it
+     by a shadow and lit along its top edge. saturate() is what stops
+     blurred colour going muddy behind it. */
+  background: var(--bar-glass);
+  border: 1px solid var(--bar-edge);
+  -webkit-backdrop-filter: saturate(1.8) blur(22px);
+  backdrop-filter: saturate(1.8) blur(22px);
+  box-shadow:
+    0 10px 34px var(--bar-shadow),
+    inset 0 1px 0 var(--bar-sheen);
+}
+
+/* Without backdrop-filter the pane would just be washed out, so fall
+   back to the solid panel it used to be. */
+@supports not (backdrop-filter: blur(1px)) {
+  .index { background: var(--panel); border-color: var(--line); }
 }
 
 .index-item {

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { SCENES } from '../art/Scenes.jsx'
+import Engraving from '../art/Engraving.jsx'
 import { placeById } from '../data/town.js'
 import { zoomPuzzle as P, DAY_KEY, MARK } from '../data/puzzles.js'
 import { distanceMiles, bearingDegrees, compassFrom, formatDistance, warmth } from '../lib/geo.js'
@@ -16,7 +16,6 @@ const squareFor = (miles) => {
 
 export default function Zoom() {
   const answer = placeById(P.answerId)
-  const Scene = SCENES[P.scene]
 
   const [guesses, setGuesses] = useState([])
   const [done, setDone] = useState(null) // null | 'won' | 'lost'
@@ -55,7 +54,7 @@ export default function Zoom() {
             transformOrigin: `${P.focus.x * 100}% ${P.focus.y * 100}%`,
           }}
         >
-          <Scene />
+          <Engraving place={answer} />
         </div>
         {!done && <span className="tag tag-right">{scale.toFixed(1)}×</span>}
       </div>

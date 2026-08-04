@@ -1,15 +1,25 @@
 // ─────────────────────────────────────────────────────────────
 //  TODAY'S PUZZLES — Fremont, California. One per type.
 //
-//  Every fact below is real. That is the whole point: a hyperlocal
-//  puzzle with invented facts is worse than no puzzle, because the
-//  first person who knows better stops trusting it and leaves.
+//  Three of the five now come off a pool rather than being written
+//  out once: Zoom draws from 106 places, Groups from 100 categories,
+//  Higher or Lower from 136 facts. This file is the assembler — it
+//  asks each pool for the day's puzzle and hands it to the view.
 //
-//  In the real version this is a queue — an array per type, indexed
-//  by day, banked 30+ days out. See the README.
+//  Every fact in those pools is real. That is the whole point: a
+//  hyperlocal puzzle with invented facts is worse than no puzzle,
+//  because the first person who knows better stops trusting it and
+//  never comes back.
+//
+//  Then & Now is still one hand-built puzzle. It needs a matched
+//  pair of images per day, which is a photo-sourcing job, not a
+//  data-entry one.
 // ─────────────────────────────────────────────────────────────
 
 import { answerForDay } from './words.js'
+import { zoomForDay } from './zoom.js'
+import { groupsForDay } from './groups.js'
+import { roundsForDay } from './higherlower.js'
 
 // Day 1 is the day the thing went live. Everything else indexes off it.
 export const DAY_NUMBER = Math.floor(
@@ -30,44 +40,16 @@ export const PUZZLE_TYPES = [
 ]
 
 // ── I. ZOOM ──────────────────────────────────────────────────
-export const zoomPuzzle = {
-  id: 'zoom',
-  answerId: 'mission-san-jose',
-  scene: 'mission',
-  // Crops into the bell wall — at 11x it's four dark ovals and a rope.
-  focus: { x: 0.21, y: 0.37 },
-  levels: [5.5, 3.6, 2.5, 1.8, 1.3, 1],
-  maxGuesses: 5,
-}
+export const zoomPuzzle = zoomForDay(DAY_NUMBER)
 
-// ── II. CONNECTIONS ──────────────────────────────────────────
-// The trap: Irvington and Mission San Jose are BOTH townships and
-// high schools. A good Connections puzzle punishes the obvious read.
+// ── II. GROUPS ───────────────────────────────────────────────
+// The trap is that items repeat across the pool — Mission San Jose
+// is a township AND a high school AND a mission. groupsForDay makes
+// sure two groups that share a tile never land on the same board.
 export const connectionsPuzzle = {
   id: 'connections',
   maxMistakes: 4,
-  groups: [
-    {
-      label: 'Built at the plant on Fremont Boulevard',
-      difficulty: 0,
-      items: ['Nova', 'Corolla', 'Tacoma', 'Model 3'],
-    },
-    {
-      label: 'East Bay Regional Parks, in town',
-      difficulty: 1,
-      items: ['Coyote Hills', 'Quarry Lakes', 'Ardenwood', 'Alameda Creek'],
-    },
-    {
-      label: 'Townships that became Fremont in 1956',
-      difficulty: 2,
-      items: ['Centerville', 'Niles', 'Warm Springs', 'Irvington'],
-    },
-    {
-      label: 'Fremont high schools',
-      difficulty: 3,
-      items: ['American', 'Washington', 'Kennedy', 'Mission San Jose'],
-    },
-  ],
+  groups: groupsForDay(DAY_NUMBER),
 }
 
 // ── III. THEN & NOW ──────────────────────────────────────────
@@ -83,33 +65,7 @@ export const thenNowPuzzle = {
 // ── IV. HIGHER OR LOWER ──────────────────────────────────────
 export const higherLowerPuzzle = {
   id: 'higherlower',
-  rounds: [
-    {
-      unit: 'feet above sea level',
-      a: { name: 'Mission Peak', value: 2520 },
-      b: { name: 'Monument Peak', value: 2594 },
-    },
-    {
-      unit: 'acres',
-      a: { name: 'Coyote Hills', value: 978 },
-      b: { name: 'Central Park', value: 450 },
-    },
-    {
-      unit: 'the year it opened',
-      a: { name: 'Mission San José', value: 1797 },
-      b: { name: 'The Fremont Assembly Plant', value: 1962 },
-    },
-    {
-      unit: 'years it ran under that name',
-      a: { name: 'NUMMI, 1984–2010', value: 26 },
-      b: { name: 'GM Fremont Assembly, 1962–1982', value: 20 },
-    },
-    {
-      unit: 'acres',
-      a: { name: 'Central Park', value: 450 },
-      b: { name: 'Lake Elizabeth', value: 83 },
-    },
-  ],
+  rounds: roundsForDay(DAY_NUMBER),
 }
 
 // ── V. THE WORD ──────────────────────────────────────────────

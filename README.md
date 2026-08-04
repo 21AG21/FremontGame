@@ -13,13 +13,50 @@ Then open http://localhost:5173
 
 | No. | Puzzle | Mechanic |
 |---|---|---|
-| I | **Zoom** | An engraving of Mission San José, cropped to 9×. Every miss pulls the camera back one stop. Wrong guesses report real distance and compass bearing to the answer. |
-| II | **Connections** | Sixteen names, four groups. Irvington and Mission San Jose are *both* townships and high schools — the puzzle is built around that. |
+| I | **Zoom** | A line engraving of one of **106 Fremont places**, cropped to 4.2×. Every miss pulls the camera back one stop. Wrong guesses report real distance and compass bearing to the answer. |
+| II | **Groups** | Sixteen names, four groups, off a pool of **100 categories**. Irvington and Mission San Jose are *both* townships and high schools — the puzzle is built around that. |
 | III | **Then & Now** | Drag-wipe between Niles Boulevard in the Essanay days and Niles Boulevard today, then name the year. |
-| IV | **Higher or Lower** | Five rounds. Mission Peak vs Monument Peak is the one that gets people. |
+| IV | **Higher or Lower** | Five rounds drawn from **136 sourced facts** in ten units. Mission Peak vs Monument Peak is the one that gets people. |
 | V | **The Word** | Five letters, refereed by the published Wordle guess list. Proper two-pass scoring, so double letters behave. |
 
 Each writes a spoiler-free share card and tracks streaks in `localStorage`.
+
+## The content pools
+
+Three of the five now come off a pool indexed by day number, so everyone in
+town gets the same puzzle and reloading doesn't reroll it.
+
+| | pool | file | a year of play |
+|---|---|---|---|
+| Zoom | 106 places | `data/zoom.js`, `data/town.js` | 103 distinct answers in 365 days |
+| Groups | 100 categories, 25 per difficulty | `data/groups.js` | 365 distinct boards, none repeated |
+| Higher or Lower | 136 facts in 10 units | `data/higherlower.js` | 5 valid rounds every day |
+| The Word | 24 answers | `data/words.js` | repeats after 24 days — the thin one |
+
+Groups gets 365 unique boards out of 100 categories because a board is a
+*combination*: one group at each difficulty, and two groups that share a tile
+are never dealt together. That last rule is what keeps "Mission San Jose is a
+school AND a township" a trap instead of a bug.
+
+Then & Now is still one hand-built puzzle. It needs a matched pair of images
+per day, which is a photo-sourcing job rather than a data-entry one.
+
+### The Zoom drawings are composed, not drawn
+
+A hundred hand-drawn engravings is not a thing anyone finishes. So `town.js`
+says what a place is *made of* — `motifs: ['victorian', 'windmill', 'orchard']`
+for Ardenwood — `art/Parts.jsx` knows how to draw each of the 66 parts, and
+`art/Engraving.jsx` stacks them back to front on one 800×600 plate, seeded off
+the place id so a drawing never changes between loads.
+
+**`localhost:5173/?sheet` renders all 106 on one page**, each as it opens and
+again whole, with the zoom focus marked. Composing from a shared library means
+a bad motif combination is otherwise invisible until someone gets that day's
+puzzle.
+
+The crop is aimed, not random: `ANCHORS` in `data/zoom.js` records where each
+motif's subject actually sits on the plate. Without it, half the puzzles open
+on blank sky.
 
 ## The facts are real
 
@@ -105,7 +142,18 @@ last row holds one. Change `repeat(3, …)` to `repeat(4, …)` in `.conn-grid`
 if you would rather have the even board than the drawing — four divides
 16, 12, 8 and 4.
 
-## Phone
+## Screens
+
+The layout is one phone-sized column that **scales up rather than staying a
+440px stamp on a big monitor** — `zoom` on `.sheet`, stepped by media queries
+that key off height as well as width, since a one-screen app can't use a wide
+short window. `zoom` rather than `transform` because it re-lays-out at the new
+size, so 23px type is really 23px at every step. Checked to 1920×1440, where
+it runs at 1.95× and 858px wide with no overflow.
+
+The section bar is the one piece of glass in the design: translucent, blurred
+and saturated, lifted off the board by a shadow and lit along its top edge,
+with a solid-panel fallback under `@supports not (backdrop-filter)`.
 
 Checked at 375×812 and 1280×800, light and dark: no overflow on either axis,
 every tap target ≥44px. The Then & Now wipe sets `touch-action: none` so
