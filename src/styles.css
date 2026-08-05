@@ -1310,7 +1310,7 @@ main {
    after the header grew a line overflowed Then & Now by 43px — the
    breakpoint was set against a header that no longer exists. */
 @media (max-height: 780px) {
-  .plate { width: min(100%, calc(clamp(150px, 34dvh / var(--z), 300px) * 4 / 3)); }
+  .plate { min-height: clamp(140px, 22dvh / var(--z), 220px); }
   .quote { font-size: var(--t-lg); }
   .hl-half { padding: 14px 16px; }
   .year-grid { grid-auto-rows: minmax(48px, 1fr); }
@@ -1322,7 +1322,7 @@ main {
   .flag { font-size: var(--t-xl); }
   .deck-game { font-size: var(--t-lg); }
   .deck-prompt { font-size: var(--t-sm); }
-  .plate { width: min(100%, calc(clamp(140px, 30dvh / var(--z), 240px) * 4 / 3)); }
+  .plate { min-height: clamp(120px, 20dvh / var(--z), 190px); }
   .quote { font-size: var(--t-md); }
   /* clamp(38px, 12vw, 48px) was BIGGER than the 30–58px base scale
      resolves to at this width. A short-screen block that enlarges is
@@ -1341,7 +1341,8 @@ main {
    the board. The plate has to give up most of it or nothing else fits. */
 @media (orientation: landscape) and (max-height: 560px) {
   :root { --pad: 12px; --pad-top: 9px; --gap: 7px; --bar-inset: 10px; }
-  .plate { width: min(100%, calc(clamp(110px, 42dvh / var(--z), 170px) * 4 / 3)); }
+  /* landscape: height is the scarce thing, so the frame gives it up */
+  .plate { min-height: 0; max-height: 46dvh; }
   .quote { font-size: var(--t-md); }
   .hl-half { padding: 10px 14px; }
   .hl-buttons .btn { min-height: 48px; }
