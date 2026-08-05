@@ -8,5 +8,9 @@ export default defineConfig({
     // which is what CI runners default to.
     env: { TZ: 'America/Los_Angeles' },
     include: ['src/**/*.test.js', 'scripts/**/*.test.mjs'],
+    // Node by default. The pools and the day arithmetic have no DOM and
+    // booting one for them costs about half a second each; the focus
+    // trap is the one file that needs it, and asks by docblock.
+    environment: 'node',
   },
 })

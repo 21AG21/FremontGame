@@ -1,11 +1,13 @@
 import { Component } from 'react'
+import { report } from '../lib/report.js'
 
 // The whole game is one bundle, so a single throw anywhere unmounts all
 // five puzzles and leaves a blank white page with no way back. A daily
 // player who hits that on a Tuesday does not come back on Wednesday.
 //
-// This does not fix anything — it just means the failure is legible and
-// has a door out of it.
+// This does not fix anything — it just means the failure is legible, has
+// a door out of it, and gets reported. See lib/report.js for what is
+// sent and what deliberately is not.
 export default class Boundary extends Component {
   state = { failed: false }
 
@@ -13,10 +15,8 @@ export default class Boundary extends Component {
     return { failed: true }
   }
 
-  componentDidCatch(error) {
-    // No analytics on this site by design, so the console is the only
-    // place this can go.
-    console.error('Fremont: a puzzle failed to render.', error)
+  componentDidCatch(error, info) {
+    report(error, info)
   }
 
   render() {

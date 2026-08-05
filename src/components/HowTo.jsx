@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import Legal from './Legal.jsx'
+import { useDialog } from '../lib/dialog.js'
 
 // How to play.
 //
@@ -69,6 +70,7 @@ export default function HowTo({ game }) {
   const [legal, setLegal] = useState(false)
 
   const close = () => setOpen(false)
+  const box = useDialog(open, close)
 
   if (!rules) return null
 
@@ -89,6 +91,8 @@ export default function HowTo({ game }) {
             role="dialog"
             aria-modal="true"
             aria-label={`How to play ${rules.title}`}
+            ref={box}
+            tabIndex={-1}
             onClick={(e) => e.stopPropagation()}
           >
             <h2 className="howto-title">{rules.title}</h2>
@@ -97,7 +101,7 @@ export default function HowTo({ game }) {
                 <li key={l}>{l}</li>
               ))}
             </ul>
-            <button className="btn btn-primary" onClick={close} autoFocus>
+            <button className="btn btn-primary" onClick={close}>
               Got it
             </button>
 

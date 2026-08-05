@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { TOWN } from '../data/town.js'
+import { useDialog } from '../lib/dialog.js'
 
 // Privacy, terms and an accessibility statement.
 //
@@ -30,6 +31,7 @@ const PRIVACY = [
       'This site has no accounts. It never asks for an email address, a name or a password, and there is nothing to log in to.',
       'There is no advertising, and nothing is sold or shared with anyone.',
       'There is one measurement tool: Vercel Analytics, run by the company that hosts the site. It counts page views and where visitors arrived from, so we can tell whether anybody is playing. It is not sent anything about how you play — not your guesses, not your results, not your streaks.',
+      'There is one exception to that, and it only happens when the site breaks. If a puzzle fails to draw and you get the “That didn’t load” screen, two short pieces of text are sent through the same tool: the error message the code produced, and the name of the component it happened in. That is so a fault on a phone or a browser we do not own can be found and fixed, rather than quietly costing that person the game. Nothing in it comes from anything you typed or guessed, and it is sent only on a failure, never during normal play.',
       'It uses no cookies and does not store an identifier on your device, so it cannot follow you to any other site or recognise you when you come back. Vercel’s own documentation describes it as anonymous and aggregate. We keep it because a puzzle nobody plays should be allowed to find that out; it is not a promise that no information about your visit leaves your browser, because that would not be true.',
       'Everything it sends goes to this site’s own address, so no other company’s server is contacted when you load the page.',
     ],
@@ -121,6 +123,7 @@ const ACCESS = [
       'The Word puzzle marks every scored tile with a symbol (✓, ~, ×) as well as a colour, so its feedback does not depend on telling green from amber.',
       'Buttons, tabs and the section bar meet the 44-pixel minimum target size. The on-screen keyboard does not: at a 320-pixel screen width its keys are about 23 pixels wide, because ten of them have to share the row. They meet the spacing exception rather than the size rule.',
       'Everything is reachable and operable by keyboard, with a visible focus ring in the site’s own colours. The Then & Now slider takes arrow keys, Home and End, and can also be positioned by tapping the picture rather than dragging it.',
+      'Both dialogs hold the keyboard while they are open: Tab cycles inside them rather than walking out into the board behind, Escape closes the top one, and focus goes back to whatever opened it. Opening the legal documents from the rules stacks properly — Escape there returns you to the rules, not to the game.',
       'The drawings carry text alternatives. On four of the five games these name the subject; on Zoom the alternative deliberately withholds it, because naming it is the puzzle — which means a screen reader user is told a drawing is present but not what it shows.',
       'Some state changes are announced through live regions. This is not complete and not reliable: several regions are created at the same moment as their first message, which many screen readers do not announce.',
       'Animation is limited to colour fades, and those are switched off entirely when your system asks for reduced motion.',
@@ -131,7 +134,7 @@ const ACCESS = [
     'Known gaps',
     [
       'The Zoom puzzle is visual by nature and cannot be played without sight. There is no non-visual equivalent.',
-      'The Word grid conveys its result through colour, a symbol, and the tile text — but the symbol is drawn in CSS, which screen readers do not reliably expose. The autocomplete on Zoom is not marked up as a combobox. Neither dialog traps focus, handles Escape, or returns focus on close.',
+      'The Word grid conveys its result through colour, a symbol, and the tile text — but the symbol is drawn in CSS, which screen readers do not reliably expose. The autocomplete on Zoom is not marked up as a combobox.',
       'Contrast and structure have been checked by hand and by calculation. The site has NOT been tested by a screen reader user, and no automated accessibility test suite runs against it. Both are worth more than anything already done.',
     ],
   ],
@@ -151,6 +154,9 @@ const DOCS = {
 
 export default function Legal({ open, onClose }) {
   const [tab, setTab] = useState('privacy')
+  // Before the early return: hooks have to run on every render, and this
+  // one owns the focus trap for as long as the dialog is up.
+  const box = useDialog(open, onClose)
   if (!open) return null
   const doc = DOCS[tab]
 
@@ -161,6 +167,8 @@ export default function Legal({ open, onClose }) {
         role="dialog"
         aria-modal="true"
         aria-label="Privacy, terms and accessibility"
+        ref={box}
+        tabIndex={-1}
         onClick={(e) => e.stopPropagation()}
       >
         <div className="legal-tabs" role="tablist">
@@ -199,7 +207,7 @@ export default function Legal({ open, onClose }) {
           </p>
         </div>
 
-        <button className="btn btn-primary" onClick={onClose} autoFocus>
+        <button className="btn btn-primary" onClick={onClose}>
           Close
         </button>
       </div>
