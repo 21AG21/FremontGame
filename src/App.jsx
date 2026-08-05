@@ -27,7 +27,6 @@ export default function App() {
   const [active, setActive] = useState('zoom')
   const [theme, setTheme] = useState(readTheme)
   const View = VIEWS[active]
-  const type = PUZZLE_TYPES.find((t) => t.id === active)
 
   // DAY_KEY and DAY_NUMBER are captured at import, so a phone left open
   // overnight keeps serving yesterday's puzzles and filing results under
@@ -156,13 +155,10 @@ export default function App() {
       <Ridge />
 
       <div className="sheet">
-        {/* A two-column grid, not two stacked rows.
-
-            Stacked, the wordmark's row was floored at 44px by the icon
-            buttons in it while the wordmark itself is 31px tall — 13px
-            of the header existed only to hold a touch target. Here the
-            buttons span both rows, so the left column sets the height
-            and the targets stay 44px. */}
+        {/* One row. The line under the wordmark used to name the game —
+            which the bar at the bottom already does, lit in navy with an
+            icon, on every screen. Two lines of header for something
+            stated twice cost 35px off the top of a phone. */}
         <header className="lockup">
           <h1 className="flag">{TOWN.name}</h1>
 
@@ -178,15 +174,6 @@ export default function App() {
               <ThemeIcon dark={theme === 'dark'} />
             </button>
           </div>
-
-          {/* Just the section name. The line under it used to repeat
-              what the board already says — "Five letters, six tries"
-              over six rows of five, "Name the place, five guesses" over
-              five guess slots and a five-pip counter. Every game states
-              its own rules by being drawn; the ? has the rest. */}
-          <p className="deck">
-            <span className="deck-game">{type.name}</span>
-          </p>
         </header>
 
         <main>

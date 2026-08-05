@@ -180,9 +180,8 @@
 :root {
   --gap: 10px;
   --pad: 22px;
-  /* Less above the wordmark than beside it. 22px of sky over a 28px
-     masthead was the single biggest piece of dead height on the page,
-     and the side value has to stay 22 to match the doc's column. */
+  /* Less above the wordmark than beside it. The side value stays 22 to
+     match the doc's column. */
   --pad-top: 15px;
   /* how far the section bar floats off the bottom and the side edges.
      One value, because the two used to be written out separately and
@@ -308,76 +307,37 @@ ul { list-style: none; }
   pointer-events: none;
 }
 
-/* Two rows, not one. The doc's single line — wordmark │ rule │ question
-   — needs 175px and never gets it: the sheet caps at 440px and the two
-   icon buttons take 88. It ellipsised to about four characters on a
-   360px phone, losing the only label naming the game. */
+/* One row: wordmark, then the two utilities at the right edge. The
+   44px touch targets set the height, and nothing else is competing for
+   it. */
 .lockup {
   position: relative;
   flex: none;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
+  display: flex;
   align-items: center;
-  column-gap: 10px;
-  row-gap: 5px;
+  gap: 10px;
+  min-height: 44px;
 }
 
 .flag {
-  grid-column: 1;
-  grid-row: 1;
+  flex: 1;
   min-width: 0;
   font-family: var(--serif);
   font-size: var(--t-2xl);
   font-weight: 600;
-  /* 1.0, and the row-gap goes up by the same amount. Two serif lines
-     stacked 2px apart read as one cramped block; this buys the
-     separation back out of the leading instead of out of the board. */
   line-height: 1;
   letter-spacing: -0.02em;
 }
 
-/* Both icon buttons in one group at the right edge. They used to take
-   turns claiming `margin-left: auto` through an adjacent-sibling rule,
-   which stopped matching the moment the How-to-play modal rendered
-   between them and shunted the theme button back across the header. */
-/* Spans both rows, so its 44px touch targets sit alongside the
-   wordmark and the deck instead of setting the height of a row of
-   their own. */
+/* One group, so the two buttons cannot take turns claiming an auto
+   margin — an adjacent-sibling rule used to do that and broke the
+   moment the How-to-play modal rendered between them. */
 .chrome {
-  grid-column: 2;
-  grid-row: 1 / span 2;
-  align-self: center;
+  flex: none;
   display: flex;
   align-items: center;
   gap: 2px;
   margin-right: -6px;
-}
-
-/* Stacked, always. Side by side they fit for Zoom and wrapped for Then
-   & Now and Higher or Lower, so the header was two different heights
-   and the whole board jumped a line every time you changed game. */
-.deck {
-  grid-column: 1;
-  grid-row: 2;
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-}
-
-.deck-game {
-  font-family: var(--serif);
-  font-size: var(--t-xl);
-  font-weight: 600;
-  line-height: 1.15;
-  letter-spacing: -0.015em;
-}
-
-.deck-prompt {
-  min-width: 0;
-  font-size: var(--t-md);
-  font-weight: 500;
-  line-height: 1.2;
-  color: var(--muted);
 }
 
 /* Not in the design doc. Kept to the size of the section-bar icons and
@@ -1293,8 +1253,6 @@ main {
 @media (max-height: 640px) {
   :root { --pad: 16px; --pad-top: 11px; --gap: 8px; --bar-inset: 12px; }
   .flag { font-size: var(--t-xl); }
-  .deck-game { font-size: var(--t-lg); }
-  .deck-prompt { font-size: var(--t-sm); }
   .plate { min-height: clamp(120px, 20dvh / var(--z), 190px); }
   .quote { font-size: var(--t-md); }
   /* clamp(38px, 12vw, 48px) was BIGGER than the 30–58px base scale
@@ -1314,20 +1272,38 @@ main {
    the board. The plate has to give up most of it or nothing else fits. */
 @media (orientation: landscape) and (max-height: 560px) {
   :root { --pad: 12px; --pad-top: 9px; --gap: 7px; --bar-inset: 10px; }
-  /* landscape: height is the scarce thing, so the frame gives it up */
-  .plate { min-height: 0; max-height: 46dvh; }
+  /* height is the scarce thing here, so the frame gives it up */
+  .plate { min-height: 0; max-height: 38dvh; }
   .quote { font-size: var(--t-md); }
-  .hl-half { padding: 10px 14px; }
   .hl-buttons .btn { min-height: 48px; }
   .btn { min-height: 46px; }
   .index-item { padding: 4px 2px; }
-  /* Still two rows — a phone on its side is 660px wide, so the deck has
-     all the room it wants; height is the thing there is none of. Both
-     rows just get shorter. */
-  .lockup { row-gap: 0; }
   .flag { font-size: var(--t-xl); }
-  .deck-game { font-size: var(--t-lg); }
-  .deck-prompt { font-size: var(--t-sm); }
+
+  /* Rotating the phone does not just make everything shorter, it makes
+     it much wider — 667px against 375 — and three of these layouts were
+     still stacking as though it hadn't.
+
+     Twelve tiles in three columns is four rows deep and 85px taller than
+     a landscape phone has. Four columns is three rows and fits. Six was
+     tried first and is worse than it sounds: 63px of tile cannot hold
+     "Cowcatcher", and a single long word has nothing to wrap at. */
+  .conn-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    /* three rows now, so the 64px floor from portrait no longer fits */
+    grid-auto-rows: minmax(44px, 1fr);
+  }
+  .tile { font-size: clamp(12px, 2vw, 15px); hyphens: auto; }
+
+  /* Higher or Lower stacked its two halves, which is 252px of card in
+     248px of room. Side by side is the obvious reading of a wide screen
+     anyway: two things, compared. */
+  .hl-card { flex-direction: row; }
+  .hl-half { padding: 8px 14px; }
+  .hl-half + .hl-half { border-top: 0; border-left: 1px solid var(--line); }
+
+  /* Six year tiles go two rows of three to three of two. */
+  .year-grid { grid-auto-rows: minmax(40px, 1fr); }
 }
 
 @media (prefers-reduced-motion: no-preference) {
