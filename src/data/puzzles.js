@@ -35,7 +35,7 @@ export { DAY_KEY, DAY_NUMBER }
 // what it costs you, so name and deck carry different information.
 export const PUZZLE_TYPES = [
   { id: 'zoom', name: 'Zoom', short: 'Zoom', prompt: 'Name the place, five guesses' },
-  { id: 'connections', name: 'Groups', short: 'Groups', prompt: 'Four groups of three' },
+  { id: 'connections', name: 'Groups', short: 'Groups', prompt: 'Three groups of four' },
   { id: 'thennow', name: 'Then & Now', short: 'Then/Now', prompt: 'Pick the year, three guesses' },
   { id: 'higherlower', name: 'Higher or Lower', short: 'Higher?', prompt: 'Five rounds, four to win' },
   { id: 'wordgrid', name: 'The Word', short: 'Word', prompt: 'Five letters, six tries' },
@@ -50,9 +50,11 @@ export const zoomPuzzle = zoomForDay(DAY_NUMBER)
 // sure two groups that share a tile never land on the same board.
 export const connectionsPuzzle = {
   id: 'connections',
-  // Three, not four. With three-tile groups, four mistakes let you solve
-  // the last two groups by elimination without knowing either category —
-  // four separate reviewers rated the board 3/10 for exactly that.
+  // Three. With three groups on the board the last one is always free,
+  // so this is really "find two categories" — but a guess is now four
+  // tiles out of twelve, which is 495 combinations rather than the 220
+  // that three-of-twelve gave you. Blind play went from unlikely to
+  // essentially impossible, which pays for the free third group.
   maxMistakes: 3,
   groups: groupsForDay(DAY_NUMBER),
 }

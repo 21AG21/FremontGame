@@ -122,7 +122,7 @@ export default function Connections() {
         <Result
           won={done === 'won'}
           title="Groups"
-          subtitle={done === 'won' ? 'All four groups' : 'Out of mistakes'}
+          subtitle={done === 'won' ? 'All three groups' : 'Out of mistakes'}
           squares={rows.join('\n')}
           stats={stats}
           onReplay={replay}

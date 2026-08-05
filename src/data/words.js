@@ -13,14 +13,14 @@
 
 import raw from './valid-wordle-words.txt?raw'
 
-// Fremont's own proper nouns. The Wordle list is common English, so it
-// has none of these — and an answer you cannot type is not a puzzle.
-export const LOCAL_WORDS = [
-  'NILES', // the township, and the film studio
-  'TESLA', // what the plant builds now
-  'NUMMI', // what it was between GM and Tesla
-  'ARDEN', // Ardenwood, shortened the way locals say it
-]
+// Both lists come from content/words.csv — see scripts/content-build.mjs.
+// A row with `local` set is one of Fremont's own proper nouns: the Wordle
+// list is common English, so it has none of them, and an answer you
+// cannot type is not a puzzle. The build refuses any other answer that
+// isn't in the published guess list.
+import WORDS from './generated/words.js'
+
+export const LOCAL_WORDS = WORDS.localWords
 
 const VALID = new Set(
   raw
@@ -32,16 +32,9 @@ const VALID = new Set(
 
 export const isWord = (w) => VALID.has(String(w).toUpperCase())
 
-// The answer queue. Every entry is either in the Wordle list or in
-// LOCAL_WORDS above, so the answer is always typeable. Ordered so the
-// obvious ones aren't all in the first week.
-const CANDIDATES = [
-  'NILES', 'ADOBE', 'CREEK', 'TESLA', 'MARSH',
-  'DEPOT', 'HILLS', 'CIVIC', 'FILMS', 'TRAIL',
-  'ARDEN', 'PLANT', 'HERON', 'LEVEE', 'GROVE',
-  'RANCH', 'BELLS', 'STEAM', 'RAILS', 'EGRET',
-  'NUMMI', 'TULES', 'WAGON', 'TOWER',
-]
+// The answer queue, in sheet order — so the row order in words.csv is
+// the order the town sees them in.
+const CANDIDATES = WORDS.candidates
 
 // A word is unfair if too many valid words differ from it in one
 // position: once you know four of five letters, each further guess

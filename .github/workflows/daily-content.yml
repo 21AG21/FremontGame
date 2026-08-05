@@ -1,0 +1,72 @@
+name: Daily content
+
+# What this is for, and what it is NOT for.
+#
+# The site does not need a daily build to show a daily puzzle. Which
+# puzzle you get is worked out in the browser from today's date against a
+# fixed pool, so a phone that loads the site on any morning gets that
+# morning's board off a build from months ago. That is deliberate: no
+# cron job can fail in a way that leaves the town without a puzzle.
+#
+# This job exists for the other half — picking up edits. Somebody adds a
+# category to the spreadsheet at nine at night; this pulls it, checks it,
+# and commits, and Vercel redeploys off the commit. If no sheet is
+# configured it pulls nothing and just re-validates what is in the repo,
+# which is still worth doing daily: it is the thing that catches a bad
+# row before a player does.
+
+on:
+  schedule:
+    # 09:10 UTC — a little after 01:10 Pacific in summer, 02:10 in
+    # winter. Deliberately after the local date rolls over, and not on
+    # the hour, where GitHub's scheduler queues everybody at once.
+    - cron: '10 9 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: daily-content
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Pull the sheet
+        env:
+          SHEET_ID: ${{ secrets.SHEET_ID }}
+          AIRTABLE_BASE: ${{ secrets.AIRTABLE_BASE }}
+          AIRTABLE_TOKEN: ${{ secrets.AIRTABLE_TOKEN }}
+        run: npm run content:pull
+
+      # Runs whether or not a sheet is configured. A failure here means
+      # the content is bad, and the job stops before committing it —
+      # what is already deployed stays deployed.
+      - name: Check and generate
+        run: npm run content
+
+      - name: Make sure it still builds
+        run: npx vite build
+
+      - name: Commit if anything changed
+        run: |
+          if [ -z "$(git status --porcelain content src/data/generated)" ]; then
+            echo "No content changes."
+            exit 0
+          fi
+          git config user.name  "fremont-daily-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add content src/data/generated
+          git commit -m "Content sync $(date -u +%Y-%m-%d)"
+          git push

@@ -1,0 +1,15 @@
+id,placeId,caption,year,then,now
+niles-essanay,niles-boulevard,"Niles Boulevard, looking east toward the canyon",1915,ridge | shops | awnings | marquee | poles | road,ridge | shops | awnings | poles | road
+mission-founded,mission-san-jose,The mission on the road between San José and the East Bay,1797,ridge | adobe | olives | oaks,ridge | mission | olives | road
+transcontinental-niles,niles-canyon,The first through train down Niles Canyon,1869,canyon | locomotive | tracks | creek,canyon | creek | tracks | road
+patterson-house,patterson-house,"The Patterson house, new on the ranch",1857,victorian | orchard | lawn,victorian | windmill | orchard
+shinn-house,shinn-park,The Shinn house and its nursery grounds,1876,victorian | orchard | oaks,victorian | orchard | lawn
+washington-high,washington-high,The first high school in the township,1892,victorian | flagpole | field,school | flagpole | oaks
+essanay-opens,essanay-museum,The picture company sets up shop in Niles,1912,shops | marquee | poles | road,shops | marquee | road
+first-dumbarton,dumbarton,The first highway bridge across the lower bay,1927,bay | trestle | levee,bay | bridge | levee
+incorporation,city-hall,Five townships vote to become one city,1956,orchard | barn | road,civic | flagpole | lawn
+gm-plant,tesla-factory,The assembly plant opens on Fremont Boulevard,1962,orchard | factory | lot,factory | stacks | lot
+nummi,tesla-factory,The plant reopens under two flags,1984,factory | lot | poles,factory | stacks | guideway
+bart-arrives,fremont-bart,The first train reaches the end of the line,1972,orchard | guideway | lot,guideway | train | lot
+warm-springs-bart,warm-springs-bart,The line pushes south past the old end of the road,2017,warehouse | road | poles,guideway | train | lot
+ohlone-college,ohlone-college,The college opens its campus on the hill,1974,ridge | orchard | oaks,ridge | civic | dome | oaks

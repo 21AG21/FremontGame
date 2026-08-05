@@ -27,8 +27,8 @@ const RULES = {
   connections: {
     title: 'Groups',
     lines: [
-      'Twelve tiles hide four groups of three.',
-      'Tap three that belong together, then Submit. Get it right and they lift out with their category named.',
+      'Twelve tiles hide three groups of four.',
+      'Tap four that belong together, then Submit. Get it right and they lift out with their category named.',
       'Some tiles fit more than one group. That is the puzzle.',
       'Three wrong guesses and the round is over.',
     ],

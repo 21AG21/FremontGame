@@ -1,0 +1,114 @@
+id,name,lat,lng,district,motifs,fame
+mission-san-jose,Mission San José,37.5344,-121.9199,Mission San José,ridge | mission | olives | road,1
+ohlone-college,Ohlone College,37.533,-121.917,Mission San José,ridge | civic | dome | oaks,1
+msj-high,Mission San Jose High School,37.529,-121.921,Mission San José,school | flagpole | field,1
+palmdale-estates,Palmdale Estates,37.535,-121.926,Mission San José,palms | victorian | lawn,2
+mission-peak,Mission Peak,37.5124,-121.8802,Mission San José,peak | grass | post,1
+mission-peak-trailhead,The Stanford Avenue Trailhead,37.51,-121.906,Mission San José,peak | gate | trail,3
+monument-peak,Monument Peak,37.457,-121.868,The hills,peak | towers | grass,2
+olive-hyde,The Olive Hyde Art Gallery,37.5352,-121.9256,Mission San José,victorian | olives | lawn,2
+weibel,The old Weibel winery grounds,37.518,-121.906,Mission San José,ridge | vines | barn,3
+msj-cemetery,The Mission San José Cemetery,37.536,-121.921,Mission San José,ridge | stones | olives,3
+chadbourne,Chadbourne Elementary,37.525,-121.928,Mission San José,school | field | oaks,2
+gomes-park,Gomes Park,37.523,-121.918,Mission San José,field | oaks | playground,2
+tesla-factory,The Fremont Assembly Plant,37.4936,-121.945,Warm Springs,factory | stacks | lot,1
+warm-springs-bart,Warm Springs BART,37.5022,-121.9394,Warm Springs,guideway | train | lot,1
+warm-springs-district,The Warm Springs district,37.49,-121.935,Warm Springs,ridge | warehouse | road,1
+warm-springs-center,The Warm Springs Community Center,37.487,-121.933,Warm Springs,civic | lawn | oaks,3
+higuera,The Higuera adobe site,37.479,-121.918,Warm Springs,ridge | adobe | oaks,3
+kato-road,Kato Road,37.483,-121.928,Warm Springs,warehouse | road | poles,3
+agua-caliente,The Agua Caliente springs,37.488,-121.924,Warm Springs,ridge | pond | tules,3
+irvington-high,Irvington High School,37.5182,-121.9629,Irvington,school | flagpole | field,1
+kennedy-high,Kennedy High School,37.5309,-121.9718,Irvington,school | field | oaks,1
+sabercat,Sabercat Historical Park,37.523,-121.943,Irvington,ridge | creek | trail,2
+five-corners,Five Corners,37.517,-121.964,Irvington,shops | road | poles,2
+irvington-plaza,Irvington Plaza,37.516,-121.966,Irvington,shops | lot | poles,2
+irvington-district,The Irvington district,37.52,-121.96,Irvington,shops | road | oaks,1
+washington-hospital,Washington Hospital,37.5455,-121.9855,Centerville,civic | lot | flagpole,2
+tule-ponds,Tule Ponds at Tyson Lagoon,37.5525,-121.972,Centerville,pond | tules | boardwalk,2
+centerville-depot,Centerville Depot,37.5586,-121.9989,Centerville,depot | tracks | poles,1
+washington-high,Washington High School,37.5477,-121.9855,Centerville,school | flagpole | oaks,1
+central-park,Central Park,37.547,-122.002,Centerville,water | lawn | oaks,1
+lake-elizabeth,Lake Elizabeth,37.5473,-122.0043,Centerville,water | geese | lawn,1
+main-library,Fremont Main Library,37.549,-121.988,Centerville,civic | lawn | flagpole,1
+city-hall,Fremont City Hall,37.5482,-121.9886,Centerville,civic | flagpole | lawn,1
+fremont-hub,The Fremont Hub,37.551,-121.988,Centerville,shops | lot | poles,1
+fremont-bart,Fremont BART,37.5574,-121.9766,Centerville,guideway | train | lot,1
+centerville-district,The Centerville district,37.556,-121.995,Centerville,shops | road | poles,1
+shinn-park,Shinn Historical Park,37.5637,-122.0113,Centerville,victorian | orchard | lawn,1
+downtown-fremont,Downtown Fremont,37.55,-121.986,Centerville,civic | shops | road,1
+capitol-avenue,Capitol Avenue,37.5495,-121.9845,Centerville,shops | road | lawn,2
+fremont-theatre,The old Centerville theatre,37.557,-121.994,Centerville,shops | marquee | road,2
+centerville-junction,Centerville Junction,37.56,-121.996,Centerville,tracks | poles | warehouse,3
+essanay-museum,Niles Essanay Silent Film Museum,37.5786,-121.9757,Niles,shops | marquee | road,1
+niles-depot,Niles Depot,37.5793,-121.9709,Niles,depot | tracks | watertower,1
+niles-canyon,Niles Canyon,37.5836,-121.9382,Niles,canyon | creek | tracks,1
+vallejo-mill,Vallejo Mill Historical Park,37.5755,-121.9822,Niles,ruin | creek | eucalyptus,1
+niles-flea,The Niles Flea Market,37.579,-121.975,Niles,shops | awnings | road,3
+niles-canyon-railway,The Niles Canyon Railway,37.582,-121.95,Niles,canyon | locomotive | tracks,1
+niles-plaza,Niles Town Plaza,37.5788,-121.9744,Niles,plaza | shops | oaks,3
+niles-boulevard,Niles Boulevard,37.5789,-121.976,Niles,shops | awnings | poles,1
+california-nursery,The California Nursery Historical Park,37.574,-121.983,Niles,orchard | barn | eucalyptus,2
+niles-staircase,The Niles staircase,37.58,-121.972,Niles,canyon | stairs | oaks,3
+alameda-creek,The Alameda Creek Trail,37.576,-122.03,Niles,creek | levee | trail,1
+quarry-lakes,Quarry Lakes,37.5686,-122.0286,Niles,water | quarry | oaks,1
+shinn-pond,Shinn Pond,37.572,-122.023,Niles,water | quarry | tules,3
+ardenwood,Ardenwood Historic Farm,37.5569,-122.0546,Ardenwood,victorian | windmill | orchard,1
+patterson-house,The Patterson House,37.5573,-122.0552,Ardenwood,victorian | lawn | eucalyptus,3
+coyote-hills,Coyote Hills Regional Park,37.5578,-122.0928,Ardenwood,hills | marsh | boardwalk,1
+coyote-hills-shellmound,The Coyote Hills shellmound,37.556,-122.096,Ardenwood,hills | mound | tules,3
+don-edwards,Don Edwards Wildlife Refuge,37.4949,-122.0743,Ardenwood,saltponds | levee | birds,1
+dumbarton,The Dumbarton Bridge,37.497,-122.108,Ardenwood,bay | bridge | levee,1
+dumbarton-rail-bridge,The Dumbarton rail bridge,37.502,-122.115,Ardenwood,bay | trestle | tules,3
+american-high,American High School,37.548,-122.01,Ardenwood,school | flagpole | field,1
+ardenwood-forge,The blacksmith shop at Ardenwood,37.5565,-122.054,Ardenwood,barn | forge | orchard,3
+ardenwood-railroad,The Ardenwood horsecar line,37.5575,-122.053,Ardenwood,tracks | orchard | lawn,3
+ardenwood-boulevard,Ardenwood Boulevard,37.554,-122.056,Ardenwood,road | eucalyptus | poles,2
+pacific-commons,Pacific Commons,37.497,-121.966,Warm Springs,shops | lot | marsh,1
+fremont-marsh,The Fremont marshlands,37.515,-122.07,Ardenwood,marsh | tules | birds,3
+salt-ponds,The salt ponds,37.505,-122.09,Ardenwood,saltponds | levee | bay,2
+coyote-hills-boardwalk,The Coyote Hills boardwalk,37.56,-122.09,Ardenwood,marsh | boardwalk | tules,2
+mission-ridge,The Mission ridge,37.52,-121.89,The hills,peak | ridge | grass,3
+ohlone-wilderness,The Ohlone Wilderness Trail,37.51,-121.85,The hills,ridge | trail | oaks,3
+mill-creek-road,Mill Creek Road,37.54,-121.89,The hills,canyon | creek | oaks,3
+sunol-ridge,The Sunol ridge,37.595,-121.87,The hills,ridge | grass | oaks,3
+vargas-plateau,Vargas Plateau,37.567,-121.907,The hills,ridge | grass | gate,3
+morrison-canyon,Morrison Canyon Road,37.558,-121.918,The hills,canyon | oaks | road,3
+niles-canyon-narrows,The narrows in Niles Canyon,37.585,-121.925,The hills,canyon | creek | trestle,3
+alameda-creek-quarry,The creek quarries,37.575,-122.01,The hills,quarry | creek | gravel,3
+newark,Newark,37.5297,-122.0402,Next door,shops | road | marsh,2
+union-city,Union City,37.5934,-122.0438,Next door,guideway | shops | road,2
+milpitas,Milpitas,37.4323,-121.8996,Next door,warehouse | road | hills,2
+hayward,Hayward,37.6688,-122.0808,Next door,civic | shops | hills,2
+sunol,Sunol,37.5946,-121.8858,Next door,depot | oaks | creek,2
+decoto,Decoto,37.588,-122.023,Next door,tracks | shops | road,2
+alvarado,Alvarado,37.598,-122.053,Next door,victorian | creek | road,2
+niles-junction,Niles Junction,37.581,-121.98,Niles,tracks | poles | watertower,3
+horner-middle,Horner Middle School,37.533,-121.988,Around town,school | field | flagpole,2
+thornton-middle,Thornton Middle School,37.559,-122.018,Around town,school | field | oaks,2
+centerville-middle,Centerville Middle School,37.556,-121.988,Around town,school | flagpole | lawn,2
+hopkins-middle,Hopkins Middle School,37.525,-121.933,Around town,school | field | oaks,2
+walters-middle,Walters Middle School,37.496,-121.96,Around town,school | lawn | flagpole,2
+robertson-high,Robertson High School,37.545,-121.98,Around town,school | lot | flagpole,2
+mission-boulevard,Mission Boulevard,37.54,-121.95,Around town,road | poles | ridge,1
+fremont-boulevard,Fremont Boulevard,37.54,-121.99,Around town,road | shops | poles,1
+paseo-padre,Paseo Padre Parkway,37.545,-121.975,Around town,road | eucalyptus | lawn,1
+mowry-avenue,Mowry Avenue,37.547,-122,Around town,road | shops | poles,1
+stevenson-boulevard,Stevenson Boulevard,37.533,-121.986,Around town,road | lawn | poles,1
+grimmer-boulevard,Grimmer Boulevard,37.514,-121.945,Around town,road | tract | poles,2
+walnut-avenue,Walnut Avenue,37.549,-121.99,Around town,road | lawn | oaks,2
+thornton-avenue,Thornton Avenue,37.559,-122.04,Around town,road | shops | marsh,1
+decoto-road,Decoto Road,37.58,-122.02,Around town,road | tracks | poles,1
+peralta-boulevard,Peralta Boulevard,37.561,-122.003,Around town,road | lawn | shops,2
+niles-boulevard-east,The east end of Niles Boulevard,37.58,-121.968,Around town,canyon | road | creek,2
+lake-elizabeth-dock,The Lake Elizabeth boat dock,37.5468,-122.005,Around town,water | dock | lawn,3
+central-park-fountain,The Central Park fountain,37.548,-122.001,Around town,lawn | fountain | oaks,3
+aqua-adventure,Aqua Adventure,37.5455,-122.0035,Around town,water | lawn | poles,3
+fremont-festival,Where the street festival sets up,37.5497,-121.985,Around town,awnings | road | shops,3
+irvington-community-park,Irvington Community Park,37.515,-121.97,Around town,field | lawn | oaks,2
+mission-hills-park,Mission Hills,37.53,-121.91,Around town,ridge | tract | oaks,2
+glenmoor,Glenmoor,37.5535,-121.9985,Around town,tract | lawn | oaks,2
+brookvale,Brookvale,37.533,-122,Around town,tract | lawn | road,2
+cabrillo,Cabrillo,37.562,-122.008,Around town,tract | road | lawn,2
+parkmont,Parkmont,37.554,-121.97,Around town,tract | lawn | oaks,2
+sundale-park,Sundale Park,37.509,-121.972,Around town,field | lawn | playground,2

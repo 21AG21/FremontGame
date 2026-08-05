@@ -5,8 +5,12 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
+    "build": "npm run content && vite build",
+    "preview": "vite preview",
+    "content": "node scripts/content-build.mjs",
+    "content:check": "node scripts/content-build.mjs --check",
+    "content:export": "node scripts/content-export.mjs",
+    "content:pull": "node scripts/content-pull.mjs"
   },
   "dependencies": {
     "@fontsource/newsreader": "^5.3.0",

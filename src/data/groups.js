@@ -1,9 +1,14 @@
 // ─────────────────────────────────────────────────────────────
 //  GROUPS — the category pool.
 //
+//  The rows live in content/groups.csv. Edit that, run `npm run
+//  content`, and this file picks up the change — none of the logic
+//  below moves.
+//
 //  difficulty 0 is the one you spot first, 3 is the one you only
-//  get by elimination. A day's board is four groups picked by day
-//  number, one at each difficulty, guaranteed not to share a tile.
+//  get by elimination. A day's board is three groups picked by day
+//  number, from three of the four tiers, guaranteed not to share a
+//  tile.
 //
 //  Traps are the whole game, so items are deliberately repeated
 //  ACROSS the pool — "Mission San Jose" is a township, a high
@@ -17,141 +22,29 @@
 //  named for whom) the group is not in the pool.
 // ─────────────────────────────────────────────────────────────
 
-export const GROUPS = [
-  // ── difficulty 0 — the gimme ────────────────────────────────
-  { d: 0, label: 'Built at the plant on Fremont Boulevard', items: ['Nova', 'Corolla', 'Tacoma', 'Model 3'] },
-  { d: 0, label: 'Cities that border Fremont', items: ['Newark', 'Union City', 'Milpitas', 'San Jose'] },
-  { d: 0, label: 'Fremont high schools', items: ['American', 'Washington', 'Kennedy', 'Mission San Jose'] },
-  { d: 0, label: 'Bay Area bridges', items: ['Dumbarton', 'Bay', 'San Mateo', 'Richmond'] },
-  { d: 0, label: 'Trees you actually see here', items: ['Eucalyptus', 'Redwood', 'Oak', 'Sycamore'] },
-  { d: 0, label: 'Bay Area teams', items: ['Warriors', 'Giants', 'Sharks', 'Earthquakes'] },
-  { d: 0, label: 'Big roads through town', items: ['Mission', 'Fremont', 'Mowry', 'Stevenson'] },
-  { d: 0, label: 'Birds on the bay side', items: ['Egret', 'Heron', 'Avocet', 'Pelican'] },
-  { d: 0, label: 'What the weather does here', items: ['Fog', 'Wind', 'Drizzle', 'Glare'] },
-  { d: 0, label: 'Counties on the bay', items: ['Alameda', 'Santa Clara', 'San Mateo', 'Marin'] },
-  { d: 0, label: 'BART, going north from Fremont', items: ['Union City', 'South Hayward', 'Hayward', 'Bay Fair'] },
-  { d: 0, label: 'Ways to cross the bay', items: ['Bridge', 'Ferry', 'Tunnel', 'Swim'] },
-  { d: 0, label: 'Fremont park staples', items: ['Playground', 'Duck pond', 'Ball field', 'Picnic table'] },
-  { d: 0, label: 'Silent film comedians', items: ['Chaplin', 'Keaton', 'Lloyd', 'Arbuckle'] },
-  { d: 0, label: 'On a hiking checklist', items: ['Water', 'Sunscreen', 'Boots', 'Hat'] },
-  { d: 0, label: 'Bay Area airports', items: ['Oakland', 'San Jose', 'San Francisco', 'Hayward'] },
-  { d: 0, label: 'Route numbers that touch Fremont', items: ['880', '680', '84', '262'] },
-  { d: 0, label: 'Kinds of California weather year', items: ['Drought', 'Flood', 'Fire', 'Bloom'] },
-  { d: 0, label: 'Seen on Niles Boulevard', items: ['Antiques', 'Bakery', 'Bookstore', 'Marquee'] },
-  { d: 0, label: 'Fremont grocery runs', items: ['Farmers market', '99 Ranch', 'Trader Joe’s', 'Safeway'] },
-  { d: 0, label: 'Sounds of a freight train', items: ['Horn', 'Rumble', 'Clang', 'Squeal'] },
-  { d: 0, label: 'What a commuter carries', items: ['Clipper card', 'Badge', 'Thermos', 'Headphones'] },
-  { d: 0, label: 'Farm animals at Ardenwood', items: ['Sheep', 'Goat', 'Chicken', 'Draft horse'] },
-  { d: 0, label: 'Things a mission was built from', items: ['Adobe', 'Tile', 'Timber', 'Lime'] },
-  { d: 0, label: 'Bay Area mountains', items: ['Diablo', 'Hamilton', 'Tamalpais', 'Umunhum'] },
-
-  // ── difficulty 1 — you get there, but not instantly ─────────
-  { d: 1, label: 'East Bay Regional Parks, in town', items: ['Coyote Hills', 'Quarry Lakes', 'Ardenwood', 'Alameda Creek'] },
-  { d: 1, label: 'On the ridge above town', items: ['Mission Peak', 'Monument Peak', 'Mount Allison', 'Ohlone Wilderness'] },
-  { d: 1, label: 'Also made at NUMMI', items: ['Prizm', 'Vibe', 'Voltz', 'Hilux'] },
-  { d: 1, label: 'Fremont’s historic parks', items: ['Shinn', 'Vallejo Mill', 'Sabercat', 'Ardenwood'] },
-  { d: 1, label: 'Rail stops, past and present', items: ['Niles', 'Centerville', 'Irvington', 'Decoto'] },
-  { d: 1, label: 'Missions in the Bay Area', items: ['San José', 'Santa Clara', 'Dolores', 'San Rafael'] },
-  { d: 1, label: 'Words before “Canyon”', items: ['Niles', 'Grand', 'Bryce', 'Antelope'] },
-  { d: 1, label: 'Words before “Hills”', items: ['Coyote', 'Beverly', 'Cherry', 'Sand'] },
-  { d: 1, label: 'Alameda County cities you forget', items: ['Albany', 'Piedmont', 'Emeryville', 'Dublin'] },
-  { d: 1, label: 'Chaplin pictures shot in Niles', items: ['The Tramp', 'The Champion', 'In the Park', 'A Jitney Elopement'] },
-  { d: 1, label: 'What a salt pond turns', items: ['Pink', 'Orange', 'Rust', 'White'] },
-  { d: 1, label: 'Creeks in the East Bay', items: ['Alameda', 'Dry', 'Walnut', 'Sausal'] },
-  { d: 1, label: 'Marsh vocabulary', items: ['Slough', 'Levee', 'Mudflat', 'Tule'] },
-  { d: 1, label: 'Ohlone College has one', items: ['Planetarium', 'Amphitheater', 'Newark campus', 'Nursing school'] },
-  { d: 1, label: 'Kinds of railroad car', items: ['Boxcar', 'Gondola', 'Hopper', 'Caboose'] },
-  { d: 1, label: 'Bay Area transit systems', items: ['BART', 'AC Transit', 'VTA', 'Caltrain'] },
-  { d: 1, label: 'What Fremont was before 1956', items: ['Farmland', 'Orchards', 'Nurseries', 'Townships'] },
-  { d: 1, label: 'Grown in the Alameda County of 1900', items: ['Apricots', 'Walnuts', 'Grapes', 'Hay'] },
-  { d: 1, label: 'The Dumbarton has had one', items: ['Drawbridge', 'Toll plaza', 'Rail crossing', 'Bike lane'] },
-  { d: 1, label: 'Words before “Springs”', items: ['Warm', 'Palm', 'Colorado', 'Hot'] },
-  { d: 1, label: 'Words before “Creek”', items: ['Alameda', 'Battle', 'Walnut', 'Cripple'] },
-  { d: 1, label: 'Found in a shellmound', items: ['Oyster', 'Mussel', 'Abalone', 'Charcoal'] },
-  { d: 1, label: 'A Victorian farmhouse has one', items: ['Cupola', 'Parlor', 'Veranda', 'Gable'] },
-  { d: 1, label: 'Places named for John C. Frémont', items: ['Fremont', 'Fremont Peak', 'Fremont County', 'Fremont Street'] },
-  { d: 1, label: 'What the plant needed by the trainload', items: ['Steel', 'Glass', 'Paint', 'Rubber'] },
-
-  // ── difficulty 2 — the one that costs you a life ────────────
-  { d: 2, label: 'Townships that became Fremont in 1956', items: ['Centerville', 'Niles', 'Warm Springs', 'Irvington'] },
-  { d: 2, label: 'Fremont districts that are also streets', items: ['Niles', 'Peralta', 'Decoto', 'Grimmer'] },
-  { d: 2, label: 'Named for a Californio family', items: ['Peralta', 'Vallejo', 'Alviso', 'Castro'] },
-  { d: 2, label: 'BART stations that opened after 2010', items: ['Warm Springs', 'Milpitas', 'Berryessa', 'Antioch'] },
-  { d: 2, label: 'Lakes you can walk around here', items: ['Elizabeth', 'Quarry', 'Shinn', 'Horseshoe'] },
-  { d: 2, label: 'Words that follow “Mission”', items: ['Peak', 'Boulevard', 'Statement', 'Control'] },
-  { d: 2, label: 'Words that follow “Central”', items: ['Park', 'Avenue', 'Valley', 'Time'] },
-  { d: 2, label: 'Silent-era studio towns', items: ['Niles', 'Fort Lee', 'Astoria', 'Culver City'] },
-  { d: 2, label: 'A mission bell needs one', items: ['Clapper', 'Yoke', 'Rope', 'Crown'] },
-  { d: 2, label: 'Names on a bay salt works', items: ['Leslie', 'Oliver', 'Cargill', 'Arden'] },
-  { d: 2, label: 'What Ardenwood grew for market', items: ['Hay', 'Beets', 'Grain', 'Walnuts'] },
-  { d: 2, label: 'Kinds of adobe failure', items: ['Slump', 'Crack', 'Wash', 'Quake'] },
-  { d: 2, label: 'Faults under the East Bay', items: ['Hayward', 'Calaveras', 'Mission', 'Silver Creek'] },
-  { d: 2, label: 'Named for the people who were here first', items: ['Ohlone', 'Tuibun', 'Ohlone College', 'Ohlone Wilderness'] },
-  { d: 2, label: 'Words before “Mill”', items: ['Vallejo', 'Saw', 'Wind', 'Tread'] },
-  { d: 2, label: 'A quarry leaves behind', items: ['Pit', 'Tailings', 'Gravel', 'Groundwater'] },
-  { d: 2, label: 'Ways to say “gone under water”', items: ['Flooded', 'Submerged', 'Drowned', 'Sunk'] },
-  { d: 2, label: 'Things a levee holds back', items: ['Tide', 'Creek', 'Salt', 'Storm'] },
-  { d: 2, label: 'What a new city has to pick', items: ['A name', 'A seal', 'A seat', 'A charter'] },
-  { d: 2, label: 'What replaced the orchards', items: ['Tract homes', 'Cul-de-sacs', 'Strip malls', 'The plant'] },
-  { d: 2, label: 'A steam locomotive carries', items: ['Tender', 'Boiler', 'Cowcatcher', 'Whistle'] },
-  { d: 2, label: 'Roads named for a mission', items: ['Mission', 'Paseo Padre', 'Palm', 'Olive'] },
-  { d: 2, label: 'The railroad reached the bay here', items: ['Niles', 'Oakland', 'Alameda', 'Decoto'] },
-  { d: 2, label: 'Fremont’s bay-side neighbours', items: ['Salt ponds', 'Sloughs', 'Levees', 'Runways'] },
-  { d: 2, label: 'What a shellmound became', items: ['A parking lot', 'A quarry', 'A park', 'A dispute'] },
-
-  // ── difficulty 3 — only by elimination ──────────────────────
-  { d: 3, label: 'Hiding a bird', items: ['Sheraton', 'Crowded', 'Ternary', 'Gullible'] },
-  { d: 3, label: 'Hiding a tree', items: ['Oakland', 'Palmdale', 'Elmhurst', 'Ashby'] },
-  { d: 3, label: 'Hiding a body of water', items: ['Baywatch', 'Seabed', 'Lakeside', 'Poncho'] },
-  { d: 3, label: 'Precede “Ford”', items: ['Stan', 'Craw', 'Ox', 'Hart'] },
-  { d: 3, label: 'Letters you do not pronounce', items: ['Salmon', 'Island', 'Debris', 'Column'] },
-  { d: 3, label: 'A tree and a Fremont street', items: ['Olive', 'Palm', 'Walnut', 'Cedar'] },
-  { d: 3, label: 'A park and the person it is named for', items: ['Shinn', 'Vallejo', 'Patterson', 'Edwards'] },
-  { d: 3, label: 'A lake somewhere, and a queen', items: ['Elizabeth', 'Victoria', 'Anne', 'Mary'] },
-  { d: 3, label: 'A Chevrolet and something in the sky', items: ['Nova', 'Vega', 'Astro', 'Celebrity'] },
-  { d: 3, label: 'A mission and the city named after it', items: ['San José', 'San Rafael', 'Santa Clara', 'San Francisco'] },
-  { d: 3, label: 'A fault and a place on the map', items: ['San Andreas', 'Hayward', 'Greenville', 'Concord'] },
-  { d: 3, label: 'All mean “a tree-lined walk”', items: ['Alameda', 'Promenade', 'Esplanade', 'Mall'] },
-  { d: 3, label: 'Newcomers say these wrong', items: ['Paseo Padre', 'Alviso', 'Decoto', 'Vallejo'] },
-  { d: 3, label: 'Can follow “Fremont”', items: ['Boulevard', 'Hub', 'Peak', 'Bank'] },
-  { d: 3, label: 'Kinds of mission', items: ['Religious', 'Military', 'Corporate', 'Space'] },
-  { d: 3, label: 'A Fremont school and a president', items: ['Washington', 'Kennedy', 'Lincoln', 'Hoover'] },
-  { d: 3, label: 'A California county and a bay', items: ['Alameda', 'Marin', 'Sonoma', 'Monterey'] },
-  { d: 3, label: 'Words for the edge of the bay', items: ['Shore', 'Strand', 'Bank', 'Margin'] },
-  { d: 3, label: 'A quarry, then a lake, now a park', items: ['Horseshoe', 'Rainbow', 'Willow', 'Lago Los Osos'] },
-  { d: 3, label: 'An orchard fruit and a paint color', items: ['Apricot', 'Cherry', 'Plum', 'Peach'] },
-  { d: 3, label: 'Things a “tramp” can be', items: ['A vagrant', 'A cargo ship', 'A long walk', 'A Chaplin role'] },
-  { d: 3, label: 'Both a saint and a bay-area city', items: ['Clara', 'Rafael', 'Mateo', 'Bruno'] },
-  { d: 3, label: 'Anagrams of one another', items: ['Slate', 'Least', 'Steal', 'Tales'] },
-  { d: 3, label: 'Double letters in the middle', items: ['Mission', 'Ballot', 'Tunnel', 'Current'] },
-  { d: 3, label: 'What goes into an adobe brick', items: ['Clay', 'Sand', 'Straw', 'Water'] },
-]
+import GROUPS_DATA from './generated/groups.js'
+export const GROUPS = GROUPS_DATA
 
 export const GROUP_COUNT = GROUPS.length
 
-const mix = (n) => {
-  let h = (n * 2654435761) % 4294967296
-  h ^= h >>> 15
-  h = (h * 2246822519) % 4294967296
-  h ^= h >>> 13
-  return h >>> 0
-}
-
 const byDifficulty = [0, 1, 2, 3].map((d) => GROUPS.filter((g) => g.d === d))
 
-// Groups hold four items but a board deals three of them, which is what
-// makes the board twelve tiles — four clean rows of three, no orphan
-// hanging off the bottom of the doc's three-column grid.
-//
-// The fourth item is not wasted: which one sits out rotates by day, so
-// the same category plays differently the next time it comes round, and
-// the pool carries more content than the board can show.
-export const ITEMS_PER_GROUP = 3
+// Three groups of four, which is still twelve tiles and still four clean
+// rows of three in the doc's grid. The board used to run four groups of
+// three, dealt out of categories that hold four — so every category had
+// a hidden fourth member sitting off the board. Dealing all four ends
+// that: what you see is the whole category.
+export const ITEMS_PER_GROUP = 4
 
-const dealItems = (g, day, d) => {
-  const drop = mix(day * 31337 + d * 7717) % g.items.length
-  return g.items.filter((_, i) => i !== drop)
-}
+// Three groups out of four difficulty tiers, so one tier sits out each
+// day. Which one is not a straight rotation: the easiest and the hardest
+// are always on the board and the middle two alternate. Dropping a tier
+// at random gives you an all-gentle board one day and an all-brutal one
+// the next, and neither is a good puzzle — you want a way in and you
+// want something that makes you work.
+const GROUPS_PER_BOARD = 3
+
+const tiersForDay = (day) => [0, day % 2 === 0 ? 1 : 2, 3]
 
 // Largest number coprime with 25 that isn't 1 — any coprime step walks
 // the whole tier before repeating, this one just doesn't walk it in an
@@ -172,33 +65,37 @@ const STEP = 7
 // four tiers walk independently, and which item sits out rotates daily.
 const cycleSlot = (day, d, n) => ((day % n) * STEP + d * 5) % n
 
-// One group at each difficulty. Two groups that share a tile can never
-// sit on the same board — that is what keeps "Mission San Jose is a
-// school AND a township" a trap rather than a bug — so a collision walks
-// forward in the cycle. The check is on the dealt three, not on all
-// four, or a clash that never reaches the board would still cost us a
-// category.
+// How far a collision jumps. Walking to the next slot puts the bumped
+// group on exactly the slot some other day reaches directly, which is
+// how "A park and the person it is named for" turned up twice in seven
+// days. 2 is coprime with 25, so the walk still reaches every group in
+// the tier, and it lifts the closest repeat over 800 days from 7 days
+// to 11 — far enough that nobody is being shown a category they can
+// still remember.
+const WALK = 2
+
+// One group from each of the day's three tiers. Two groups that share a
+// tile can never sit on the same board — that is what keeps "Mission San
+// Jose is a school AND a township" a trap rather than a bug — so a
+// collision walks forward in the cycle.
 export function groupsForDay(day) {
   const chosen = []
   const taken = new Set()
 
-  for (let d = 0; d < 4; d++) {
+  for (const d of tiersForDay(day)) {
     const pool = byDifficulty[d]
     const start = cycleSlot(day, d, pool.length)
 
     for (let step = 0; step < pool.length; step++) {
-      const g = pool[(start + step) % pool.length]
-      const items = dealItems(g, day, d)
-      // Reserve all FOUR, not the three dealt. The dropped item is still
-      // a member of this category, so if it turns up on the board inside
-      // another group the player can group three tiles that this board's
-      // own printed label says belong together — and be marked wrong.
+      const g = pool[(start + step * WALK) % pool.length]
       if (g.items.some((i) => taken.has(i))) continue
       g.items.forEach((i) => taken.add(i))
-      chosen.push({ label: g.label, difficulty: d, items })
+      chosen.push({ label: g.label, difficulty: d, items: [...g.items] })
       break
     }
   }
 
   return chosen
 }
+
+export { GROUPS_PER_BOARD }

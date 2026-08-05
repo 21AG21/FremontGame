@@ -1,0 +1,135 @@
+unit,name,value,anchor
+feet above sea level,Mission Peak,2520,yes
+feet above sea level,Monument Peak,2594,yes
+feet above sea level,Mount Allison,2658,
+feet above sea level,Mount Diablo,3849,yes
+feet above sea level,Mount Hamilton,4265,yes
+feet above sea level,Mount Tamalpais,2571,yes
+feet above sea level,Mount Umunhum,3486,
+feet above sea level,Loma Prieta,3786,
+feet above sea level,Vollmer Peak,1913,
+feet above sea level,Grizzly Peak,1759,
+feet above sea level,"Round Top, in the Oakland hills",1763,
+feet above sea level,"Twin Peaks, in San Francisco",922,yes
+feet above sea level,"Mount Davidson, San Francisco",928,
+feet above sea level,Mount Saint Helena,4344,
+feet above sea level,Mount Sizer,3216,
+feet above sea level,Copernicus Peak,4372,
+the year it opened,Mission San José,1797,yes
+the year it opened,"Mission Dolores, San Francisco",1776,
+the year it opened,Mission Santa Clara de Asís,1777,
+the year it opened,"Mission San Francisco Solano, the last one",1823,
+the year it opened,The Shinn House,1876,yes
+the year it opened,The Patterson House at Ardenwood,1857,yes
+the year it opened,Washington High School,1892,yes
+the year it opened,Ohlone College,1967,yes
+the year it opened,The Essanay studio in Niles,1912,yes
+the year it opened,The Fremont Assembly Plant,1962,yes
+the year it opened,NUMMI,1984,yes
+the year it opened,Tesla in Fremont,2010,yes
+the year it opened,"BART, first passengers",1972,yes
+the year it opened,Warm Springs BART,2017,yes
+the year it opened,Milpitas and Berryessa BART,2020,yes
+the year it opened,The first Dumbarton Bridge,1927,
+the year it opened,The Dumbarton Bridge you drive now,1982,yes
+the year it opened,The San Mateo–Hayward Bridge,1929,yes
+the year it opened,The Bay Bridge,1936,yes
+the year it opened,The Golden Gate Bridge,1937,yes
+the year it opened,The Richmond–San Rafael Bridge,1956,
+the year it opened,"The Carquinez Bridge, the first one",1927,
+the year it opened,The transcontinental railroad through Niles Canyon,1869,yes
+the year it was founded,Fremont,1956,yes
+the year it was founded,Newark,1955,yes
+the year it was founded,Union City,1959,yes
+the year it was founded,Hayward,1876,yes
+the year it was founded,Oakland,1852,yes
+the year it was founded,"San José, the pueblo",1777,yes
+the year it was founded,Berkeley,1878,yes
+the year it was founded,Alameda County,1853,yes
+the year it was founded,California statehood,1850,yes
+the year it was founded,Milpitas,1954,yes
+the year it was founded,Pleasanton,1894,yes
+the year it was founded,Livermore,1876,yes
+the year it was founded,UC Berkeley,1868,yes
+the year it was founded,"Stanford, first classes",1891,yes
+the year it was founded,Cal State East Bay,1957,
+the year it was founded,San José State,1857,
+acres,Central Park,450,yes
+acres,Lake Elizabeth,83,yes
+acres,Coyote Hills Regional Park,978,yes
+acres,Quarry Lakes,540,yes
+acres,Ardenwood Historic Farm,205,yes
+acres,Mission Peak Regional Preserve,3000,yes
+acres,Garin and Dry Creek Pioneer,4800,
+acres,Sunol Regional Wilderness,6858,
+acres,Tilden Regional Park,2079,
+acres,Anthony Chabot Regional Park,3315,
+acres,Don Edwards San Francisco Bay refuge,30000,
+acres,Golden Gate Park,1017,yes
+acres,Central Park in New York,843,yes
+acres,The Presidio,1491,
+acres,Point Reyes National Seashore,71028,
+acres,Henry W. Coe State Park,87000,
+"people, at the 2020 census",Fremont,230504,yes
+"people, at the 2020 census",Newark,47529,yes
+"people, at the 2020 census",Union City,70143,yes
+"people, at the 2020 census",Hayward,162954,yes
+"people, at the 2020 census",Milpitas,80273,yes
+"people, at the 2020 census",San Leandro,91008,yes
+"people, at the 2020 census",Pleasanton,79871,yes
+"people, at the 2020 census",Livermore,87955,yes
+"people, at the 2020 census",Dublin,72589,yes
+"people, at the 2020 census",San José,1013240,yes
+"people, at the 2020 census",Oakland,440646,yes
+"people, at the 2020 census",Berkeley,124321,yes
+"people, at the 2020 census",Alameda,78280,yes
+"people, at the 2020 census",Sunnyvale,155805,yes
+"people, at the 2020 census",Santa Clara,127647,yes
+"people, at the 2020 census",Palo Alto,68572,yes
+"people, at the 2020 census",San Francisco,873965,yes
+"people, at the 2020 census",Alameda County,1682353,yes
+"square miles, total area",Fremont,92,yes
+"square miles, total area",Newark,14,yes
+"square miles, total area",Union City,20,yes
+"square miles, total area",Hayward,64,yes
+"square miles, total area",San José,180,yes
+"square miles, total area",Oakland,78,yes
+"square miles, total area",San Francisco,232,yes
+"square miles, total area",Berkeley,18,yes
+"square miles, total area",Milpitas,14,yes
+"square miles, total area",Alameda County,821,yes
+"square miles, total area",Livermore,26,yes
+"square miles, total area",Pleasanton,24,yes
+years it ran under that name,NUMMI,26,yes
+years it ran under that name,GM Fremont Assembly,20,yes
+years it ran under that name,The Essanay studio in Niles,4,yes
+years it ran under that name,"Mission San José, as a working mission",37,yes
+years it ran under that name,The first Dumbarton Bridge,57,
+years it ran under that name,The Southern Pacific,131,
+miles,"The Alameda Creek Trail, end to end",12,yes
+miles,Niles Canyon Road,6,yes
+miles,The Dumbarton Bridge,1.6,yes
+miles,The San Mateo–Hayward Bridge,7,yes
+miles,The Bay Bridge,4.5,yes
+miles,The Golden Gate Bridge,1.7,yes
+miles,"Alameda Creek, source to bay",45,yes
+miles,Fremont BART to Downtown Berkeley,26,yes
+miles,"Mission Peak trail, Stanford Avenue and back",6,yes
+miles,The whole BART system,131,yes
+feet,The Golden Gate Bridge towers,746,yes
+feet,Salesforce Tower,1070,yes
+feet,The Campanile at Berkeley,307,yes
+feet,Coit Tower,210,yes
+feet,The Transamerica Pyramid,853,yes
+feet,Mission San José’s bell tower,60,yes
+feet,"The Dumbarton Bridge, at its highest",85,
+how many there are,California missions,21,yes
+how many there are,Townships that became Fremont,5,yes
+how many there are,Comprehensive high schools in Fremont,5,yes
+how many there are,BART stations in Fremont,2,yes
+how many there are,"BART stations, all of them",50,yes
+how many there are,Bells at Mission San José,4,yes
+how many there are,Counties in the Bay Area,9,yes
+how many there are,Cities in Alameda County,14,yes
+how many there are,Regional parks run by East Bay Parks,73,
+how many there are,Chaplin pictures made in Niles,5,yes
