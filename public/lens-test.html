@@ -1,0 +1,134 @@
+<!doctype html>
+<!--
+  Does this browser actually RUN an SVG filter referenced from
+  backdrop-filter, or only parse it?
+
+  CSS.supports() answers the wrong question — Safari returns true for
+  url() in backdrop-filter and then may or may not render it. The only
+  honest test is to put a violent displacement over a backdrop with hard
+  edges and look.
+
+  Two panes over the same stripes. The left one has no lens and is the
+  control; the right one has a lens at a scale nobody would ship. If the
+  right pane's stripes are bent and the left one's are straight, the
+  browser runs it.
+
+  Not linked from anywhere and not part of the app — /lens-test.html.
+-->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>lens test</title>
+    <style>
+      body {
+        margin: 0;
+        font: 13px/1.4 ui-monospace, monospace;
+        background: repeating-linear-gradient(
+          135deg,
+          #0b3a2a 0 18px,
+          #f4f9f2 18px 36px
+        );
+        min-height: 100vh;
+      }
+      .row { display: flex; gap: 16px; padding: 90px 16px 16px; }
+      .pane {
+        flex: 1;
+        height: 190px;
+        border-radius: 26px;
+        background: rgba(255, 255, 255, 0.4);
+        backdrop-filter: blur(6px) saturate(1.6);
+        -webkit-backdrop-filter: blur(6px) saturate(1.6);
+        position: relative;
+        overflow: hidden;
+      }
+      .lens {
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        backdrop-filter: url(#test-lens);
+        -webkit-backdrop-filter: url(#test-lens);
+      }
+      .label {
+        position: absolute;
+        left: 10px;
+        bottom: 8px;
+        z-index: 5;
+        background: #000;
+        color: #0f0;
+        padding: 2px 6px;
+        border-radius: 4px;
+      }
+      #out {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        background: #000;
+        color: #0f0;
+        padding: 6px 10px;
+        white-space: pre-wrap;
+        z-index: 99;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="out">measuring…</div>
+
+    <svg width="0" height="0" style="position: absolute">
+      <defs>
+        <filter
+          id="test-lens"
+          x="-20%"
+          y="-60%"
+          width="140%"
+          height="220%"
+          color-interpolation-filters="sRGB"
+        >
+          <feColorMatrix
+            in="SourceAlpha"
+            type="matrix"
+            values="0 0 0 1 0  0 0 0 1 0  0 0 0 1 0  0 0 0 0 1"
+            result="shape"
+          />
+          <feGaussianBlur in="shape" stdDeviation="10" result="sh" />
+          <feOffset in="sh" dx="-16" dy="0" result="hl" />
+          <feOffset in="sh" dx="16" dy="0" result="hr" />
+          <feComposite in="hl" in2="hr" operator="arithmetic"
+                       k1="0" k2="0.5" k3="-0.5" k4="0.5" result="gx" />
+          <feOffset in="sh" dx="0" dy="-16" result="vt" />
+          <feOffset in="sh" dx="0" dy="16" result="vb" />
+          <feComposite in="vt" in2="vb" operator="arithmetic"
+                       k1="0" k2="0.5" k3="-0.5" k4="0.5" result="gy" />
+          <feColorMatrix in="gx" type="matrix"
+            values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0 1" result="mr" />
+          <feColorMatrix in="gy" type="matrix"
+            values="0 0 0 0 0  1 0 0 0 0  0 0 0 0 0  0 0 0 0 1" result="mg" />
+          <feBlend in="mr" in2="mg" mode="screen" result="map" />
+          <feDisplacementMap in="SourceGraphic" in2="map" scale="90"
+                             xChannelSelector="R" yChannelSelector="G" />
+        </filter>
+      </defs>
+    </svg>
+
+    <div class="row">
+      <div class="pane"><span class="label">no lens</span></div>
+      <div class="pane">
+        <div class="lens"></div>
+        <span class="label">lens, scale 90</span>
+      </div>
+    </div>
+
+    <script>
+      document.getElementById('out').textContent = [
+        'ua           ' + (navigator.userAgent.match(/(Version\/[\d.]+ )?(Safari|Chrome)\/[\d.]+/) || ['?'])[0],
+        'supports url ' + CSS.supports('backdrop-filter', 'url(#test-lens)'),
+        'computed     ' + (getComputedStyle(document.querySelector('.lens')).backdropFilter ||
+                           getComputedStyle(document.querySelector('.lens')).webkitBackdropFilter),
+        '',
+        'RIGHT stripes bent  -> the browser runs it',
+        'both panes the same -> it parses and ignores it',
+      ].join('\n')
+    </script>
+  </body>
+</html>

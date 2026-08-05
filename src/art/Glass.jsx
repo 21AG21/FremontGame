@@ -29,10 +29,20 @@
 // border-radius, so the bend goes round the corners instead of stopping
 // square.
 //
-// Safari ignores url() in backdrop-filter entirely and drops the
-// declaration. That is why this lives on its own layer: where it does
-// not work, the layer renders as nothing and the blur underneath is
-// untouched.
+// Safari does not run this, and it is worth being precise about how it
+// fails, because the obvious guess is wrong. It does NOT drop the
+// declaration: CSS.supports('backdrop-filter','url(#x)') returns true on
+// iOS 26 and getComputedStyle reports url("#glass-bar") back. It parses
+// it, computes it, and then silently renders nothing — measured on a
+// real iPhone against public/lens-test.html, where the lensed pane and
+// the control pane come out pixel-identical over hard diagonal stripes
+// that Chrome visibly bends.
+//
+// Which means feature detection cannot find this, and the only reason it
+// is harmless is that the lens is its own layer: a no-op there paints
+// nothing and the blur underneath is untouched. Everything else in the
+// material — vibrancy, rim, specular, thickness, shadow — does work in
+// Safari. Verified.
 
 // Red bends most, blue least — the same order as a real prism, and the
 // reason a rim reads as glass rather than as a soft edge.
