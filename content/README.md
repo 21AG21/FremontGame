@@ -125,27 +125,52 @@ lucky, because it's the best word on the list.
 
 ---
 
-## Editing in a browser instead
+## Editing in Airtable
 
-Two options, both optional. Without either, these CSV files in the repo
-are the source of truth and you edit them here.
+There is a base called **The Fremont Daily — content**, id
+`appUeif6dV0j9eBed`, with all five tables and all 385 rows already in
+it. Every column carries a description explaining what it does, and
+`district`, `fame` and `difficulty` are dropdowns so they cannot be
+typed wrong.
 
-**Google Sheets.** One sheet, five tabs named `places`, `groups`,
-`facts`, `scenes`, `words`, columns matching the headers above. Share it
-"anyone with the link can view" and set `SHEET_ID` in the repo's GitHub
-secrets to the id out of its URL.
+It is not connected to anything yet. To switch the site over to it:
 
-**Airtable.** One base, five tables with the same names and columns. Set
-`AIRTABLE_BASE` and `AIRTABLE_TOKEN`.
+1. In Airtable, make a personal access token with `data.records:read`
+   and `schema.bases:read` on that base. **Do not paste it into a chat
+   window or commit it** — it goes straight into step 2.
+2. In the GitHub repo, Settings → Secrets and variables → Actions, add
+   `AIRTABLE_BASE` = `appUeif6dV0j9eBed` and `AIRTABLE_TOKEN` = the
+   token.
+3. Actions → Daily content → Run workflow, to check it works now rather
+   than finding out at 2am.
 
-Either way a job runs every morning: it pulls the sheet, checks it, and
-commits only if everything passes, which redeploys the site. If the
-check fails it stops and the site keeps serving what it already had.
+After that, a job runs every morning: it pulls the base, checks every
+row, and commits only if everything passes — which redeploys the site.
+If the check fails it stops, and the site keeps serving what it already
+had.
 
-You can also run it by hand from the Actions tab, or locally:
+**Row order is the queue order.** The Word plays its answers top to
+bottom, so dragging a row in Airtable changes what the town sees. The
+other four tables don't care about order.
+
+### Or Google Sheets, if you'd rather
+
+One sheet, five tabs named `places`, `groups`, `facts`, `scenes`,
+`words`, columns matching the headers above. Share it "anyone with the
+link can view" and set `SHEET_ID` to the id out of its URL. No token
+needed. `npm run content:export --force` regenerates the CSVs to import.
+
+### Or neither
+
+Without `AIRTABLE_BASE` or `SHEET_ID` set, the CSV files in this folder
+are the source of truth and you edit them here — in GitHub's web UI, or
+in Numbers, or anywhere else. The daily job still runs and still checks
+them; it just has nothing to pull.
+
+You can run a pull by hand from the Actions tab, or locally:
 
 ```bash
-SHEET_ID=... npm run content:pull
+AIRTABLE_BASE=appUeif6dV0j9eBed AIRTABLE_TOKEN=... npm run content:pull
 ```
 
 ---
