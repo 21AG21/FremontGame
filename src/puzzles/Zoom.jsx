@@ -107,10 +107,10 @@ export default function Zoom() {
             ))}
           </div>
 
-          <span className="caption">
-            {guesses.length === 0 ? 'Five guesses. Each one zooms out.' : 'How far off you were'}
-          </span>
-
+          {/* No caption. "Five guesses. Each one zooms out." sat directly
+              under a five-pip counter and five empty slots, and above a
+              magnification badge that ticks down every time you guess —
+              four ways of saying the same thing, three of them silent. */}
           <ul className="guess-list" aria-live="polite">
             {guesses.map((g, i) => {
               const c = compassFrom(g.bearing)
@@ -137,15 +137,6 @@ export default function Zoom() {
                 </li>
               )
             })}
-
-            {/* The guesses you have not made yet. Empty slots, not
-                absence: the list keeps its shape so nothing under it
-                moves when a guess lands. */}
-            {Array.from({ length: P.maxGuesses - guesses.length }, (_, i) => (
-              <li key={`empty-${i}`} className="is-slot" aria-hidden="true">
-                <div className="guess is-empty" />
-              </li>
-            ))}
           </ul>
         </div>
       )}

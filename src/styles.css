@@ -19,7 +19,10 @@
 :root[data-theme='light'] {
   color-scheme: light;
 
-  --bg: #f1f5f8;
+  /* A green cast on the paper, not a blue one. This is a town with a
+     ridge on one side and a marsh on the other, and the site was set
+     entirely in navy — correct for a newspaper, wrong for Fremont. */
+  --bg: #eef4ef;
   --ink: #0c2033;
   /* 4.56:1 on the page background, 5.00:1 on a panel. The design doc's
      #5B7794 measured 4.25:1 on the background, which is a fail for the
@@ -44,7 +47,12 @@
   --on-navy: #ffffff;
   --on-green: #ffffff;
 
-  --ridge: #043764;
+  /* Mission Peak, in the colour Mission Peak actually is. The ridge is
+     the one piece of decoration on the site and it was navy, which made
+     it read as a watermark of the wordmark rather than as a hill. It
+     sits at 9% opacity and is aria-hidden, so it carries no state and
+     collides with nothing — green stays free to mean "correct". */
+  --ridge: #2f6b3a;
   /* White on the doc's 0.45 scrim measured 2.55:1 over a white plate.
      0.78 puts it at 6.33:1 and still reads as glass. */
   --scrim: rgba(4, 55, 100, 0.78);
@@ -81,7 +89,7 @@
 :root[data-theme='dark'] {
   color-scheme: dark;
 
-  --bg: #07203a;
+  --bg: #06231f;
   --ink: #eaf1f8;
   --muted: #93aec7;
 
@@ -101,7 +109,7 @@
 
   --amber: #d9a72a;
 
-  --ridge: #9fd6ff;
+  --ridge: #6fce8e;
   --scrim: rgba(4, 25, 45, 0.72);
 
   --art-ink: #08203a;
@@ -124,7 +132,7 @@
   :root:not([data-theme='light']) {
     color-scheme: dark;
 
-    --bg: #07203a;
+    --bg: #06231f;
     --ink: #eaf1f8;
     --muted: #93aec7;
 
@@ -144,7 +152,7 @@
 
     --amber: #d9a72a;
 
-    --ridge: #9fd6ff;
+    --ridge: #6fce8e;
     --scrim: rgba(4, 25, 45, 0.72);
 
     --art-ink: #08203a;
@@ -388,44 +396,17 @@ ul { list-style: none; }
   color: var(--muted);
 }
 
-/* Glass, not panel. These two discs sit on the same page as the bar and
-   were the only floating controls still painted as opaque cards — which
-   read as a different material two inches from one that isn't. Same
-   vibrancy, same pair of hairlines, no lens: see .tag for why a rim
-   effect on a 32px disc is not worth a filter pass. */
+/* No disc at all.
+
+   These were opaque cards, then glass discs, and both were too loud: two
+   filled circles in the top corner read as a toolbar, which is what the
+   whole layout is trying not to be. They are utilities — rules, and a
+   theme switch — and a utility should be legible and quiet. The glyph
+   alone does that, and it frees the corner for the wordmark.
+
+   The 44px target stays; only the paint is gone. */
 .theme::before,
-.howto-open::before {
-  content: '';
-  position: absolute;
-  z-index: -1;
-  width: 32px;
-  height: 32px;
-  border: 0;
-  border-radius: 999px;
-  background: var(--glass-tint);
-  -webkit-backdrop-filter: saturate(1.8) brightness(1.04) blur(12px);
-  backdrop-filter: saturate(1.8) brightness(1.04) blur(12px);
-  box-shadow:
-    inset 0 0.5px 0 var(--glass-inner-top),
-    inset 0 -0.5px 0 var(--glass-inner-bottom),
-    0 0 0 1px var(--glass-rim-side),
-    0 1px 2px var(--glass-shadow-near);
-}
-
-@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-  .theme::before,
-  .howto-open::before { background: var(--panel); box-shadow: 0 0 0 1px var(--line); }
-}
-
-@media (prefers-reduced-transparency: reduce) {
-  .theme::before,
-  .howto-open::before {
-    background: var(--panel);
-    -webkit-backdrop-filter: none;
-    backdrop-filter: none;
-    box-shadow: 0 0 0 1px var(--line);
-  }
-}
+.howto-open::before { content: none; }
 
 .theme { position: relative; }
 .theme svg { position: relative; }
@@ -700,34 +681,31 @@ main {
 
 .btn:disabled { opacity: 0.4; cursor: default; }
 
-/* The plate an engraving sits on. Fixed height, per the doc, and for a
-   reason beyond fidelity: the drawing is cropped with slice, so a frame
-   that changes shape shows a different part of it to different players. */
-/* Pinned to the drawing's own 4:3, not to 236px.
+/* The plate takes the room, rather than holding a ratio and leaving it.
 
-   The old comment defended the fixed height on the grounds that the
-   crop is a `slice` and a frame that changes shape shows a different
-   part of the drawing to different players. That was the right worry
-   and the wrong fix: the frame is as wide as the sheet, so a fixed
-   HEIGHT is exactly what made the aspect ratio — and therefore the
-   crop — differ, 1.07 on a 375px phone against 1.29 in the 440px
-   column. Matching the viewBox means nobody is cropped at all.
+   This was locked to the drawing's own 4:3 so every player got an
+   identical crop. Correct in principle, and it cost most of the screen:
+   a 4:3 box in a 331px column is 248px tall, and on an 812px phone with
+   nothing else to show before your first guess it left roughly a third
+   of the display empty. Filling that with placeholder slots only made
+   the emptiness tidier.
 
-   Height leads and width follows so the plate can never be taller than
-   the screen has room for; on a short phone it narrows and centres
-   rather than losing the top and bottom of the picture. Divided by --z
-   to stay the same fraction of the screen at every desktop step, the
-   way .sheet's own min-height does. */
+   So the frame grows into whatever the screen has and the `slice` crop
+   varies again — capped at square, because past that a wide engraving
+   loses its own sides. What that costs is real but small: everyone still
+   sees the focus point, every zoom level is the same multiple, and the
+   difficulty lives in the magnification rather than in the framing. What
+   it buys is a picture big enough to be the point of the screen. */
 .plate {
   position: relative;
-  flex: none;
-  /* Width leads, because `max-width` on an aspect-ratio box clips the
-     box without re-deriving its height — the plate came out 433px wide
-     in a 331px column and pushed the whole page sideways. Capping the
-     width against BOTH the column and the height budget keeps 4:3 true
-     under either constraint. */
-  width: min(100%, calc(clamp(170px, 40dvh / var(--z), 420px) * 4 / 3));
-  aspect-ratio: 4 / 3;
+  flex: 1 1 auto;
+  width: 100%;
+  min-height: clamp(150px, 26dvh / var(--z), 260px);
+  /* A fifth taller than it is wide, and no more. A landscape engraving
+     in a portrait frame loses its own sides to the slice crop, and past
+     about 1.2 the thing you are being asked to recognise starts falling
+     off the left and right edges. */
+  max-height: min(100%, calc((min(440px, 100vw) - var(--pad) * 2) * 1.2));
   margin-inline: auto;
   overflow: hidden;
   border-radius: var(--r-lg);
@@ -875,6 +853,11 @@ main {
   display: flex;
   flex-direction: column;
   gap: var(--gap);
+  /* Guesses stack downward from the top of whatever room is left. Before
+     the first one there is nothing here at all, which is the point: an
+     empty lower half reads as room to play into, five dashed rectangles
+     read as something failing to load. */
+  justify-content: flex-start;
 }
 
 .guess-list {
@@ -890,11 +873,7 @@ main {
   overflow-x: hidden;
 }
 
-/* Made guesses keep their own height; the unspent slots below them
-   share out whatever is left and collapse quietly when there isn't
-   any, so five slots can never push the board off a short screen. */
 .guess-list > li { flex: none; min-height: 0; display: flex; }
-.guess-list > li.is-slot { flex: 1 1 0; }
 
 /* Wraps. "Lake Elizabeth" beside "Hot ↙ under a mile south" needs
    348px of a 295px row, and with the meta pinned at flex: none the
@@ -914,14 +893,10 @@ main {
   border: 1px solid var(--line);
 }
 
-/* A guess you have not made. Sunk rather than raised, and dashed, so
-   it reads as a slot waiting to be filled and never as a result. */
-.guess.is-empty {
-  min-height: 0;
-  background: var(--sunk);
-  border-style: dashed;
-  border-color: var(--line);
-}
+/* The five dashed placeholders are gone. They were put there to fill a
+   third of an empty phone, and they did — with five outlines of nothing,
+   directly under a five-pip counter that already says how many guesses
+   are left. Filling space is not the same as using it. */
 
 .guess-name {
   flex: 1 1 auto;
@@ -1162,9 +1137,16 @@ main {
   corner-shape: squircle;
   background: var(--panel);
   border: 1px solid var(--line);
-  font-family: var(--serif);
+  /* Sans, not the serif the rest of the site is set in. Newsreader is a
+     reading face — it has a two-storey g, a curled C, a stressed S, and
+     at 34px in a five-letter row those details are what you look at
+     instead of the letter. A guessing game needs the plainest possible
+     letterform, because the whole task is recognising WHICH letter it is
+     at a glance and nothing else. */
+  font-family: var(--sans);
   font-size: clamp(26px, 5vh, 40px);
-  font-weight: 600;
+  font-weight: 700;
+  letter-spacing: 0.01em;
 }
 
 /* Colour alone is not the feedback channel. Wordle's green and amber sit

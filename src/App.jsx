@@ -154,13 +154,13 @@ export default function App() {
             </button>
           </div>
 
-          {/* Section head and deck. These used to be one nowrap line
-              beside the wordmark, where two 44px icon buttons left the
-              deck about 88px on a 360px phone — it ellipsised to four
-              characters, so the only label naming the game was gone. */}
+          {/* Just the section name. The line under it used to repeat
+              what the board already says — "Five letters, six tries"
+              over six rows of five, "Name the place, five guesses" over
+              five guess slots and a five-pip counter. Every game states
+              its own rules by being drawn; the ? has the rest. */}
           <p className="deck">
             <span className="deck-game">{type.name}</span>
-            <span className="deck-prompt">{type.prompt}</span>
           </p>
         </header>
 

@@ -95,7 +95,11 @@ export default function ThenNow() {
         />
       ) : (
         <>
-          <span className="caption">Pick the year of the earlier view</span>
+          {/* The one caption kept anywhere. A grid of years does not say
+              WHICH of the two views you are dating, and the plate labels
+              them Then and Today — so this is three words tying the
+              answer to a word already on screen, not a restatement. */}
+          <span className="caption">Which year is Then?</span>
           {/* the row stays after the round ends — the years you tried are
               the record of how you got there */}
           <div className="year-grid">
