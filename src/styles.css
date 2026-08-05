@@ -19,11 +19,12 @@
 :root[data-theme='light'] {
   color-scheme: light;
 
-  /* An actual sage, not a hint of one. #eef4ef was off-white with a
-     rumour of green in it — technically a green cast, and from two feet
-     away indistinguishable from the grey it replaced. This is a town
-     with a ridge on one side and a marsh on the other. */
-  --bg: #dbe8db;
+  /* Two overshoots and the middle. #eef4ef was off-white with a rumour
+     of green in it, indistinguishable from the grey it replaced.
+     #dbe8db was a full sage and too much of one — the page started
+     competing with the board instead of holding it. This reads as green
+     without being the loudest thing on screen. */
+  --bg: #e7efe5;
   --ink: #0c2033;
   /* 4.56:1 on the page background, 5.00:1 on a panel. The design doc's
      #5B7794 measured 4.25:1 on the background, which is a fail for the
@@ -37,13 +38,9 @@
 
   --navy: #043764;
   --green: #33632e;
-  /* Deepened for the sage page. #B28618 cleared 3:1 against white and
-     off-white, but the background is a real green now and it fell to
-     2.62:1 there — a state fill you cannot find the edge of.
-     No amber satisfies both 3:1 on sage and 4.5:1 for dark ink sitting
-     on it, so the label flips to white and the fill goes deep enough to
-     carry it: 3.89:1 on the page, 4.82:1 on a panel, 4.93:1 for the
-     letter. */
+  /* Deepened for the green page: #B28618 fell to 2.62:1 there. No amber
+     clears both 3:1 on the page and 4.5:1 for dark ink, so the label is
+     white. 3.89:1 on the page, 4.82:1 on a panel, 4.93:1 for the letter. */
   --amber: #8e6b13;
   /* Green as a fill and green as type are not the same value: #33632E
      sits almost on top of the dark panel. This is the type one. */
@@ -58,7 +55,7 @@
      sits at 9% opacity and is aria-hidden, so it carries no state and
      collides with nothing — green stays free to mean "correct". */
   --ridge: #2f6b3a;
-  --ridge-alpha: 0.15;
+  --ridge-alpha: 0.1;
   /* White on the doc's 0.45 scrim measured 2.55:1 over a white plate.
      0.78 puts it at 6.33:1 and still reads as glass. */
   --scrim: rgba(4, 55, 100, 0.78);
@@ -95,11 +92,11 @@
 :root[data-theme='dark'] {
   color-scheme: dark;
 
-  --bg: #06251b;
+  --bg: #072a22;
   --ink: #eaf1f8;
   --muted: #93aec7;
 
-  --panel: #0e3226;
+  --panel: #0e3128;
   --line: rgba(255, 255, 255, 0.14);
   --line-2: rgba(255, 255, 255, 0.44);
   --sunk: rgba(255, 255, 255, 0.05);
@@ -116,7 +113,7 @@
   --amber: #d9a72a;
 
   --ridge: #6fce8e;
-  --ridge-alpha: 0.16;
+  --ridge-alpha: 0.11;
   --scrim: rgba(4, 25, 45, 0.72);
 
   --art-ink: #08203a;
@@ -139,11 +136,11 @@
   :root:not([data-theme='light']) {
     color-scheme: dark;
 
-    --bg: #06251b;
+    --bg: #072a22;
     --ink: #eaf1f8;
     --muted: #93aec7;
 
-    --panel: #0e3226;
+    --panel: #0e3128;
     --line: rgba(255, 255, 255, 0.14);
     --line-2: rgba(255, 255, 255, 0.44);
     --sunk: rgba(255, 255, 255, 0.05);
@@ -160,7 +157,7 @@
     --amber: #d9a72a;
 
     --ridge: #6fce8e;
-    --ridge-alpha: 0.16;
+    --ridge-alpha: 0.11;
     --scrim: rgba(4, 25, 45, 0.72);
 
     --art-ink: #08203a;
@@ -311,15 +308,10 @@ ul { list-style: none; }
   pointer-events: none;
 }
 
-/* Two rows, not one.
-
-   The doc draws wordmark │ rule │ question on a single line, and at the
-   width it is drawn at that is right. This app is never that wide: the
-   sheet is capped at 440px and the two icon buttons take 88 of it, so
-   the question got between 88px and 168px of a line it needed 175 for.
-   It ellipsised — on a 360px phone down to about four characters — and
-   the only label naming the game vanished on every screen size the site
-   actually runs at. Masthead above, section head and deck below. */
+/* Two rows, not one. The doc's single line — wordmark │ rule │ question
+   — needs 175px and never gets it: the sheet caps at 440px and the two
+   icon buttons take 88. It ellipsised to about four characters on a
+   360px phone, losing the only label naming the game. */
 .lockup {
   position: relative;
   flex: none;
@@ -404,15 +396,9 @@ ul { list-style: none; }
   color: var(--muted);
 }
 
-/* No disc at all.
-
-   These were opaque cards, then glass discs, and both were too loud: two
-   filled circles in the top corner read as a toolbar, which is what the
-   whole layout is trying not to be. They are utilities — rules, and a
-   theme switch — and a utility should be legible and quiet. The glyph
-   alone does that, and it frees the corner for the wordmark.
-
-   The 44px target stays; only the paint is gone. */
+/* No disc. Opaque cards then glass discs were both too loud — two filled
+   circles up there read as a toolbar. The glyph alone is enough for a
+   utility. 44px target unchanged; only the paint is gone. */
 .theme::before,
 .howto-open::before { content: none; }
 
@@ -451,15 +437,10 @@ main {
      pushes saturation well past 1 for exactly this reason. */
   background: var(--glass-tint);
   border: 0;
-  /* contrast(0.72) is the adaptive part, and it is doing real work.
-     Apple's material normalises whatever is behind it so the labels on
-     it stay readable over anything — a white plate, a navy board, an
-     amber key. CSS cannot sample the backdrop's luminance, but it does
-     not have to: pulling contrast toward the middle compresses the
-     range whatever the range happens to be, which is the same effect
-     arrived at from the other end. A dark backdrop lifts, a bright one
-     drops, and the tint over it lands in a predictable place instead of
-     riding whatever the board is doing this second. */
+  /* The contrast() is the adaptive part: it compresses the backdrop's
+     range per pixel, so a label on the glass reads the same over a white
+     plate, a navy board or an amber key. No luminance sampling needed —
+     pulling toward the middle normalises whatever range it is given. */
   -webkit-backdrop-filter: saturate(2) contrast(0.88) brightness(1.03) blur(24px);
   backdrop-filter: saturate(2) contrast(0.88) brightness(1.03) blur(24px);
   /* Thickness. Two hairlines — light along the top inside edge, a dark
@@ -480,17 +461,11 @@ main {
   --gx: 50%;
 }
 
-/* The lens.
-
-   Displaces the already-blurred backdrop through the map in art/Glass.jsx,
-   so the border bends what is behind it instead of only softening it.
-   This is the difference between glass and frosting, and it is the one
-   part of Apple's material that cannot be done with gradients.
-
-   Its own element, and deliberately not on .index itself: Safari drops
-   any backdrop-filter containing url(), so putting the lens in the same
-   declaration as the blur would cost Safari the blur as well. Here, a
-   browser that cannot do it simply paints nothing. */
+/* The lens — displaces the blurred backdrop through the map in
+   art/Glass.jsx, so the border bends what is behind it rather than only
+   softening it. Its own element on purpose: Safari no-ops url() inside
+   backdrop-filter, and sharing a declaration with the blur would cost
+   Safari the blur too. */
 .index-lens {
   position: absolute;
   inset: 0;
@@ -507,17 +482,11 @@ main {
   backdrop-filter: url(#glass-bar);
 }
 
-/* The rim.
-
-   A border takes one colour. Real glass is bright where the light lands,
-   almost nothing down the sides, and picks up a weaker bounce along the
-   bottom from whatever it is sitting on — so this is a 1px ring of
-   gradient, drawn by masking a padding box out of a border box.
-
-   Two speculars, not one. Apple's material lights the top-left corner
-   hardest and leaves a second, softer highlight opposite it; a single
-   centred spot reads as a glow behind the bar rather than a light on it.
-   The first one rides the pointer. */
+/* The rim. A border takes one colour; glass is bright where the light
+   lands and almost nothing down the sides, so this is a 1px ring of
+   gradient masked out of a border box. Two speculars, because a single
+   centred spot reads as a glow behind the bar rather than a light on
+   it. The first rides the pointer (and the gyroscope, if offered). */
 .index::before {
   content: '';
   position: absolute;
@@ -698,21 +667,11 @@ main {
 
 .btn:disabled { opacity: 0.4; cursor: default; }
 
-/* The plate takes the room, rather than holding a ratio and leaving it.
-
-   This was locked to the drawing's own 4:3 so every player got an
-   identical crop. Correct in principle, and it cost most of the screen:
-   a 4:3 box in a 331px column is 248px tall, and on an 812px phone with
-   nothing else to show before your first guess it left roughly a third
-   of the display empty. Filling that with placeholder slots only made
-   the emptiness tidier.
-
-   So the frame grows into whatever the screen has and the `slice` crop
-   varies again — capped at square, because past that a wide engraving
-   loses its own sides. What that costs is real but small: everyone still
-   sees the focus point, every zoom level is the same multiple, and the
-   difficulty lives in the magnification rather than in the framing. What
-   it buys is a picture big enough to be the point of the screen. */
+/* Grows into the screen rather than holding the drawing's 4:3. Locking
+   the ratio gave every player an identical crop and cost a third of the
+   display. The slice crop varies again, which is a real but small cost:
+   everyone still sees the focus point and every zoom level is the same
+   multiple, so difficulty lives in the magnification, not the framing. */
 .plate {
   position: relative;
   flex: 1 1 auto;
@@ -737,17 +696,10 @@ main {
 
 .plate svg { display: block; width: 100%; height: 100%; }
 
-/* The bar's material at chip size — vibrancy, two hairlines, a contact
-   shadow — but no lens.
-
-   Refraction is a rim effect, and this chip is 24px tall. A band wide
-   enough to see would be most of it, and a band in proportion bends
-   about a pixel and a half that nobody will ever notice, for a whole
-   extra filter pass over the engraving on every frame. The bar earns it;
-   this does not.
-
-   The scrim stays opaque enough to hold white at 6.33:1 — the reading on
-   this label is not negotiable. */
+/* The bar's material at chip size, without the lens: refraction is a rim
+   effect and this chip is 24px tall, so a visible band would be most of
+   it and a proportionate one bends ~1.5px for an extra filter pass every
+   frame. Scrim stays opaque enough to hold white at 6.33:1. */
 .tag {
   position: absolute;
   bottom: 8px;

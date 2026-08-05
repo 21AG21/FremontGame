@@ -1,48 +1,28 @@
-// ─────────────────────────────────────────────────────────────
-//  ZOOM — the answer queue.
+// ZOOM — the answer queue.
 //
-//  Every place in town.js is a possible answer except the ones
-//  next door, which stay in the list only as decoys: guessing
-//  Hayward should tell you you're eight miles off, not be the
-//  thing you were meant to name.
-//
-//  The drawing is composed from the place's motifs rather than
-//  drawn by hand — see art/Engraving.jsx. That is the whole
-//  reason there can be a hundred of these.
-// ─────────────────────────────────────────────────────────────
+// Every place in town.js can be the answer except the ones next door,
+// which stay in the list as decoys. The drawing is composed from the
+// place's motifs (art/Engraving.jsx), which is why there can be a
+// hundred of these without a hundred drawings.
 
 import { PLACES } from './town.js'
 import { distanceMiles } from '../lib/geo.js'
 
-// Two rules decide what can be an answer.
-//
-// It has to be nameable — fame 3 places stay in the autocomplete as
-// wrong guesses, which is where they are useful, and out of the answer
-// queue, where they only ever produce "I could not have got that".
-//
-// And it has to be separable. A pair of places 0.2 miles apart cannot be
-// told apart by a distance-and-bearing hint, so guessing the neighbour
-// costs a life for being essentially right. Where two candidates sit
-// inside a quarter mile of each other, the better-known one is the
-// answer and the other becomes a decoy.
-// 800 feet. Far enough that "0.2 mi north" distinguishes two answers,
-// close enough that genuinely distinct civic buildings a block apart
-// both stay in. A quarter mile collapsed City Hall, the main library and
-// Washington High into one.
+// Two rules decide what can be an answer: it has to be nameable (fame 3
+// is decoy-only, or you get "I could not have got that"), and separable
+// — two places closer than this cannot be told apart by a distance-and-
+// bearing hint, so guessing the neighbour costs a life for being
+// essentially right. 800ft: a quarter mile collapsed City Hall, the main
+// library and Washington High into one.
 const SEPARATION = 0.15
 
 const NAMEABLE = PLACES.filter((p) => p.district !== 'Next door' && p.fame <= 2)
 
-// Greedy, best-first, and comparing against SURVIVORS — not against the
-// whole candidate list.
-//
-// The obvious version compares each place to every other candidate,
-// which lets a place be eliminated by a neighbour that is itself
-// eliminated: Aqua Adventure knocked out Central Park, which knocked out
-// Lake Elizabeth, so the two best-known places in Fremont could never be
-// the answer. Sorting by fame first and keeping a place only if it
-// clears everything already kept fixes both that and the tie-break,
-// which was alphabetical when it was supposed to be by fame.
+// Greedy, best-first, compared against SURVIVORS rather than all
+// candidates. Comparing against everything lets a place be eliminated by
+// a neighbour that is itself eliminated — Aqua Adventure knocked out
+// Central Park, which knocked out Lake Elizabeth, so the two best-known
+// places in town could never be the answer.
 export const ZOOM_POOL = [...NAMEABLE]
   .sort((a, b) => a.fame - b.fame || a.name.localeCompare(b.name))
   .reduce((kept, p) => {
@@ -69,12 +49,9 @@ const mix = (n) => {
   return h >>> 0
 }
 
-// Where the interesting part of each motif actually sits on the plate,
-// in fractions of it. A random focus inside a plausible-looking band
-// opens half the puzzles on blank sky — the crop has to be aimed at
-// the thing that identifies the place, so every motif says where its
-// own subject is. Ordered by how much a crop of it gives away, most
-// telling first: the picker takes the earliest match in this table.
+// Where each motif's subject sits on the plate, in fractions. A random
+// focus opens half the puzzles on blank sky. Ordered by how much a crop
+// gives away, most telling first — the picker takes the earliest match.
 const ANCHORS = [
   // unmistakable
   ['mission', 0.26, 0.36],
@@ -162,18 +139,14 @@ export function focusFor(place) {
   }
 }
 
-// Opens at 2.6, down from 4.2 and originally 5.5.
-//
-// These plates are composed from a parts library rather than drawn one
-// at a time, so past about 3× the crop lands inside a single shape and
-// you are looking at a texture swatch, not a puzzle. Reviewers of three
-// different ages independently quit on the opening frame — the first
-// screen has to be teasing, not blank.
+// Opens at 2.6, down from 5.5. These plates come from a parts library,
+// so past about 3x the crop lands inside a single shape and you are
+// looking at a texture swatch. Three reviewers quit on the opening
+// frame at the old value.
 export const LEVELS = [2.6, 2.1, 1.75, 1.45, 1.2, 1]
 
-// Walk the pool rather than hash into it: a hash served the same place
-// on consecutive days nine times a year, which on a daily game reads as
-// the site being broken.
+// Walk the pool rather than hash into it — a hash repeated the same
+// place on consecutive days nine times a year.
 const STEP = (() => {
   const gcd = (a, b) => (b ? gcd(b, a % b) : a)
   const n = ZOOM_POOL.length
