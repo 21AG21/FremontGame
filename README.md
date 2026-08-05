@@ -196,6 +196,18 @@ Checked with no overflow on either axis, both themes, at 320×568, 375×812,
 667×375 and 1512×1400. Every tap target clears 44px except the Word keyboard at
 320px, which is 25px wide — disclosed in the accessibility statement.
 
+Four of the five screens fill that column exactly. Zoom cannot: the plate stops
+at a fifth taller than it is wide so the engraving keeps its sides, and nothing
+below it grows, so on a tall phone it comes up about 170px short. That slack is
+centred rather than left at the bottom — `justify-content: safe center`, where
+`safe` is what stops a short screen centring its content off both ends at once.
+
+The one place the page does scroll is Zoom with four guesses on the board at
+375×812, by four pixels. That is the sheet's `min-height` doing its job: it is
+deliberately not a fixed height, because a clipped box is permanent data loss
+for anyone who enlarges text or forces line spacing (1.4.4, 1.4.10, 1.4.12).
+Four pixels of scroll is the correct trade.
+
 ## Known gaps
 
 - **Then & Now has 14 scenes and The Word 18 playable answers.** Both repeat

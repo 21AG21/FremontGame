@@ -436,6 +436,23 @@ main {
   display: flex;
   flex-direction: column;
   gap: var(--gap);
+  /* Four of the five screens fill this column exactly — a grid, a
+     keyboard, a card, a set of buttons all stretch. Zoom cannot: the
+     plate stops at a fifth taller than it is wide so the engraving
+     keeps its sides, and nothing under it grows. On a 375x812 phone
+     that left 171px of nothing directly above the bar while every
+     other gap on the screen was 10, which is the one thing on the
+     screen that looked like a mistake.
+
+     Centring costs the four that fill nothing at all — their content
+     is already exactly the height of this box — and it gives Zoom a
+     margin top and bottom instead of a hole at one end.
+
+     `safe` matters: on a short screen the content is taller than the
+     column, and plain centring would overflow it off BOTH ends, taking
+     the top of the picture with it. safe falls back to flex-start the
+     moment it stops fitting. */
+  justify-content: safe center;
 }
 
 /* ── section bar ─────────────────────────────────────────────── */
@@ -884,20 +901,28 @@ main {
 }
 
 .guesses {
-  flex: 1;
+  /* Sized to its guesses, never grown to fill.
+
+     This used to be flex: 1, and so was the list inside it, which put
+     three flexible boxes — the picture and these two — in competition
+     for the same leftover height. Before your first guess the list is
+     empty, and an empty box was still winning about 110px of it: the
+     engraving came up a sixth smaller than it had room for, and the
+     space it lost opened as a hole above the bar. Every other gap on
+     the screen is 17px and that one was 185.
+
+     Guesses still stack downward from the top and still push into the
+     room below; they just have to earn the space by existing. */
+  flex: 0 1 auto;
   min-height: 0;
   display: flex;
   flex-direction: column;
   gap: var(--gap);
-  /* Guesses stack downward from the top of whatever room is left. Before
-     the first one there is nothing here at all, which is the point: an
-     empty lower half reads as room to play into, five dashed rectangles
-     read as something failing to load. */
   justify-content: flex-start;
 }
 
 .guess-list {
-  flex: 1;
+  flex: 0 1 auto;
   min-height: 0;
   display: flex;
   flex-direction: column;
