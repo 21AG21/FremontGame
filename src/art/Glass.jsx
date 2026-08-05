@@ -152,7 +152,24 @@ function Lens({ id, band, scale }) {
         values="0 0 0 0 0  1 0 0 0 0  0 0 0 0 0  0 0 0 0 1"
         result="mg"
       />
-      <feBlend in="mr" in2="mg" mode="screen" result="map" />
+      <feBlend in="mr" in2="mg" mode="screen" result="raw" />
+
+      {/* The lens profile.
+
+          Up to here the ramp is the gradient of a Gaussian-blurred
+          silhouette, which is a smooth falloff — not the curve a bevel
+          actually has. A convex edge barely deviates across its flat
+          face and then bends hard in the last fraction before the rim,
+          because the refraction angle climbs as the surface turns away
+          from you.
+
+          This S-curve is that profile: flat through the middle, steep
+          at the extremes. It is the difference between an edge that
+          fades and an edge that turns. */}
+      <feComponentTransfer in="raw" result="map">
+        <feFuncR type="table" tableValues="0 0.16 0.5 0.84 1" />
+        <feFuncG type="table" tableValues="0 0.16 0.5 0.84 1" />
+      </feComponentTransfer>
 
       {pass('r')}
       {pass('g')}

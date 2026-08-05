@@ -81,6 +81,31 @@ export default function App() {
     el.style.setProperty('--gx', `${((clientX - r.left) / r.width) * 100}%`)
   }
 
+  // Tilt the phone and the highlight slides, because that is what a lit
+  // edge does when you move the thing it is on. Apple drives this off
+  // the gyroscope and so does this.
+  //
+  // What it deliberately does NOT do is ask. Since iOS 13 motion access
+  // needs requestPermission() behind a user gesture, and putting a
+  // system permission sheet in front of somebody for a decorative
+  // highlight is a straightforwardly bad trade. Where the browser hands
+  // the events over without one — Android, and any iPhone where the
+  // reader has already allowed motion for this site — it is used. Where
+  // it doesn't, the pointer keeps driving it and nothing is missing.
+  useEffect(() => {
+    if (typeof DeviceOrientationEvent === 'undefined') return
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return
+
+    const onTilt = (e) => {
+      // gamma is the left-right tilt, -90..90
+      if (e.gamma == null || !bar.current) return
+      const x = Math.max(4, Math.min(96, 50 + e.gamma * 1.6))
+      bar.current.style.setProperty('--gx', `${x}%`)
+    }
+    window.addEventListener('deviceorientation', onTilt)
+    return () => window.removeEventListener('deviceorientation', onTilt)
+  }, [])
+
   const onDown = (e) => {
     if (e.pointerType === 'mouse' && e.button !== 0) return
     // Not captured yet. A tap has to stay an ordinary click on the
