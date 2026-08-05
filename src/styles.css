@@ -19,31 +19,36 @@
 :root[data-theme='light'] {
   color-scheme: light;
 
-  /* A green cast on the paper, not a blue one. This is a town with a
-     ridge on one side and a marsh on the other, and the site was set
-     entirely in navy — correct for a newspaper, wrong for Fremont. */
-  --bg: #eef4ef;
+  /* An actual sage, not a hint of one. #eef4ef was off-white with a
+     rumour of green in it — technically a green cast, and from two feet
+     away indistinguishable from the grey it replaced. This is a town
+     with a ridge on one side and a marsh on the other. */
+  --bg: #dbe8db;
   --ink: #0c2033;
   /* 4.56:1 on the page background, 5.00:1 on a panel. The design doc's
      #5B7794 measured 4.25:1 on the background, which is a fail for the
      captions that sit directly on it. */
   --muted: #4e6880;
 
-  --panel: #ffffff;
-  --line: rgba(4, 55, 100, 0.12);
-  --line-2: rgba(4, 55, 100, 0.42);
-  --sunk: rgba(4, 55, 100, 0.06);
+  --panel: #fbfdfa;
+  --line: rgba(18, 64, 40, 0.14);
+  --line-2: rgba(18, 64, 40, 0.42);
+  --sunk: rgba(18, 64, 40, 0.07);
 
   --navy: #043764;
   --green: #33632e;
-  /* #C8971B measures 2.66:1 against a white panel, under the 3:1 that
-     WCAG asks for a state fill. This clears 3:1 on both light surfaces
-     and still takes the dark ink at 4.9:1. */
-  --amber: #b28618;
+  /* Deepened for the sage page. #B28618 cleared 3:1 against white and
+     off-white, but the background is a real green now and it fell to
+     2.62:1 there — a state fill you cannot find the edge of.
+     No amber satisfies both 3:1 on sage and 4.5:1 for dark ink sitting
+     on it, so the label flips to white and the fill goes deep enough to
+     carry it: 3.89:1 on the page, 4.82:1 on a panel, 4.93:1 for the
+     letter. */
+  --amber: #8e6b13;
   /* Green as a fill and green as type are not the same value: #33632E
      sits almost on top of the dark panel. This is the type one. */
   --green-ink: #33632e;
-  --on-amber: #12212e;
+  --on-amber: #ffffff;
   --on-navy: #ffffff;
   --on-green: #ffffff;
 
@@ -53,6 +58,7 @@
      sits at 9% opacity and is aria-hidden, so it carries no state and
      collides with nothing — green stays free to mean "correct". */
   --ridge: #2f6b3a;
+  --ridge-alpha: 0.15;
   /* White on the doc's 0.45 scrim measured 2.55:1 over a white plate.
      0.78 puts it at 6.33:1 and still reads as glass. */
   --scrim: rgba(4, 55, 100, 0.78);
@@ -67,7 +73,7 @@
      the top edge where the light lands, nearly invisible down the
      sides, and picks up a soft bounce along the bottom. A flat border
      colour cannot do that, so the rim is a masked gradient. */
-  --glass-tint: rgba(255, 255, 255, 0.55);
+  --glass-tint: rgba(250, 253, 248, 0.5);
   --glass-rim-top: rgba(255, 255, 255, 0.98);
   --glass-rim-side: rgba(255, 255, 255, 0.32);
   --glass-rim-bottom: rgba(255, 255, 255, 0.7);
@@ -89,11 +95,11 @@
 :root[data-theme='dark'] {
   color-scheme: dark;
 
-  --bg: #06231f;
+  --bg: #06251b;
   --ink: #eaf1f8;
   --muted: #93aec7;
 
-  --panel: #0d2c4a;
+  --panel: #0e3226;
   --line: rgba(255, 255, 255, 0.14);
   --line-2: rgba(255, 255, 255, 0.44);
   --sunk: rgba(255, 255, 255, 0.05);
@@ -110,11 +116,12 @@
   --amber: #d9a72a;
 
   --ridge: #6fce8e;
+  --ridge-alpha: 0.16;
   --scrim: rgba(4, 25, 45, 0.72);
 
   --art-ink: #08203a;
 
-  --glass-tint: rgba(14, 40, 68, 0.52);
+  --glass-tint: rgba(14, 52, 38, 0.5);
   --glass-rim-top: rgba(255, 255, 255, 0.36);
   --glass-rim-side: rgba(255, 255, 255, 0.07);
   --glass-rim-bottom: rgba(255, 255, 255, 0.15);
@@ -132,11 +139,11 @@
   :root:not([data-theme='light']) {
     color-scheme: dark;
 
-    --bg: #06231f;
+    --bg: #06251b;
     --ink: #eaf1f8;
     --muted: #93aec7;
 
-    --panel: #0d2c4a;
+    --panel: #0e3226;
     --line: rgba(255, 255, 255, 0.14);
     --line-2: rgba(255, 255, 255, 0.44);
     --sunk: rgba(255, 255, 255, 0.05);
@@ -153,11 +160,12 @@
     --amber: #d9a72a;
 
     --ridge: #6fce8e;
+    --ridge-alpha: 0.16;
     --scrim: rgba(4, 25, 45, 0.72);
 
     --art-ink: #08203a;
 
-    --glass-tint: rgba(14, 40, 68, 0.52);
+    --glass-tint: rgba(14, 52, 38, 0.5);
     --glass-rim-top: rgba(255, 255, 255, 0.36);
     --glass-rim-side: rgba(255, 255, 255, 0.07);
     --glass-rim-bottom: rgba(255, 255, 255, 0.15);
@@ -299,7 +307,7 @@ ul { list-style: none; }
   z-index: -1;
   width: 100%;
   height: 100%;
-  opacity: 0.09;
+  opacity: var(--ridge-alpha, 0.09);
   pointer-events: none;
 }
 
@@ -452,8 +460,8 @@ main {
      arrived at from the other end. A dark backdrop lifts, a bright one
      drops, and the tint over it lands in a predictable place instead of
      riding whatever the board is doing this second. */
-  -webkit-backdrop-filter: saturate(1.8) contrast(0.72) brightness(1.06) blur(24px);
-  backdrop-filter: saturate(1.8) contrast(0.72) brightness(1.06) blur(24px);
+  -webkit-backdrop-filter: saturate(2) contrast(0.88) brightness(1.03) blur(24px);
+  backdrop-filter: saturate(2) contrast(0.88) brightness(1.03) blur(24px);
   /* Thickness. Two hairlines — light along the top inside edge, a dark
      one along the bottom — then an inner shadow that gives the pane a
      depth rather than an edge, then a tight contact shadow and a soft
@@ -750,8 +758,8 @@ main {
      engraving, which is pure white paper and near-black ink — the
      widest range on the site and the one place a fixed tint would be
      at the mercy of wherever the crop happens to land. */
-  -webkit-backdrop-filter: blur(6px) saturate(1.5) contrast(0.72) brightness(1.06);
-  backdrop-filter: blur(6px) saturate(1.5) contrast(0.72) brightness(1.06);
+  -webkit-backdrop-filter: blur(6px) saturate(1.7) contrast(0.88) brightness(1.03);
+  backdrop-filter: blur(6px) saturate(1.7) contrast(0.88) brightness(1.03);
   box-shadow:
     inset 0 0.5px 0 rgba(255, 255, 255, 0.34),
     inset 0 -0.5px 0 rgba(0, 0, 0, 0.22),
