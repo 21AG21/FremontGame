@@ -138,6 +138,10 @@
 :root {
   --gap: 12px;
   --pad: 22px;
+  /* how far the section bar floats off the bottom and the side edges.
+     One value, because the two used to be written out separately and
+     drifted apart. */
+  --bar-inset: 14px;
 
   --r-lg: 26px;
   --r-md: 18px;
@@ -220,7 +224,7 @@ ul { list-style: none; }
   min-height: calc(100dvh / var(--z));
   max-width: 440px;
   margin: 0 auto;
-  padding: var(--pad) var(--pad) calc(18px + env(safe-area-inset-bottom));
+  padding: var(--pad) var(--pad) calc(var(--bar-inset) + env(safe-area-inset-bottom));
   display: flex;
   flex-direction: column;
   gap: var(--gap);
@@ -258,48 +262,85 @@ ul { list-style: none; }
   pointer-events: none;
 }
 
+/* Two rows, not one.
+
+   The doc draws wordmark │ rule │ question on a single line, and at the
+   width it is drawn at that is right. This app is never that wide: the
+   sheet is capped at 440px and the two icon buttons take 88 of it, so
+   the question got between 88px and 168px of a line it needed 175 for.
+   It ellipsised — on a 360px phone down to about four characters — and
+   the only label naming the game vanished on every screen size the site
+   actually runs at. Masthead above, section head and deck below. */
 .lockup {
   position: relative;
   flex: none;
   display: flex;
-  align-items: baseline;
-  gap: 9px;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.masthead {
+  display: flex;
+  /* center, not baseline. Baseline in a row holding 44px buttons and a
+     22px rule aligned everything to a different edge — the icons sat
+     high and the hairline hung below the wordmark. */
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
 }
 
 .flag {
-  flex: none;
+  flex: 1;
+  min-width: 0;
   font-family: var(--serif);
   font-size: var(--t-2xl);
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.015em;
+}
+
+/* Both icon buttons in one group at the right edge. They used to take
+   turns claiming `margin-left: auto` through an adjacent-sibling rule,
+   which stopped matching the moment the How-to-play modal rendered
+   between them and shunted the theme button back across the header. */
+.chrome {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin-right: -6px;
+}
+
+/* Stacked, always. Side by side they fit for Zoom and wrapped for Then
+   & Now and Higher or Lower, so the header was two different heights
+   and the whole board jumped a line every time you changed game. */
+.deck {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.deck-game {
+  font-family: var(--serif);
+  font-size: var(--t-xl);
   font-weight: 600;
   line-height: 1.15;
   letter-spacing: -0.015em;
 }
 
-.lockup-rule {
-  flex: none;
-  width: 1px;
-  height: 22px;
-  background: var(--line-2);
-}
-
-.prompt {
+.deck-prompt {
   min-width: 0;
-  font-size: var(--t-lg);
+  font-size: var(--t-md);
   font-weight: 500;
-  line-height: 1.2;
-  letter-spacing: -0.01em;
+  line-height: 1.3;
   color: var(--muted);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 
 /* Not in the design doc. Kept to the size of the section-bar icons and
-   pushed to the far edge so it reads as chrome, not as a sixth game. */
+   at the far edge so it reads as chrome, not as a sixth game. */
 .theme {
   flex: none;
-  margin-left: auto;
-  align-self: center;
   /* 44px is the minimum target, even though the visible pill is 32 —
      the padding does the work so the header doesn't grow. */
   width: 44px;
@@ -344,11 +385,10 @@ main {
 
 .index {
   position: sticky;
-  bottom: calc(18px + env(safe-area-inset-bottom));
+  bottom: calc(var(--bar-inset) + env(safe-area-inset-bottom));
   z-index: 10;
-  margin: auto calc(var(--pad) * -1 + 18px) 0;
+  margin: auto calc(var(--pad) * -1 + var(--bar-inset)) 0;
   display: flex;
-  gap: 2px;
   padding: 4px;
   border-radius: var(--r-md);
   corner-shape: squircle;
@@ -362,6 +402,27 @@ main {
   box-shadow:
     0 6px 20px var(--bar-shadow),
     inset 0 1px 0 var(--bar-sheen);
+  /* The bar claims horizontal drags and leaves vertical ones to the
+     page, so sliding between games and scrolling never fight. */
+  touch-action: pan-y;
+  /* where the light is, as a fraction across the pane */
+  --gx: 50%;
+}
+
+/* The specular highlight, following your finger along the top edge.
+   Painted above the pane and the pill so the glass reads as one
+   surface with something moving over it, rather than five buttons. */
+.index::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  border-radius: inherit;
+  corner-shape: squircle;
+  pointer-events: none;
+  background:
+    radial-gradient(90% 150% at var(--gx) -30%, var(--bar-sheen), transparent 62%);
+  opacity: 0.55;
 }
 
 /* Without backdrop-filter the pane would just be washed out, so fall
@@ -370,14 +431,59 @@ main {
   .index { background: var(--panel); border-color: var(--line); }
 }
 
+/* One pill that travels, not five backgrounds taking turns. Sized to
+   exactly a fifth of the track — which is why the bar has no gap
+   between items any more; a gap makes the pitch and the width two
+   different numbers and the pill drifts a couple of pixels per slot. */
+.index-pill {
+  position: absolute;
+  z-index: 0;
+  top: 4px;
+  bottom: 4px;
+  left: 4px;
+  width: calc((100% - 8px) / 5);
+  border-radius: var(--r-xs);
+  corner-shape: squircle;
+  background: var(--navy);
+  transform: translate3d(calc(var(--i) * 100%), 0, 0);
+  box-shadow:
+    0 2px 8px var(--bar-shadow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.22);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* Overshoots very slightly and settles, which is the difference
+     between a pill that moves and a pill that is redrawn. */
+  .index-pill {
+    transition:
+      transform 340ms cubic-bezier(0.22, 1.06, 0.32, 1),
+      scale 180ms ease-out;
+  }
+
+  /* Under a finger it has to keep up, so the travel is short and the
+     overshoot goes away — a 340ms spring while you are still dragging
+     reads as lag, not as weight. The stretch is what sells it as one
+     soft thing being pushed along rather than a box being re-drawn
+     five times. */
+  .index.is-sliding .index-pill {
+    transition-duration: 110ms;
+    transition-timing-function: ease-out;
+    scale: 1.06 0.96;
+  }
+}
+
 .index-item {
+  position: relative;
+  z-index: 1;
   flex: 1;
   min-width: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 5px;
-  padding: 9px 2px;
+  gap: 3px;
+  /* 6+18+3+13+6 = 46px tall, over the 44 target floor and 8px shorter
+     than it was. */
+  padding: 6px 2px;
   border: 0;
   border-radius: var(--r-xs);
   corner-shape: squircle;
@@ -386,7 +492,6 @@ main {
 }
 
 .index-item.is-active {
-  background: var(--navy);
   color: var(--on-navy);
 }
 
@@ -441,10 +546,32 @@ main {
 /* The plate an engraving sits on. Fixed height, per the doc, and for a
    reason beyond fidelity: the drawing is cropped with slice, so a frame
    that changes shape shows a different part of it to different players. */
+/* Pinned to the drawing's own 4:3, not to 236px.
+
+   The old comment defended the fixed height on the grounds that the
+   crop is a `slice` and a frame that changes shape shows a different
+   part of the drawing to different players. That was the right worry
+   and the wrong fix: the frame is as wide as the sheet, so a fixed
+   HEIGHT is exactly what made the aspect ratio — and therefore the
+   crop — differ, 1.07 on a 375px phone against 1.29 in the 440px
+   column. Matching the viewBox means nobody is cropped at all.
+
+   Height leads and width follows so the plate can never be taller than
+   the screen has room for; on a short phone it narrows and centres
+   rather than losing the top and bottom of the picture. Divided by --z
+   to stay the same fraction of the screen at every desktop step, the
+   way .sheet's own min-height does. */
 .plate {
   position: relative;
   flex: none;
-  height: 236px;
+  /* Width leads, because `max-width` on an aspect-ratio box clips the
+     box without re-deriving its height — the plate came out 433px wide
+     in a 331px column and pushed the whole page sideways. Capping the
+     width against BOTH the column and the height budget keeps 4:3 true
+     under either constraint. */
+  width: min(100%, calc(clamp(170px, 40dvh / var(--z), 420px) * 4 / 3));
+  aspect-ratio: 4 / 3;
+  margin-inline: auto;
   overflow: hidden;
   border-radius: var(--r-lg);
   corner-shape: squircle;
@@ -578,31 +705,68 @@ main {
 }
 
 .guess-list {
+  flex: 1;
+  min-height: 0;
   display: flex;
   flex-direction: column;
-  gap: var(--gap);
+  gap: 8px;
   overflow-y: auto;
+  /* overflow-y: auto makes overflow-x compute to auto too, so a row
+     that was one pixel too wide gave the list a horizontal scrollbar
+     and hid the end of the hint behind it. */
+  overflow-x: hidden;
 }
 
+/* Made guesses keep their own height; the unspent slots below them
+   share out whatever is left and collapse quietly when there isn't
+   any, so five slots can never push the board off a short screen. */
+.guess-list > li { flex: none; min-height: 0; display: flex; }
+.guess-list > li.is-slot { flex: 1 1 0; }
+
+/* Wraps. "Lake Elizabeth" beside "Hot ↙ under a mile south" needs
+   348px of a 295px row, and with the meta pinned at flex: none the
+   overflow went sideways off the card instead of onto a second line. */
 .guess {
+  flex: 1;
+  min-height: 44px;
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
-  padding: 17px 18px;
+  gap: 4px 12px;
+  padding: 10px 18px;
   border-radius: var(--r-md);
   corner-shape: squircle;
   background: var(--panel);
   border: 1px solid var(--line);
 }
 
-.guess-name { font-size: var(--t-lg); font-weight: 600; line-height: 1.2; }
+/* A guess you have not made. Sunk rather than raised, and dashed, so
+   it reads as a slot waiting to be filled and never as a result. */
+.guess.is-empty {
+  min-height: 0;
+  background: var(--sunk);
+  border-style: dashed;
+  border-color: var(--line);
+}
+
+.guess-name {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-size: var(--t-lg);
+  font-weight: 600;
+  line-height: 1.2;
+  overflow-wrap: break-word;
+}
 
 .guess-meta {
-  flex: none;
+  flex: 0 1 auto;
+  min-width: 0;
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 6px;
+  justify-content: flex-end;
+  gap: 4px 6px;
   font-size: var(--t-md);
   font-weight: 600;
   font-variant-numeric: tabular-nums;
@@ -728,9 +892,9 @@ main {
 
 .year-hint { font-size: var(--t-xs); font-weight: 500; }
 
-/* ── IV. Higher or Lower ─────────────────────────────────────── */
-
-.hl-progress { flex: none; display: flex; gap: 6px; }
+/* Shared by Higher or Lower's five rounds and Zoom's five guesses —
+   one way of saying "this is what you have left" rather than two. */
+.progress { flex: none; display: flex; gap: 6px; }
 
 .pip {
   flex: 1;
@@ -743,6 +907,8 @@ main {
 .pip.is-hit { background: var(--green); }
 .pip.is-miss { background: var(--muted); }
 .pip.is-current { background: var(--navy); }
+
+/* ── IV. Higher or Lower ─────────────────────────────────────── */
 
 .hl-card {
   flex: 1;
@@ -757,8 +923,12 @@ main {
   text-align: center;
 }
 
+/* min-height: 0, or each half floors the card at its own content height
+   and `flex: 1` on the card above it can never shrink — the page
+   overflowed by 43px on a 320x568 phone while the card sat at 300. */
 .hl-half {
   flex: 1;
+  min-height: 0;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -980,13 +1150,33 @@ main {
 
 /* ── very short screens ──────────────────────────────────────── */
 
-/* The doc's own card is 660 tall and everything fits at that size, so
-   nothing here fires until well below it. */
-@media (max-height: 620px) {
-  :root { --pad: 16px; --gap: 9px; }
-  .plate { height: 180px; }
+/* Two tiers, because one at 620px left a dead band. A 360x640 Android
+   is 20px above the old threshold and got the full-size layout, which
+   after the header grew a line overflowed Then & Now by 43px — the
+   breakpoint was set against a header that no longer exists. */
+@media (max-height: 780px) {
+  .plate { width: min(100%, calc(clamp(150px, 34dvh / var(--z), 300px) * 4 / 3)); }
   .quote { font-size: var(--t-lg); }
-  .hl-value { font-size: clamp(38px, 12vw, 48px); }
+  .hl-half { padding: 14px 16px; }
+  .year-grid { grid-auto-rows: minmax(48px, 1fr); }
+}
+
+/* The doc's own card is 660 tall, so this one stays well below it. */
+@media (max-height: 640px) {
+  :root { --pad: 16px; --gap: 9px; --bar-inset: 12px; }
+  .masthead { min-height: 40px; }
+  .flag { font-size: var(--t-xl); }
+  .deck-game { font-size: var(--t-lg); }
+  .deck-prompt { font-size: var(--t-sm); }
+  .plate { width: min(100%, calc(clamp(140px, 30dvh / var(--z), 240px) * 4 / 3)); }
+  .quote { font-size: var(--t-md); }
+  /* clamp(38px, 12vw, 48px) was BIGGER than the 30–58px base scale
+     resolves to at this width. A short-screen block that enlarges is
+     the same bug that overflowed the Word grid by 63px; this one shrinks. */
+  .hl-value { font-size: clamp(28px, 10vw, 40px); }
+  .hl-half { padding: 12px 14px; }
+  .hl-buttons .btn { min-height: 48px; }
+  .year-grid { grid-auto-rows: minmax(44px, 1fr); }
   .wg-cell { min-height: 0; font-size: var(--t-md); }
   .wg-key { min-height: 30px; font-size: var(--t-xs); }
   .result { padding: 14px; }
@@ -996,14 +1186,21 @@ main {
 /* Landscape phones: 390px of height minus 116 of padding leaves ~270 for
    the board. The plate has to give up most of it or nothing else fits. */
 @media (orientation: landscape) and (max-height: 560px) {
-  :root { --pad: 12px; --gap: 8px; }
-  .sheet { padding-bottom: calc(76px + env(safe-area-inset-bottom)); }
-  .plate { height: clamp(110px, 42vh, 170px); }
+  :root { --pad: 12px; --gap: 8px; --bar-inset: 10px; }
+  .plate { width: min(100%, calc(clamp(110px, 42dvh / var(--z), 170px) * 4 / 3)); }
   .quote { font-size: var(--t-md); }
   .hl-half { padding: 10px 14px; }
   .hl-buttons .btn { min-height: 48px; }
   .btn { min-height: 46px; }
-  .index-item { padding: 5px 2px; }
+  .index-item { padding: 4px 2px; }
+  /* Still two rows — a phone on its side is 660px wide, so the deck has
+     all the room it wants; height is the thing there is none of. Both
+     rows just get shorter. */
+  .lockup { gap: 2px; }
+  .masthead { min-height: 38px; }
+  .flag { font-size: var(--t-xl); }
+  .deck-game { font-size: var(--t-lg); }
+  .deck-prompt { font-size: var(--t-sm); }
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -1030,9 +1227,11 @@ main {
 
 .howto-open {
   flex: none;
-  margin-left: auto;
-  align-self: center;
+  /* isolate + z-index below, because an absolutely positioned ::before
+     paints above its parent's in-flow text: the disc was drawn over the
+     "?" and the control shipped as an empty circle. */
   position: relative;
+  isolation: isolate;
   width: 44px;
   height: 44px;
   display: grid;
@@ -1049,15 +1248,13 @@ main {
 .howto-open::before {
   content: '';
   position: absolute;
+  z-index: -1;
   width: 32px;
   height: 32px;
   border: 1px solid var(--line);
   border-radius: 999px;
   background: var(--panel);
 }
-
-/* the theme button already claimed the auto margin */
-.howto-open + .theme { margin-left: 0; }
 
 .howto-scrim {
   position: fixed;

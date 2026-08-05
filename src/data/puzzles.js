@@ -26,15 +26,19 @@ import { thenNowForDay } from './thennow.js'
 import { DAY_KEY, DAY_NUMBER } from '../lib/day.js'
 export { DAY_KEY, DAY_NUMBER }
 
-// `short` is what fits in a fifth of the section bar; `prompt` is the
-// day's question, which sits after the wordmark and is the only place
-// the game explains itself.
+// `short` is what fits in a fifth of the section bar; `name` is the
+// section head under the wordmark; `prompt` is the deck beside it.
+//
+// The prompt used to restate the name — "Higher or Lower · Higher or
+// lower?", "Groups · Find the groups" — which wastes the one line the
+// game has to explain itself. Every prompt now says what you do and
+// what it costs you, so name and deck carry different information.
 export const PUZZLE_TYPES = [
-  { id: 'zoom', name: 'Zoom', short: 'Zoom', prompt: 'Which place is this?' },
-  { id: 'connections', name: 'Groups', short: 'Groups', prompt: 'Find the groups' },
-  { id: 'thennow', name: 'Then & Now', short: 'Then/Now', prompt: 'When was this?' },
-  { id: 'higherlower', name: 'Higher or Lower', short: 'Higher?', prompt: 'Higher or lower?' },
-  { id: 'wordgrid', name: 'The Word', short: 'Word', prompt: 'Guess the word' },
+  { id: 'zoom', name: 'Zoom', short: 'Zoom', prompt: 'Name the place, five guesses' },
+  { id: 'connections', name: 'Groups', short: 'Groups', prompt: 'Four groups of three' },
+  { id: 'thennow', name: 'Then & Now', short: 'Then/Now', prompt: 'Pick the year, three guesses' },
+  { id: 'higherlower', name: 'Higher or Lower', short: 'Higher?', prompt: 'Five rounds, four to win' },
+  { id: 'wordgrid', name: 'The Word', short: 'Word', prompt: 'Five letters, six tries' },
 ]
 
 // ── I. ZOOM ──────────────────────────────────────────────────

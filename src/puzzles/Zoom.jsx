@@ -82,11 +82,35 @@ export default function Zoom() {
           stats={stats}
           onReplay={replay}
         />
-      ) : guesses.length === 0 ? (
-        <span className="caption">Five guesses. Each one zooms out.</span>
       ) : (
         <div className="guesses">
-          <span className="caption">How far off you were</span>
+          {/* Everything you have left, shown before you spend any of it.
+              This screen used to render nothing at all below the search
+              box until the first guess landed, which left a third of a
+              phone empty on the one game whose whole job is to look
+              like something. The other four all show their budget up
+              front — six rows, five pips, twelve tiles. */}
+          <div
+            className="progress"
+            role="img"
+            aria-label={`Guess ${Math.min(guesses.length + 1, P.maxGuesses)} of ${P.maxGuesses}.`}
+          >
+            {Array.from({ length: P.maxGuesses }, (_, i) => (
+              <span
+                key={i}
+                className={
+                  'pip' +
+                  (i < guesses.length ? ' is-miss' : '') +
+                  (i === guesses.length ? ' is-current' : '')
+                }
+              />
+            ))}
+          </div>
+
+          <span className="caption">
+            {guesses.length === 0 ? 'Five guesses. Each one zooms out.' : 'How far off you were'}
+          </span>
+
           <ul className="guess-list" aria-live="polite">
             {guesses.map((g, i) => {
               const c = compassFrom(g.bearing)
@@ -113,6 +137,15 @@ export default function Zoom() {
                 </li>
               )
             })}
+
+            {/* The guesses you have not made yet. Empty slots, not
+                absence: the list keeps its shape so nothing under it
+                moves when a guess lands. */}
+            {Array.from({ length: P.maxGuesses - guesses.length }, (_, i) => (
+              <li key={`empty-${i}`} className="is-slot" aria-hidden="true">
+                <div className="guess is-empty" />
+              </li>
+            ))}
           </ul>
         </div>
       )}

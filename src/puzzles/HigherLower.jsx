@@ -72,7 +72,7 @@ export default function HigherLower() {
   return (
     <div className="puzzle">
       <div
-        className="hl-progress"
+        className="progress"
         role="img"
         aria-label={`Round ${round + 1} of ${P.rounds.length}. ${results.filter(Boolean).length} right so far.`}
       >
