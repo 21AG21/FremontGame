@@ -4,12 +4,78 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="theme-color" content="#e7efe5" />
-    <meta name="description" content="Five daily puzzles about Fremont, California." />
+
+    <title>The Fremont Daily — five daily puzzles about Fremont, California</title>
+    <meta
+      name="description"
+      content="Five puzzles about one town, every morning. Name the place from an engraving, find the groups, date the photograph, pick the bigger number, and guess the word — all about Fremont, California."
+    />
+    <link rel="canonical" href="%SITE_URL%/" />
+
+    <!--
+      The share card. This game is built to be pasted into a group chat,
+      so the link is the front door — without these it arrives as a bare
+      URL with nothing to say what it is. og:image has to be absolute;
+      the origin is filled in at build time (see vite.config.js).
+    -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="The Fremont Daily" />
+    <meta property="og:title" content="The Fremont Daily" />
+    <meta property="og:description" content="Five puzzles about one town, every morning." />
+    <meta property="og:url" content="%SITE_URL%/" />
+    <meta property="og:image" content="%SITE_URL%/og.png" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta
+      property="og:image:alt"
+      content="The Fremont Daily, over a row of letter tiles spelling NILES."
+    />
+    <meta property="og:locale" content="en_US" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="The Fremont Daily" />
+    <meta name="twitter:description" content="Five puzzles about one town, every morning." />
+    <meta name="twitter:image" content="%SITE_URL%/og.png" />
+
+    <!-- Added to the home screen, this is a game, not a browser tab. -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="Fremont" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+    <!-- Inline so the tab has its mark before anything is fetched. -->
     <link
       rel="icon"
       href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Crect width='48' height='48' fill='%23043764'/%3E%3Cpolygon points='0,48 0,32 12,17 22,25 33,4 42,18 48,13 48,48' fill='%23f1f5f8'/%3E%3C/svg%3E"
     />
-    <title>Fremont</title>
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Game",
+        "name": "The Fremont Daily",
+        "description": "Five daily puzzles about Fremont, California.",
+        "url": "%SITE_URL%/",
+        "image": "%SITE_URL%/og.png",
+        "inLanguage": "en-US",
+        "genre": "Puzzle",
+        "gamePlatform": "Web browser",
+        "isAccessibleForFree": true,
+        "about": {
+          "@type": "City",
+          "name": "Fremont",
+          "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Fremont",
+            "addressRegion": "CA",
+            "addressCountry": "US"
+          }
+        }
+      }
+    </script>
+
     <!--
       Runs before first paint so a saved dark theme doesn't flash light.
       Only writes [data-theme] when there is a saved choice — leaving it
