@@ -27,7 +27,9 @@ const { SCENES } = await import(join(ROOT, 'src/data/thennow.js'))
 // imported. Both arrays are plain literals — no logic to lose.
 const wordsSrc = await readFile(join(ROOT, 'src/data/words.js'), 'utf8')
 const literalArray = (name) => {
-  const m = wordsSrc.match(new RegExp(`(?:const|export const)\\s+${name}\\s*=\\s*\\[([\\s\\S]*?)\\]`))
+  const m = wordsSrc.match(
+    new RegExp(`(?:const|export const)\\s+${name}\\s*=\\s*\\[([\\s\\S]*?)\\]`)
+  )
   if (!m) throw new Error(`could not find ${name} in words.js`)
   return [...m[1].matchAll(/'([A-Z]{5})'/g)].map((x) => x[1])
 }
@@ -45,14 +47,22 @@ const TABLES = {
     rows: GROUPS.map((g) => ({
       difficulty: g.d,
       label: g.label,
-      item1: g.items[0], item2: g.items[1], item3: g.items[2], item4: g.items[3],
+      item1: g.items[0],
+      item2: g.items[1],
+      item3: g.items[2],
+      item4: g.items[3],
     })),
   },
 
   'facts.csv': {
     header: ['unit', 'name', 'value', 'anchor'],
     rows: FACT_SETS.flatMap((s) =>
-      s.facts.map((f) => ({ unit: s.unit, name: f.name, value: f.value, anchor: f.anchor ? 'yes' : '' }))
+      s.facts.map((f) => ({
+        unit: s.unit,
+        name: f.name,
+        value: f.value,
+        anchor: f.anchor ? 'yes' : '',
+      }))
     ),
   },
 
@@ -75,7 +85,10 @@ let kept = 0
 for (const [file, { header, rows }] of Object.entries(TABLES)) {
   const path = join(OUT, file)
   if (!force) {
-    const exists = await access(path).then(() => true, () => false)
+    const exists = await access(path).then(
+      () => true,
+      () => false
+    )
     if (exists) {
       console.log(`  kept    ${file}  (already exists — pass --force to overwrite)`)
       kept++

@@ -34,13 +34,13 @@ That means three things worth knowing:
 Pools cycle rather than repeat at random, so nothing comes back until
 the whole pool has been through. Roughly:
 
-| Game | Pool | Comes round again |
-|---|---|---|
-| Zoom | 63 answers | every 63 days |
-| Groups | 100 categories | at least 11 days between repeats |
-| Higher or Lower | 134 facts | no pair repeats within 28 days |
-| Then & Now | 14 scenes | **every 14 days** |
-| The Word | 24 answers | **every 24 days** |
+| Game            | Pool           | Comes round again                |
+| --------------- | -------------- | -------------------------------- |
+| Zoom            | 63 answers     | every 63 days                    |
+| Groups          | 100 categories | at least 11 days between repeats |
+| Higher or Lower | 134 facts      | no pair repeats within 28 days   |
+| Then & Now      | 14 scenes      | **every 14 days**                |
+| The Word        | 24 answers     | **every 24 days**                |
 
 The two in bold are thin. They are the first place to spend an hour if
 you want the site to feel less repetitive.
@@ -51,16 +51,16 @@ you want the site to feel less repetitive.
 
 ### `places.csv` — Zoom, and every drawing
 
-| column | what it is |
-|---|---|
-| `id` | short name, lowercase with hyphens, never reused |
-| `name` | how it appears on screen — "The Patterson House", not "patterson house" |
-| `lat`, `lng` | decimal degrees. Right-click a spot in a map app and paste the pair |
-| `district` | groups the autocomplete. `Next door` means another town: a decoy, never an answer |
-| `motifs` | what the place is made of, separated by `\|`, **back of the scene to front** |
-| `fame` | `1` a six-year resident names it · `2` a long-timer does · `3` decoy only |
+| column       | what it is                                                                        |
+| ------------ | --------------------------------------------------------------------------------- |
+| `id`         | short name, lowercase with hyphens, never reused                                  |
+| `name`       | how it appears on screen — "The Patterson House", not "patterson house"           |
+| `lat`, `lng` | decimal degrees. Right-click a spot in a map app and paste the pair               |
+| `district`   | groups the autocomplete. `Next door` means another town: a decoy, never an answer |
+| `motifs`     | what the place is made of, separated by `\|`, **back of the scene to front**      |
+| `fame`       | `1` a six-year resident names it · `2` a long-timer does · `3` decoy only         |
 
-`motifs` is the interesting one. The Zoom drawing is *composed* from
+`motifs` is the interesting one. The Zoom drawing is _composed_ from
 these — there is no artwork file per place. `ridge \| mission \| olives \|
 road` draws a ridge behind a mission with olive trees and a road in
 front. The vocabulary is whatever `src/art/Parts.jsx` can draw, and the
@@ -92,7 +92,7 @@ other, so the unit text has to match **exactly** — "feet above sea
 level" and "Feet above sea level" are two separate pools.
 
 `anchor` marks a fact a Fremont resident could picture. The side you're
-*shown* is always an anchor, so you have somewhere to reason from. Every
+_shown_ is always an anchor, so you have somewhere to reason from. Every
 unit needs at least one or the check fails.
 
 Every number here should be real and checked. A hyperlocal puzzle that
@@ -177,11 +177,11 @@ AIRTABLE_BASE=appUeif6dV0j9eBed AIRTABLE_TOKEN=... npm run content:pull
 
 ## The commands
 
-| | |
-|---|---|
-| `npm run content` | check and regenerate. Run this after any edit |
-| `npm run content:check` | check only, write nothing. This is what CI runs |
-| `npm run content:pull` | fetch from Google Sheets or Airtable if configured |
+|                          |                                                                          |
+| ------------------------ | ------------------------------------------------------------------------ |
+| `npm run content`        | check and regenerate. Run this after any edit                            |
+| `npm run content:check`  | check only, write nothing. This is what CI runs                          |
+| `npm run content:pull`   | fetch from Google Sheets or Airtable if configured                       |
 | `npm run content:export` | dump the current data back out to CSV. Won't overwrite without `--force` |
 
 `npm run build` runs `npm run content` first, so a bad row fails the

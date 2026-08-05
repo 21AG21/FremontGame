@@ -1,5 +1,30 @@
 import { useState, useRef, useEffect, useMemo } from 'react'
 import { PLACES } from '../data/town.js'
+import { DAY_NUMBER } from '../lib/day.js'
+
+// The unfiltered list is a browse, not a hint — taking PLACES in source
+// order would put the answer at the top of it.
+//
+// Shuffled off the day number rather than Math.random. A random shuffle
+// is impure, and React is allowed to throw a useMemo away and recompute
+// it: the browse list would then reorder itself under the player's
+// thumb mid-scroll. Seeding on the day keeps it fixed for the whole
+// session, and has the side effect that everyone in town browses the
+// same order, so a screenshot of the list means the same thing to
+// whoever it is sent to.
+const BROWSE_ORDER = (() => {
+  const a = [...PLACES]
+  let s = DAY_NUMBER * 2654435761 + 1
+  const next = () => {
+    s = (s * 1103515245 + 12345) & 0x7fffffff
+    return s / 0x7fffffff
+  }
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(next() * (i + 1))
+    ;[a[i], a[j]] = [a[j], a[i]]
+  }
+  return a
+})()
 
 // Autocomplete over the town's place list. Typing is free-form but you can
 // only submit a real place — kills spelling arguments, and browsing the list
@@ -9,17 +34,7 @@ export default function PlaceSearch({ onGuess, disabled, used = [] }) {
   const [open, setOpen] = useState(false)
   const [cursor, setCursor] = useState(0)
   const boxRef = useRef(null)
-
-  // The unfiltered list is a browse, not a hint — taking PLACES in source
-  // order would put the answer at the top of it, so shuffle once per mount.
-  const browseOrder = useMemo(() => {
-    const a = [...PLACES]
-    for (let i = a.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1))
-      ;[a[i], a[j]] = [a[j], a[i]]
-    }
-    return a
-  }, [])
+  const browseOrder = BROWSE_ORDER
 
   const matches = useMemo(() => {
     const q = query.trim().toLowerCase()
@@ -38,7 +53,16 @@ export default function PlaceSearch({ onGuess, disabled, used = [] }) {
 
   const noMatch = query.trim() !== '' && matches.length === 0
 
-  useEffect(() => setCursor(0), [query])
+  // Put the highlight back on the top match whenever the query changes.
+  // Adjusted during render rather than in an effect: an effect renders
+  // one frame with the old highlight on a list that has already been
+  // replaced, which is how you end up arrowing into whatever used to be
+  // in that slot.
+  const [lastQuery, setLastQuery] = useState(query)
+  if (query !== lastQuery) {
+    setLastQuery(query)
+    setCursor(0)
+  }
 
   useEffect(() => {
     const away = (e) => {
@@ -78,7 +102,10 @@ export default function PlaceSearch({ onGuess, disabled, used = [] }) {
         value={query}
         placeholder={disabled ? 'Round over' : 'Type a place name'}
         disabled={disabled}
-        onChange={(e) => { setQuery(e.target.value); setOpen(true) }}
+        onChange={(e) => {
+          setQuery(e.target.value)
+          setOpen(true)
+        }}
         onFocus={() => setOpen(true)}
         onKeyDown={onKey}
         autoComplete="off"
@@ -86,7 +113,9 @@ export default function PlaceSearch({ onGuess, disabled, used = [] }) {
       {open && !disabled && (matches.length > 0 || noMatch) && (
         <ul className="search-list">
           {noMatch ? (
-            <li><p className="search-empty">No place by that name.</p></li>
+            <li>
+              <p className="search-empty">No place by that name.</p>
+            </li>
           ) : (
             matches.map((p, i) => (
               <li key={p.id}>

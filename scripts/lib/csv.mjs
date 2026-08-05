@@ -8,9 +8,11 @@
 // round-trips through any of them survives.
 
 export function parseCsv(text) {
-  // A BOM in front of the first header turns "id" into "﻿id", which
-  // then fails to match any column name. Excel writes one by default.
-  const src = text.replace(/^﻿/, '').replace(/\r\n?/g, '\n')
+  // A BOM in front of the first header turns "id" into an id nothing
+  // matches, and Excel writes one by default. Escaped rather than typed
+  // literally, because a raw BOM in source is invisible to whoever
+  // reads this next.
+  const src = text.replace(/^\uFEFF/, '').replace(/\r\n?/g, '\n')
 
   const rows = []
   let row = []
@@ -23,20 +25,41 @@ export function parseCsv(text) {
 
     if (quoted) {
       if (c === '"') {
-        if (src[i + 1] === '"') { field += '"'; i++ }
-        else quoted = false
+        if (src[i + 1] === '"') {
+          field += '"'
+          i++
+        } else quoted = false
       } else field += c
       continue
     }
 
-    if (c === '"' && field === '') { quoted = true; started = true; continue }
-    if (c === ',') { row.push(field); field = ''; started = false; continue }
-    if (c === '\n') { row.push(field); rows.push(row); row = []; field = ''; started = false; continue }
+    if (c === '"' && field === '') {
+      quoted = true
+      started = true
+      continue
+    }
+    if (c === ',') {
+      row.push(field)
+      field = ''
+      started = false
+      continue
+    }
+    if (c === '\n') {
+      row.push(field)
+      rows.push(row)
+      row = []
+      field = ''
+      started = false
+      continue
+    }
     field += c
     started = true
   }
 
-  if (field !== '' || started || row.length) { row.push(field); rows.push(row) }
+  if (field !== '' || started || row.length) {
+    row.push(field)
+    rows.push(row)
+  }
 
   // Trailing blank lines, and rows a spreadsheet left behind as commas.
   return rows.filter((r) => r.some((v) => v.trim() !== ''))
@@ -53,7 +76,9 @@ export function readTable(text) {
     header,
     rows: rows.slice(1).map((cells, i) => {
       const o = { __line: i + 2 }
-      header.forEach((h, j) => { o[h] = (cells[j] ?? '').trim() })
+      header.forEach((h, j) => {
+        o[h] = (cells[j] ?? '').trim()
+      })
       return o
     }),
   }
@@ -74,6 +99,9 @@ export function writeTable(header, rows) {
 // quoting, and rather than a semicolon so it survives paste into a
 // European locale spreadsheet, where the semicolon is the delimiter.
 export const splitList = (v) =>
-  String(v || '').split('|').map((s) => s.trim()).filter(Boolean)
+  String(v || '')
+    .split('|')
+    .map((s) => s.trim())
+    .filter(Boolean)
 
 export const joinList = (a) => (a || []).join(' | ')

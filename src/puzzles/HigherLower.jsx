@@ -12,7 +12,10 @@ export default function HigherLower() {
   const [stats, setStats] = useState(() => getRecord('higherlower'))
   const timer = useRef(null)
 
-  useEffect(() => saveState('higherlower', DAY_KEY, { round, results, done }), [round, results, done])
+  useEffect(
+    () => saveState('higherlower', DAY_KEY, { round, results, done }),
+    [round, results, done]
+  )
 
   // The reveal timer outlived the component, firing setState into a
   // unmounted tree every time you switched tabs mid-round.
@@ -42,7 +45,12 @@ export default function HigherLower() {
     }, 1400)
   }
 
-  const replay = () => { setRound(0); setResults([]); setReveal(null); setDone(null) }
+  const replay = () => {
+    setRound(0)
+    setResults([])
+    setReveal(null)
+    setDone(null)
+  }
 
   const score = results.filter(Boolean).length
   const squares = results.map((c) => (c ? MARK.hit : MARK.miss)).join('')
@@ -107,17 +115,25 @@ export default function HigherLower() {
       </div>
 
       <div className="hl-buttons">
-        <button className={'btn' + verdict('higher')} disabled={!!reveal} onClick={() => answer('higher')}>
+        <button
+          className={'btn' + verdict('higher')}
+          disabled={!!reveal}
+          onClick={() => answer('higher')}
+        >
           Higher
         </button>
-        <button className={'btn' + verdict('lower')} disabled={!!reveal} onClick={() => answer('lower')}>
+        <button
+          className={'btn' + verdict('lower')}
+          disabled={!!reveal}
+          onClick={() => answer('lower')}
+        >
           Lower
         </button>
       </div>
 
       <span className="hl-than">
-        than {r.a.value.toLocaleString()} · {results.filter(Boolean).length}/{P.toWin} right,
-        {' '}round {round + 1} of {P.rounds.length}
+        than {r.a.value.toLocaleString()} · {results.filter(Boolean).length}/{P.toWin} right, round{' '}
+        {round + 1} of {P.rounds.length}
       </span>
     </div>
   )

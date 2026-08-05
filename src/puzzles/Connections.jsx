@@ -82,8 +82,13 @@ export default function Connections() {
   }
 
   const replay = () => {
-    setTiles(shuffle(allItems)); setSelected([]); setSolved([])
-    setMistakes(0); setRows([]); setRejected([]); setDone(null)
+    setTiles(shuffle(allItems))
+    setSelected([])
+    setSolved([])
+    setMistakes(0)
+    setRows([])
+    setRejected([])
+    setDone(null)
   }
 
   return (

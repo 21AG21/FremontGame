@@ -2,7 +2,14 @@ import { useState, useEffect, useMemo } from 'react'
 import Engraving from '../art/Engraving.jsx'
 import { placeById } from '../data/town.js'
 import { zoomPuzzle as P, DAY_KEY, MARK } from '../data/puzzles.js'
-import { distanceMiles, bearingDegrees, compassFrom, formatDistance, warmth, warmthWord } from '../lib/geo.js'
+import {
+  distanceMiles,
+  bearingDegrees,
+  compassFrom,
+  formatDistance,
+  warmth,
+  warmthWord,
+} from '../lib/geo.js'
 import { saveResult, getRecord, loadState, saveState } from '../lib/storage.js'
 import PlaceSearch from '../components/PlaceSearch.jsx'
 import Result from '../components/Result.jsx'
@@ -45,7 +52,10 @@ export default function Zoom() {
     else if (next.length >= P.maxGuesses) finish(false, next.length)
   }
 
-  const replay = () => { setGuesses([]); setDone(null) }
+  const replay = () => {
+    setGuesses([])
+    setDone(null)
+  }
 
   const squares = guesses.map((g) => (g.correct ? MARK.hit : squareFor(g.miles))).join('')
 

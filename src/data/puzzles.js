@@ -37,7 +37,12 @@ export const PUZZLE_TYPES = [
   { id: 'zoom', name: 'Zoom', short: 'Zoom', prompt: 'Name the place, five guesses' },
   { id: 'connections', name: 'Groups', short: 'Groups', prompt: 'Three groups of four' },
   { id: 'thennow', name: 'Then & Now', short: 'Then/Now', prompt: 'Pick the year, three guesses' },
-  { id: 'higherlower', name: 'Higher or Lower', short: 'Higher?', prompt: 'Five rounds, four to win' },
+  {
+    id: 'higherlower',
+    name: 'Higher or Lower',
+    short: 'Higher?',
+    prompt: 'Five rounds, four to win',
+  },
   { id: 'wordgrid', name: 'The Word', short: 'Word', prompt: 'Five letters, six tries' },
 ]
 
@@ -93,7 +98,7 @@ export const PUZZLES = {
 // state colours — the characters below exist only for the text put on
 // the clipboard, where block glyphs are fine.
 export const MARK = {
-  hit:  '█',
+  hit: '█',
   warm: '▓',
   cool: '▒',
   miss: '░',

@@ -53,13 +53,25 @@ export default function ThenNow() {
         aria-valuemax={100}
         aria-valuenow={Math.round(wipe)}
         onKeyDown={(e) => {
-          if (e.key === 'ArrowLeft') { e.preventDefault(); setWipe((w) => Math.max(0, w - 4)) }
-          else if (e.key === 'ArrowRight') { e.preventDefault(); setWipe((w) => Math.min(100, w + 4)) }
-          else if (e.key === 'Home') { e.preventDefault(); setWipe(0) }
-          else if (e.key === 'End') { e.preventDefault(); setWipe(100) }
+          if (e.key === 'ArrowLeft') {
+            e.preventDefault()
+            setWipe((w) => Math.max(0, w - 4))
+          } else if (e.key === 'ArrowRight') {
+            e.preventDefault()
+            setWipe((w) => Math.min(100, w + 4))
+          } else if (e.key === 'Home') {
+            e.preventDefault()
+            setWipe(0)
+          } else if (e.key === 'End') {
+            e.preventDefault()
+            setWipe(100)
+          }
         }}
         onClick={(e) => moveTo(e.clientX)}
-        onMouseDown={(e) => { dragging.current = true; moveTo(e.clientX) }}
+        onMouseDown={(e) => {
+          dragging.current = true
+          moveTo(e.clientX)
+        }}
         onMouseMove={(e) => dragging.current && moveTo(e.clientX)}
         onMouseUp={() => (dragging.current = false)}
         onMouseLeave={() => (dragging.current = false)}
@@ -70,7 +82,12 @@ export default function ThenNow() {
           <Engraving place={place} motifs={P.scene.now} variant="-now" alt={`${P.place}, today.`} />
         </div>
         <div className="wipe-layer wipe-top" style={{ clipPath: `inset(0 ${100 - wipe}% 0 0)` }}>
-          <Engraving place={place} motifs={P.scene.then} variant="-then" alt={`${P.place}, in the earlier view.`} />
+          <Engraving
+            place={place}
+            motifs={P.scene.then}
+            variant="-then"
+            alt={`${P.place}, in the earlier view.`}
+          />
         </div>
 
         <div className="wipe-seam" style={{ left: `${wipe}%` }} />
@@ -91,7 +108,11 @@ export default function ThenNow() {
           subtitle={String(P.answerYear)}
           squares={squares || MARK.miss}
           stats={stats}
-          onReplay={() => { setGuesses([]); setDone(null); setWipe(50) }}
+          onReplay={() => {
+            setGuesses([])
+            setDone(null)
+            setWipe(50)
+          }}
         />
       ) : (
         <>

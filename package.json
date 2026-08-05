@@ -1,12 +1,23 @@
 {
-  "name": "towndaily",
+  "name": "fremont-daily",
   "private": true,
   "version": "0.1.0",
+  "description": "Five daily puzzles about Fremont, California.",
+  "license": "UNLICENSED",
   "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
     "dev": "vite",
     "build": "npm run content && vite build",
     "preview": "vite preview",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "eslint . --max-warnings 0",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "verify": "npm run lint && npm run format:check && npm run content:check && npm test && vite build",
     "content": "node scripts/content-build.mjs",
     "content:check": "node scripts/content-build.mjs --check",
     "content:export": "node scripts/content-export.mjs",
@@ -20,7 +31,15 @@
     "react-dom": "^18.3.1"
   },
   "devDependencies": {
+    "@eslint/js": "^9.39.5",
     "@vitejs/plugin-react": "^4.3.4",
-    "vite": "^6.0.7"
+    "eslint": "^9.39.5",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "eslint-plugin-react-refresh": "^0.5.3",
+    "globals": "^17.9.0",
+    "prettier": "^3.9.6",
+    "vite": "^6.0.7",
+    "vitest": "^3.2.7"
   }
 }

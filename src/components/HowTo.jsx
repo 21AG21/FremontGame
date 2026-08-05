@@ -74,7 +74,11 @@ export default function HowTo({ game }) {
 
   return (
     <>
-      <button className="howto-open" onClick={() => setOpen(true)} aria-label={`How to play ${rules.title}`}>
+      <button
+        className="howto-open"
+        onClick={() => setOpen(true)}
+        aria-label={`How to play ${rules.title}`}
+      >
         ?
       </button>
 

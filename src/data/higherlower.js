@@ -16,19 +16,7 @@ import FACTS_DATA from './generated/facts.js'
 export const FACT_SETS = FACTS_DATA
 
 // Flat list, for anything that wants to count the pool.
-export const ALL_FACTS = FACT_SETS.flatMap((s) =>
-  s.facts.map((f) => ({ ...f, unit: s.unit }))
-)
-
-// A small deterministic hash. Day-indexed, not random: everyone in town
-// has to get the same puzzle, and reloading must not reroll it.
-const mix = (n) => {
-  let h = (n * 2654435761) % 4294967296
-  h ^= h >>> 15
-  h = (h * 2246822519) % 4294967296
-  h ^= h >>> 13
-  return h >>> 0
-}
+export const ALL_FACTS = FACT_SETS.flatMap((s) => s.facts.map((f) => ({ ...f, unit: s.unit })))
 
 // The shown side is always an anchor — somewhere you have stood, driven
 // over, or can at least place on a map.

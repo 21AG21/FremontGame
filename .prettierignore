@@ -1,0 +1,6 @@
+dist/
+node_modules/
+src/data/generated/
+src/data/valid-wordle-words.txt
+content/*.csv
+package-lock.json

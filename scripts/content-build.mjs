@@ -74,7 +74,10 @@ for (const r of placesTable.rows) {
     fail(...at, `"${r.id}" lng ${r.lng} is outside Fremont — a dropped minus sign does this`)
 
   if (![1, 2, 3].includes(fame))
-    fail(...at, `"${r.id}" fame is "${r.fame}" — must be 1 (everyone knows it), 2 (locals do) or 3 (decoy only)`)
+    fail(
+      ...at,
+      `"${r.id}" fame is "${r.fame}" — must be 1 (everyone knows it), 2 (locals do) or 3 (decoy only)`
+    )
 
   if (!motifs.length) fail(...at, `"${r.id}" has no motifs, so it has no drawing`)
   for (const m of motifs)
@@ -102,7 +105,10 @@ for (const r of groupsTable.rows) {
 
   const filled = items.filter(Boolean)
   if (filled.length !== 4)
-    fail(...at, `"${r.label}" has ${filled.length} items — the board deals all four, so it needs exactly four`)
+    fail(
+      ...at,
+      `"${r.label}" has ${filled.length} items — the board deals all four, so it needs exactly four`
+    )
   if (new Set(filled).size !== filled.length)
     fail(...at, `"${r.label}" repeats an item, which would put the same tile on the board twice`)
 
@@ -113,11 +119,22 @@ for (const r of groupsTable.rows) {
 // A tile shared by two categories is the whole point of the game. A tile
 // shared by six is a tile the day-picker has to route around so often
 // that whole categories stop reaching the board.
-for (const [item, n] of itemUse) if (n > 5) warn('groups.csv', 0, `"${item}" appears in ${n} categories — the collision guard will start skipping them`)
+for (const [item, n] of itemUse)
+  if (n > 5)
+    warn(
+      'groups.csv',
+      0,
+      `"${item}" appears in ${n} categories — the collision guard will start skipping them`
+    )
 
 for (const d of [0, 1, 2, 3]) {
   const n = groups.filter((g) => g.d === d).length
-  if (n < 3) fail('groups.csv', 0, `difficulty ${d} has only ${n} categories — a board needs to find one that does not clash`)
+  if (n < 3)
+    fail(
+      'groups.csv',
+      0,
+      `difficulty ${d} has only ${n} categories — a board needs to find one that does not clash`
+    )
 }
 
 // ── facts ─────────────────────────────────────────────────────
@@ -128,7 +145,10 @@ for (const r of factsTable.rows) {
   const at = ['facts.csv', r.__line]
   const value = Number(r.value)
 
-  if (!r.unit) { fail(...at, 'no unit — a fact with no unit cannot be paired with anything'); continue }
+  if (!r.unit) {
+    fail(...at, 'no unit — a fact with no unit cannot be paired with anything')
+    continue
+  }
   if (!r.name) fail(...at, 'no name')
   if (!Number.isFinite(value)) fail(...at, `"${r.name}" value "${r.value}" is not a number`)
 
@@ -139,18 +159,33 @@ for (const r of factsTable.rows) {
 }
 
 for (const [unit, facts] of byUnit) {
-  if (facts.length < 2) fail('facts.csv', facts[0].__line, `unit "${unit}" has one fact, so there is nothing to compare it to`)
+  if (facts.length < 2)
+    fail(
+      'facts.csv',
+      facts[0].__line,
+      `unit "${unit}" has one fact, so there is nothing to compare it to`
+    )
   // The side you are shown has to be something you can picture, or the
   // round is a coin flip. Every unit needs at least one of those.
   if (!facts.some((f) => f.anchor))
-    fail('facts.csv', facts[0].__line, `unit "${unit}" has no anchor — mark at least one fact a Fremont resident could picture`)
+    fail(
+      'facts.csv',
+      facts[0].__line,
+      `unit "${unit}" has no anchor — mark at least one fact a Fremont resident could picture`
+    )
   if (new Set(facts.map((f) => f.value)).size !== facts.length)
-    warn('facts.csv', facts[0].__line, `unit "${unit}" has two facts with the same value — that pair can never be a fair round`)
+    warn(
+      'facts.csv',
+      facts[0].__line,
+      `unit "${unit}" has two facts with the same value — that pair can never be a fair round`
+    )
 }
 
 const factSets = [...byUnit].map(([unit, facts]) => ({
   unit,
-  facts: facts.map(({ name, value, anchor }) => (anchor ? { name, value, anchor } : { name, value })),
+  facts: facts.map(({ name, value, anchor }) =>
+    anchor ? { name, value, anchor } : { name, value }
+  ),
 }))
 
 // ── scenes ────────────────────────────────────────────────────
@@ -168,20 +203,29 @@ for (const r of scenesTable.rows) {
   else if (sceneIds.has(r.id)) fail(...at, `duplicate id "${r.id}"`)
   else sceneIds.add(r.id)
 
-  if (!placeIds.has(r.placeId)) fail(...at, `"${r.id}" points at place "${r.placeId}", which is not in places.csv`)
+  if (!placeIds.has(r.placeId))
+    fail(...at, `"${r.id}" points at place "${r.placeId}", which is not in places.csv`)
   if (!r.caption) fail(...at, `"${r.id}" has no caption`)
   if (!Number.isFinite(year) || year < 1700 || year > 2030)
     fail(...at, `"${r.id}" year "${r.year}" is not a plausible year`)
 
-  for (const [which, list] of [['then', then], ['now', now]]) {
+  for (const [which, list] of [
+    ['then', then],
+    ['now', now],
+  ]) {
     if (!list.length) fail(...at, `"${r.id}" has no ${which} motifs`)
-    for (const m of list) if (!MOTIFS.has(m)) fail(...at, `"${r.id}" ${which} uses motif "${m}", which Parts.jsx cannot draw`)
+    for (const m of list)
+      if (!MOTIFS.has(m))
+        fail(...at, `"${r.id}" ${which} uses motif "${m}", which Parts.jsx cannot draw`)
   }
 
   // Identical lists mean the wipe reveals nothing and the puzzle is
   // "guess a year from an unchanged picture".
   if (then.join('|') === now.join('|'))
-    fail(...at, `"${r.id}" draws then and now identically — there is nothing to see through the wipe`)
+    fail(
+      ...at,
+      `"${r.id}" draws then and now identically — there is nothing to see through the wipe`
+    )
 
   scenes.push({ id: r.id, placeId: r.placeId, caption: r.caption, year, then, now })
 }
@@ -191,14 +235,21 @@ for (const r of scenesTable.rows) {
 const nowKey = new Map()
 for (const s of scenes) {
   const k = `${s.placeId}::${s.now.join('|')}`
-  if (nowKey.has(k)) fail('scenes.csv', 0, `"${s.id}" and "${nowKey.get(k)}" draw the same Today picture but want different years`)
+  if (nowKey.has(k))
+    fail(
+      'scenes.csv',
+      0,
+      `"${s.id}" and "${nowKey.get(k)}" draw the same Today picture but want different years`
+    )
   nowKey.set(k, s.id)
 }
 
 // ── words ─────────────────────────────────────────────────────
 const wordList = new Set(
   (await readFile(join(ROOT, 'src/data/valid-wordle-words.txt'), 'utf8'))
-    .split('\n').map((w) => w.trim().toUpperCase()).filter((w) => w.length === 5)
+    .split('\n')
+    .map((w) => w.trim().toUpperCase())
+    .filter((w) => w.length === 5)
 )
 
 const wordsTable = await table('words.csv')
@@ -211,23 +262,40 @@ for (const r of wordsTable.rows) {
   const w = (r.word || '').trim().toUpperCase()
   const isLocal = /^(y|yes|true|1|x)$/i.test(r.local)
 
-  if (!/^[A-Z]{5}$/.test(w)) { fail(...at, `"${r.word}" is not five letters A–Z`); continue }
-  if (seenWords.has(w)) { fail(...at, `"${w}" is in the list twice`); continue }
+  if (!/^[A-Z]{5}$/.test(w)) {
+    fail(...at, `"${r.word}" is not five letters A–Z`)
+    continue
+  }
+  if (seenWords.has(w)) {
+    fail(...at, `"${w}" is in the list twice`)
+    continue
+  }
   seenWords.add(w)
 
   // An answer nobody can type is not a puzzle. Either it is in the
   // published guess list, or it is a local word we add to that list.
   if (!wordList.has(w) && !isLocal)
-    fail(...at, `"${w}" is not in the Wordle guess list — nobody could type it. Put yes in the local column to add it.`)
+    fail(
+      ...at,
+      `"${w}" is not in the Wordle guess list — nobody could type it. Put yes in the local column to add it.`
+    )
 
   if (isLocal) localWords.push(w)
   candidates.push(w)
 }
 
 if (candidates.length < 7)
-  fail('words.csv', 0, `only ${candidates.length} answers — the queue repeats every ${candidates.length} days`)
+  fail(
+    'words.csv',
+    0,
+    `only ${candidates.length} answers — the queue repeats every ${candidates.length} days`
+  )
 else if (candidates.length < 30)
-  warn('words.csv', 0, `${candidates.length} answers means the word repeats every ${candidates.length} days`)
+  warn(
+    'words.csv',
+    0,
+    `${candidates.length} answers means the word repeats every ${candidates.length} days`
+  )
 
 // ── report ────────────────────────────────────────────────────
 for (const w of warnings) console.warn(`  warning  ${w}`)
@@ -253,22 +321,50 @@ const OUTPUTS = {
 
 console.log(
   `  ok  ${places.length} places, ${groups.length} categories, ` +
-  `${factsTable.rows.length} facts in ${factSets.length} units, ` +
-  `${scenes.length} scenes, ${candidates.length} answers` +
-  (warnings.length ? `  (${warnings.length} warning${warnings.length > 1 ? 's' : ''})` : '')
+    `${factsTable.rows.length} facts in ${factSets.length} units, ` +
+    `${scenes.length} scenes, ${candidates.length} answers` +
+    (warnings.length ? `  (${warnings.length} warning${warnings.length > 1 ? 's' : ''})` : '')
 )
-
-if (checkOnly) {
-  console.log('  --check: nothing written.')
-  process.exit(0)
-}
 
 const BANNER =
   '// Generated from content/ by scripts/content-build.mjs — do not edit.\n' +
   '// Edit the CSV and run `npm run content`.\n\n'
 
+const render = (data) => BANNER + 'export default ' + JSON.stringify(data, null, 1) + '\n'
+
+// --check has to answer two questions, not one. "Is every row valid" is
+// the obvious one. The other is "does what is committed in
+// src/data/generated still match content/" — because the app imports the
+// generated files and nothing else. Edit a CSV, forget to run the
+// build, and every check above passes while the site keeps serving the
+// old pool. That is a silent deploy of stale content, and it is the
+// failure mode a spreadsheet workflow invites.
+if (checkOnly) {
+  const drifted = []
+  for (const [file, data] of Object.entries(OUTPUTS)) {
+    let committed = null
+    try {
+      committed = await readFile(join(OUT, file), 'utf8')
+    } catch {
+      drifted.push(`${file} — missing`)
+      continue
+    }
+    if (committed !== render(data)) drifted.push(`${file} — out of date`)
+  }
+
+  if (drifted.length) {
+    console.error('\nsrc/data/generated no longer matches content/:\n')
+    for (const d of drifted) console.error(`  ${d}`)
+    console.error('\nRun `npm run content` and commit the result.')
+    process.exit(1)
+  }
+
+  console.log('  --check: generated files are in sync, nothing written.')
+  process.exit(0)
+}
+
 await mkdir(OUT, { recursive: true })
 for (const [file, data] of Object.entries(OUTPUTS)) {
-  await writeFile(join(OUT, file), BANNER + 'export default ' + JSON.stringify(data, null, 1) + '\n', 'utf8')
+  await writeFile(join(OUT, file), render(data), 'utf8')
 }
 console.log(`  wrote src/data/generated/ (${Object.keys(OUTPUTS).length} files)`)

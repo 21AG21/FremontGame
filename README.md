@@ -11,13 +11,13 @@ Then open http://localhost:5173
 
 ## The five
 
-| No. | Puzzle | Mechanic |
-|---|---|---|
-| I | **Zoom** | A line engraving of one of **63 Fremont places**, opening at 2.6×. Every miss pulls the camera back one stop. Wrong guesses report a warmth word, a compass bearing and a coarse distance. |
-| II | **Groups** | Twelve tiles, **three groups of four**, off a pool of 100 categories. Mission San Jose is *both* a township and a high school — the puzzle is built around that. |
-| III | **Then & Now** | Drag-wipe between two eras of the same place, then name the year of the older one. |
-| IV | **Higher or Lower** | Five rounds drawn from **134 sourced facts** in ten units. The side you are shown is always something a resident can picture. |
-| V | **The Word** | Five letters, refereed by the published Wordle guess list. Two-pass scoring, so double letters behave. |
+| No. | Puzzle              | Mechanic                                                                                                                                                                                   |
+| --- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| I   | **Zoom**            | A line engraving of one of **63 Fremont places**, opening at 2.6×. Every miss pulls the camera back one stop. Wrong guesses report a warmth word, a compass bearing and a coarse distance. |
+| II  | **Groups**          | Twelve tiles, **three groups of four**, off a pool of 100 categories. Mission San Jose is _both_ a township and a high school — the puzzle is built around that.                           |
+| III | **Then & Now**      | Drag-wipe between two eras of the same place, then name the year of the older one.                                                                                                         |
+| IV  | **Higher or Lower** | Five rounds drawn from **134 sourced facts** in ten units. The side you are shown is always something a resident can picture.                                                              |
+| V   | **The Word**        | Five letters, refereed by the published Wordle guess list. Two-pass scoring, so double letters behave.                                                                                     |
 
 Each writes a spoiler-free share card and tracks streaks in `localStorage`.
 
@@ -27,13 +27,13 @@ Every game comes off a pool indexed by day number, so everyone in town gets the
 same puzzle and reloading doesn't reroll it. Nothing has to run at midnight — a
 build from six months ago still serves today's board.
 
-| | pool | comes round again |
-|---|---|---|
-| Zoom | 63 answers, from 113 places | every 63 days |
-| Groups | 100 categories, 25 per difficulty | ≥11 days between repeats |
-| Higher or Lower | 134 facts in 10 units | no pair repeats within 28 days |
-| Then & Now | **14 scenes** | every 14 days |
-| The Word | 24 queued, **18 playable** | every 18 days |
+|                 | pool                              | comes round again              |
+| --------------- | --------------------------------- | ------------------------------ |
+| Zoom            | 63 answers, from 113 places       | every 63 days                  |
+| Groups          | 100 categories, 25 per difficulty | ≥11 days between repeats       |
+| Higher or Lower | 134 facts in 10 units             | no pair repeats within 28 days |
+| Then & Now      | **14 scenes**                     | every 14 days                  |
+| The Word        | 24 queued, **18 playable**        | every 18 days                  |
 
 The two in bold are thin, and they are the first place to spend an hour.
 
@@ -75,7 +75,7 @@ which is written for someone who does not want to read this file.
 ### The Zoom drawings are composed, not drawn
 
 A hundred hand-drawn engravings is not a thing anyone finishes. So a place says
-what it is *made of* — `victorian | windmill | orchard` for Ardenwood —
+what it is _made of_ — `victorian | windmill | orchard` for Ardenwood —
 `art/Parts.jsx` knows how to draw each of the 66 parts, and `art/Engraving.jsx`
 stacks them back to front on one 800×600 plate, seeded off the place id so a
 drawing never changes between loads.
@@ -97,9 +97,9 @@ stops trusting it and never comes back.
 
 - Fremont incorporated 23 January 1956 from Centerville, Niles, Irvington,
   Mission San José and Warm Springs — [City of Fremont](https://www.fremont.gov/about/our-story)
-- Mission Peak 2,520 ft; Monument Peak 2,594 ft — [Mission Peak](https://en.wikipedia.org/wiki/Mission_Peak), [Monument Peak](https://en.wikipedia.org/wiki/Monument_Peak_(San_Francisco_Bay_Area))
+- Mission Peak 2,520 ft; Monument Peak 2,594 ft — [Mission Peak](https://en.wikipedia.org/wiki/Mission_Peak), [Monument Peak](<https://en.wikipedia.org/wiki/Monument_Peak_(San_Francisco_Bay_Area)>)
 - Chaplin at the Niles Essanay studio, January 1915: five pictures in ten weeks,
-  the last of them *The Tramp* — [Museum of Local History](https://museumoflocalhistory.org/exhibits/exhibit-movies-in-niles/), [KQED](https://www.kqed.org/news/11789138/how-charlie-chaplin-and-silent-films-flourished-in-the-east-bay)
+  the last of them _The Tramp_ — [Museum of Local History](https://museumoflocalhistory.org/exhibits/exhibit-movies-in-niles/), [KQED](https://www.kqed.org/news/11789138/how-charlie-chaplin-and-silent-films-flourished-in-the-east-bay)
 - GM Fremont Assembly 1962–1982, NUMMI 1984–2010, Tesla from 2010 —
   [Fremont Assembly](https://en.wikipedia.org/wiki/Fremont_Assembly), [NUMMI](https://en.wikipedia.org/wiki/NUMMI)
 - Central Park 450 acres, Lake Elizabeth 83; Coyote Hills ~978 acres —
@@ -117,11 +117,11 @@ they carry no state, so green stays free to mean one thing.
 
 **Three colours, each meaning exactly one thing.** Nothing else is coloured:
 
-| | light | dark | means |
-|---|---|---|---|
-| navy | `#043764` | `#1077D3` | the thing you have selected right now |
-| green | `#33632E` | `#43833D` | correct |
-| amber | `#8E6B13` | `#D9A72A` | right letter, wrong place |
+|       | light     | dark      | means                                 |
+| ----- | --------- | --------- | ------------------------------------- |
+| navy  | `#043764` | `#1077D3` | the thing you have selected right now |
+| green | `#33632E` | `#43833D` | correct                               |
+| amber | `#8E6B13` | `#D9A72A` | right letter, wrong place             |
 
 All 22 text and state-fill pairs are measured against WCAG in both themes: 4.5:1
 for text, 3:1 for fills. The light amber is deep with a white label because no
@@ -134,20 +134,20 @@ a saved theme before first paint so it doesn't flash.
 
 Two values are not mirror images:
 
-*The engravings keep a light plate in both modes.* `--art-ink` cools on dark but
+_The engravings keep a light plate in both modes._ `--art-ink` cools on dark but
 `--art-paper` stays white — inverting a line drawing turns it into a
 photographic negative, which reads as a bug.
 
-*Green as a fill and green as type are different values.* The fill sits almost
+_Green as a fill and green as type are different values._ The fill sits almost
 on top of the dark panel, so text uses `--green-ink`.
 
 And two that carried over:
 
-*Shading is hatch density, not grey.* The engravings carry no `opacity` and no
+_Shading is hatch density, not grey._ The engravings carry no `opacity` and no
 mid-tones — light and shade come from how tightly the hatch is ruled, which is
 how engraving actually works.
 
-*The share marks are CSS boxes, not characters.* No text face here has block
+_The share marks are CSS boxes, not characters._ No text face here has block
 glyphs, and the shade characters dither to grey. The characters appear only in
 the clipboard text.
 

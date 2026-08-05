@@ -58,7 +58,7 @@ async function fromGoogle(name) {
   if (/^\s*</.test(text)) {
     throw new Error(
       `tab "${name}" came back as HTML, not CSV — the sheet is probably not shared ` +
-      `"anyone with the link can view"`
+        `"anyone with the link can view"`
     )
   }
   return readTable(text).rows

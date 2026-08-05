@@ -18,7 +18,13 @@ export default function Sheet() {
         Each one as it opens, then the whole plate. The crosshair is the zoom focus.
       </p>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(230px, 1fr))', gap: 18 }}>
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fill, minmax(230px, 1fr))',
+          gap: 18,
+        }}
+      >
         {ZOOM_POOL.map((place) => {
           const f = focusFor(place)
           return (

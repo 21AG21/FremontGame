@@ -196,7 +196,6 @@
   --serif: 'Newsreader', Georgia, 'Times New Roman', serif;
   --sans: 'Work Sans', system-ui, -apple-system, sans-serif;
 
-
   /* One type scale, eight steps. The previous version used seventeen
      sizes including every integer from 10 to 20, differences nobody
      perceives, because weight was pinned at 600 and size was the only
@@ -214,14 +213,23 @@
   --z: 1;
 }
 
-* { box-sizing: border-box; }
+* {
+  box-sizing: border-box;
+}
 
-html, body, #root { height: 100%; }
+html,
+body,
+#root {
+  height: 100%;
+}
 
 /* dvh and the 100% ICB disagree by the URL-bar delta on iOS, which
    leaves the document a few pixels scrollable — enough to rubber-band,
    collapse the bar and resize the sheet mid-round. */
-html, body { overscroll-behavior: none; }
+html,
+body {
+  overscroll-behavior: none;
+}
 
 body {
   margin: 0;
@@ -235,10 +243,27 @@ body {
   -webkit-tap-highlight-color: transparent;
 }
 
-button, input { font: inherit; color: inherit; }
-button { cursor: pointer; }
-h1, h2, h3, p, dl, dd, ul { margin: 0; padding: 0; }
-ul { list-style: none; }
+button,
+input {
+  font: inherit;
+  color: inherit;
+}
+button {
+  cursor: pointer;
+}
+h1,
+h2,
+h3,
+p,
+dl,
+dd,
+ul {
+  margin: 0;
+  padding: 0;
+}
+ul {
+  list-style: none;
+}
 
 /* One focus ring, in the palette. The UA default is a yellow-orange
    that belongs to no part of this design. */
@@ -248,11 +273,18 @@ ul { list-style: none; }
 :focus-visible {
   outline: 2px solid var(--ink);
   outline-offset: 2px;
-  box-shadow: 0 0 0 2px #fff, 0 0 0 5px var(--ink);
+  box-shadow:
+    0 0 0 2px #fff,
+    0 0 0 5px var(--ink);
 }
 .index-item:focus-visible,
 .btn-primary:focus-visible,
-.tile.is-selected:focus-visible { outline-color: #fff; box-shadow: 0 0 0 2px var(--ink), 0 0 0 5px #fff; }
+.tile.is-selected:focus-visible {
+  outline-color: #fff;
+  box-shadow:
+    0 0 0 2px var(--ink),
+    0 0 0 5px #fff;
+}
 
 /* ── shell ───────────────────────────────────────────────────── */
 
@@ -285,11 +317,31 @@ ul { list-style: none; }
    as width because this is a one-screen app — a wide, short window has
    no room to grow into. */
 @supports (zoom: 1.2) {
-@media (min-width: 720px) and (min-height: 840px) { :root { --z: 1.2; } }
-@media (min-width: 820px) and (min-height: 1000px) { :root { --z: 1.45; } }
-@media (min-width: 980px) and (min-height: 1180px) { :root { --z: 1.7; } }
-@media (min-width: 1120px) and (min-height: 1360px) { :root { --z: 1.95; } }
-@media (min-width: 1280px) and (min-height: 1560px) { :root { --z: 2.2; } }
+  @media (min-width: 720px) and (min-height: 840px) {
+    :root {
+      --z: 1.2;
+    }
+  }
+  @media (min-width: 820px) and (min-height: 1000px) {
+    :root {
+      --z: 1.45;
+    }
+  }
+  @media (min-width: 980px) and (min-height: 1180px) {
+    :root {
+      --z: 1.7;
+    }
+  }
+  @media (min-width: 1120px) and (min-height: 1360px) {
+    :root {
+      --z: 1.95;
+    }
+  }
+  @media (min-width: 1280px) and (min-height: 1560px) {
+    :root {
+      --z: 2.2;
+    }
+  }
 }
 
 /* Fixed to the viewport, not to the column: a ridge scoped to the sheet
@@ -360,10 +412,16 @@ ul { list-style: none; }
    circles up there read as a toolbar. The glyph alone is enough for a
    utility. 44px target unchanged; only the paint is gone. */
 .theme::before,
-.howto-open::before { content: none; }
+.howto-open::before {
+  content: none;
+}
 
-.theme { position: relative; }
-.theme svg { position: relative; }
+.theme {
+  position: relative;
+}
+.theme svg {
+  position: relative;
+}
 
 main {
   position: relative;
@@ -466,9 +524,13 @@ main {
       var(--glass-rim-side) 66%,
       var(--glass-rim-bottom) 100%
     );
-  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
   -webkit-mask-composite: xor;
-  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
   mask-composite: exclude;
 }
 
@@ -489,8 +551,13 @@ main {
 /* Without backdrop-filter the pane would just be washed out, so fall
    back to the solid panel it used to be. */
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-  .index { background: var(--panel); box-shadow: 0 6px 20px var(--bar-shadow); }
-  .index::before { background: var(--line); }
+  .index {
+    background: var(--panel);
+    box-shadow: 0 6px 20px var(--bar-shadow);
+  }
+  .index::before {
+    background: var(--line);
+  }
 }
 
 /* Reduce Transparency, which is a real switch a lot of people leave on.
@@ -504,8 +571,12 @@ main {
     backdrop-filter: none;
     box-shadow: 0 6px 20px var(--bar-shadow);
   }
-  .index::before { background: var(--line); }
-  .index::after { display: none; }
+  .index::before {
+    background: var(--line);
+  }
+  .index::after {
+    display: none;
+  }
 }
 
 /* One pill that travels, not five backgrounds taking turns. Sized to
@@ -625,7 +696,10 @@ main {
   color: var(--on-navy);
 }
 
-.btn:disabled { opacity: 0.4; cursor: default; }
+.btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
 
 /* Grows into the screen rather than holding the drawing's 4:3. Locking
    the ratio gave every player an identical crop and cost a third of the
@@ -652,9 +726,15 @@ main {
 
 /* The engravings draw in currentColor — see art/Parts.jsx for why. */
 .plate svg,
-.scene { color: var(--art-ink); }
+.scene {
+  color: var(--art-ink);
+}
 
-.plate svg { display: block; width: 100%; height: 100%; }
+.plate svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
 
 /* The bar's material at chip size, without the lens: refraction is a rim
    effect and this chip is 24px tall, so a visible band would be most of
@@ -682,9 +762,12 @@ main {
   font-variant-numeric: tabular-nums;
 }
 
-
-.tag-left { left: 8px; }
-.tag-right { right: 8px; }
+.tag-left {
+  left: 8px;
+}
+.tag-right {
+  right: 8px;
+}
 
 /* Tiles: the one shape shared by Groups and the year row. */
 .tile {
@@ -727,13 +810,22 @@ main {
   color: var(--muted);
 }
 
-.tile:disabled { cursor: default; }
+.tile:disabled {
+  cursor: default;
+}
 
 /* ── I. Zoom ─────────────────────────────────────────────────── */
 
-.plate-inner { width: 100%; height: 100%; transform-origin: center; }
+.plate-inner {
+  width: 100%;
+  height: 100%;
+  transform-origin: center;
+}
 
-.search { position: relative; flex: none; }
+.search {
+  position: relative;
+  flex: none;
+}
 
 .search-input {
   display: block;
@@ -746,8 +838,12 @@ main {
   font-size: var(--t-lg);
 }
 
-.search-input:focus { border-color: var(--navy); }
-.search-input::placeholder { color: var(--muted); }
+.search-input:focus {
+  border-color: var(--navy);
+}
+.search-input::placeholder {
+  color: var(--muted);
+}
 
 .search-list {
   position: absolute;
@@ -776,9 +872,16 @@ main {
   font-weight: 500;
 }
 
-.search-item.is-cursor { background: var(--navy); color: var(--on-navy); }
+.search-item.is-cursor {
+  background: var(--navy);
+  color: var(--on-navy);
+}
 
-.search-empty { padding: 14px 16px; color: var(--muted); font-size: var(--t-md); }
+.search-empty {
+  padding: 14px 16px;
+  color: var(--muted);
+  font-size: var(--t-md);
+}
 
 .guesses {
   flex: 1;
@@ -806,7 +909,11 @@ main {
   overflow-x: hidden;
 }
 
-.guess-list > li { flex: none; min-height: 0; display: flex; }
+.guess-list > li {
+  flex: none;
+  min-height: 0;
+  display: flex;
+}
 
 /* Wraps. "Lake Elizabeth" beside "Hot ↙ under a mile south" needs
    348px of a 295px row, and with the meta pinned at flex: none the
@@ -854,7 +961,11 @@ main {
   color: var(--muted);
 }
 
-.guess-arrow { display: inline-block; font-size: var(--t-md); line-height: 1; }
+.guess-arrow {
+  display: inline-block;
+  font-size: var(--t-md);
+  line-height: 1;
+}
 
 .guess.is-correct {
   background: var(--green);
@@ -862,11 +973,18 @@ main {
   color: var(--on-green);
 }
 
-.guess.is-correct .guess-meta { color: var(--on-green); }
+.guess.is-correct .guess-meta {
+  color: var(--on-green);
+}
 
 /* ── II. Groups ──────────────────────────────────────────────── */
 
-.bands { flex: none; display: flex; flex-direction: column; gap: 8px; }
+.bands {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
 
 .band {
   padding: 14px 16px;
@@ -885,7 +1003,12 @@ main {
   text-transform: uppercase;
 }
 
-.band-items { display: block; margin-top: 5px; font-size: var(--t-lg); font-weight: 600; }
+.band-items {
+  display: block;
+  margin-top: 5px;
+  font-size: var(--t-lg);
+  font-weight: 600;
+}
 
 .conn-grid {
   flex: 1;
@@ -904,7 +1027,10 @@ main {
   gap: 12px;
 }
 
-.mistakes { display: flex; gap: 7px; }
+.mistakes {
+  display: flex;
+  gap: 7px;
+}
 
 .dot {
   width: 12px;
@@ -914,14 +1040,26 @@ main {
   border: 1px solid var(--green);
 }
 
-.dot.is-spent { background: transparent; border-color: var(--muted); border-width: 2px; }
+.dot.is-spent {
+  background: transparent;
+  border-color: var(--muted);
+  border-width: 2px;
+}
 
 /* ── III. Then & Now ─────────────────────────────────────────── */
 
-.wipe { touch-action: none; cursor: ew-resize; }
+.wipe {
+  touch-action: none;
+  cursor: ew-resize;
+}
 
-.wipe-layer { position: absolute; inset: 0; }
-.wipe-top { z-index: 2; }
+.wipe-layer {
+  position: absolute;
+  inset: 0;
+}
+.wipe-top {
+  z-index: 2;
+}
 
 /* The seam and handle sit on the engraving, not on the page, so the
    doc gives them one set of values for both themes. */
@@ -951,7 +1089,9 @@ main {
   font-size: 16px;
 }
 
-.wipe .tag { z-index: 3; }
+.wipe .tag {
+  z-index: 3;
+}
 
 .quote {
   flex: none;
@@ -971,11 +1111,18 @@ main {
   gap: 8px;
 }
 
-.year-hint { font-size: var(--t-xs); font-weight: 500; }
+.year-hint {
+  font-size: var(--t-xs);
+  font-weight: 500;
+}
 
 /* Shared by Higher or Lower's five rounds and Zoom's five guesses —
    one way of saying "this is what you have left" rather than two. */
-.progress { flex: none; display: flex; gap: 6px; }
+.progress {
+  flex: none;
+  display: flex;
+  gap: 6px;
+}
 
 .pip {
   flex: 1;
@@ -985,9 +1132,15 @@ main {
   border: 1px solid var(--line-2);
 }
 
-.pip.is-hit { background: var(--green); }
-.pip.is-miss { background: var(--muted); }
-.pip.is-current { background: var(--navy); }
+.pip.is-hit {
+  background: var(--green);
+}
+.pip.is-miss {
+  background: var(--muted);
+}
+.pip.is-current {
+  background: var(--navy);
+}
 
 /* ── IV. Higher or Lower ─────────────────────────────────────── */
 
@@ -1016,9 +1169,14 @@ main {
   padding: 22px 18px;
 }
 
-.hl-half + .hl-half { border-top: 1px solid var(--line); }
+.hl-half + .hl-half {
+  border-top: 1px solid var(--line);
+}
 
-.hl-name { font-family: var(--serif); font-size: var(--t-xl); }
+.hl-name {
+  font-family: var(--serif);
+  font-size: var(--t-xl);
+}
 
 .hl-value {
   display: block;
@@ -1029,11 +1187,24 @@ main {
   font-variant-numeric: tabular-nums;
 }
 
-.hl-unit { font-size: var(--t-sm); font-weight: 600; color: var(--muted); }
+.hl-unit {
+  font-size: var(--t-sm);
+  font-weight: 600;
+  color: var(--muted);
+}
 
-.hl-buttons { flex: none; display: flex; gap: 10px; }
+.hl-buttons {
+  flex: none;
+  display: flex;
+  gap: 10px;
+}
 
-.hl-buttons .btn { flex: 1; min-height: 66px; border-radius: var(--r-md); font-size: var(--t-lg); }
+.hl-buttons .btn {
+  flex: 1;
+  min-height: 66px;
+  border-radius: var(--r-md);
+  font-size: var(--t-lg);
+}
 
 .hl-buttons .btn.is-right {
   background: var(--green);
@@ -1049,15 +1220,32 @@ main {
   opacity: 1;
 }
 
-.hl-than { flex: none; text-align: center; font-size: var(--t-sm); font-weight: 500; color: var(--muted); }
+.hl-than {
+  flex: none;
+  text-align: center;
+  font-size: var(--t-sm);
+  font-weight: 500;
+  color: var(--muted);
+}
 
 /* ── V. The Word ─────────────────────────────────────────────── */
 
 /* The doc pins these at 46 and 52 on a 660px card. On a real phone that
    leaves a hole between the grid and the keyboard, so both take the room
    instead: the grid grows into whatever the keyboard doesn't want. */
-.wg-grid { flex: 6 1 0; min-height: 0; display: flex; flex-direction: column; gap: 6px; }
-.wg-row { flex: 1; min-height: 0; display: flex; gap: 6px; }
+.wg-grid {
+  flex: 6 1 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.wg-row {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  gap: 6px;
+}
 
 .wg-cell {
   flex: 1;
@@ -1086,7 +1274,9 @@ main {
    close in luminance, and a first-time player who cannot separate them
    reasonably concludes the game is broken rather than that they are
    colour-blind. Every scored cell carries a mark as well as a fill. */
-.wg-cell { position: relative; }
+.wg-cell {
+  position: relative;
+}
 
 .wg-cell.is-correct::after,
 .wg-cell.is-present::after,
@@ -1100,14 +1290,34 @@ main {
   line-height: 1;
 }
 
-.wg-cell.is-correct::after { content: '✓'; }
-.wg-cell.is-present::after { content: '~'; }
-.wg-cell.is-absent::after { content: '×'; }
+.wg-cell.is-correct::after {
+  content: '✓';
+}
+.wg-cell.is-present::after {
+  content: '~';
+}
+.wg-cell.is-absent::after {
+  content: '×';
+}
 
-.wg-cell.is-typing.has-letter { border-color: var(--line-2); }
-.wg-cell.is-absent { background: var(--sunk); border-color: var(--line); color: var(--muted); }
-.wg-cell.is-present { background: var(--amber); border-color: var(--amber); color: var(--on-amber); }
-.wg-cell.is-correct { background: var(--green); border-color: var(--green); color: var(--on-green); }
+.wg-cell.is-typing.has-letter {
+  border-color: var(--line-2);
+}
+.wg-cell.is-absent {
+  background: var(--sunk);
+  border-color: var(--line);
+  color: var(--muted);
+}
+.wg-cell.is-present {
+  background: var(--amber);
+  border-color: var(--amber);
+  color: var(--on-amber);
+}
+.wg-cell.is-correct {
+  background: var(--green);
+  border-color: var(--green);
+  color: var(--on-green);
+}
 
 /* The one thing the grid has to say out loud: a guess that isn't a
    word. It sits in the gap instead of shaking the row. */
@@ -1122,11 +1332,26 @@ main {
   font-weight: 600;
 }
 
-.wg-keys { flex: 4 1 0; min-height: 0; display: flex; flex-direction: column; gap: 8px; }
+.wg-keys {
+  flex: 4 1 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
 
-.wg-keyrow { flex: 1; min-height: 0; display: flex; gap: 6px; }
-.wg-keyrow:nth-child(2) { padding: 0 10px; }
-.wg-keyrow:nth-child(3) { padding: 0 22px; }
+.wg-keyrow {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  gap: 6px;
+}
+.wg-keyrow:nth-child(2) {
+  padding: 0 10px;
+}
+.wg-keyrow:nth-child(3) {
+  padding: 0 22px;
+}
 
 .wg-key {
   flex: 1;
@@ -1146,15 +1371,32 @@ main {
   font-weight: 600;
 }
 
-.wg-key.is-absent { background: var(--sunk); border-color: var(--line); color: var(--muted); }
-.wg-key.is-present { background: var(--amber); border-color: var(--amber); color: var(--on-amber); }
-.wg-key.is-correct { background: var(--green); border-color: var(--green); color: var(--on-green); }
+.wg-key.is-absent {
+  background: var(--sunk);
+  border-color: var(--line);
+  color: var(--muted);
+}
+.wg-key.is-present {
+  background: var(--amber);
+  border-color: var(--amber);
+  color: var(--on-amber);
+}
+.wg-key.is-correct {
+  background: var(--green);
+  border-color: var(--green);
+  color: var(--on-green);
+}
 
 /* The doc draws 26 letters and no action keys, which cannot be played
    on a phone. This is the one row added to it — kept off the three
    lettered rows so those still match the drawing exactly. */
-.wg-keyrow-actions { padding: 0 22px; }
-.wg-keyrow-actions .wg-key { font-size: var(--t-sm); letter-spacing: 0.04em; }
+.wg-keyrow-actions {
+  padding: 0 22px;
+}
+.wg-keyrow-actions .wg-key {
+  font-size: var(--t-sm);
+  letter-spacing: 0.04em;
+}
 
 /* Six rows of cells plus four rows of keys is the tallest screen in the
    app, and the added action row costs it 59px. Scoped to the Word so a
@@ -1164,10 +1406,22 @@ main {
    overflowed by 63px at 320x568, the size the commit claimed to have
    checked. Nothing here sets a min-height the layout cannot honour. */
 @media (max-height: 760px) {
-  .wg-cell { min-height: 0; font-size: var(--t-lg); }
-  .wg-key { min-height: 34px; font-size: var(--t-sm); }
-  .wg-grid, .wg-row, .wg-keyrow { gap: 4px; }
-  .wg-keys { gap: 5px; }
+  .wg-cell {
+    min-height: 0;
+    font-size: var(--t-lg);
+  }
+  .wg-key {
+    min-height: 34px;
+    font-size: var(--t-sm);
+  }
+  .wg-grid,
+  .wg-row,
+  .wg-keyrow {
+    gap: 4px;
+  }
+  .wg-keys {
+    gap: 5px;
+  }
 }
 
 /* ── result ──────────────────────────────────────────────────── */
@@ -1190,17 +1444,32 @@ main {
   line-height: 1.1;
 }
 
-.result.is-won .result-answer { color: var(--green-ink); }
+.result.is-won .result-answer {
+  color: var(--green-ink);
+}
 
 /* Losing had no treatment, so it read as a neutral panel with a word in
    it. Not a failure colour — this palette has none and does not need
    one — but the answer you missed should not look like the answer you
    got. */
-.result.is-lost .result-answer { color: var(--muted); }
-.result.is-lost { border-color: var(--line-2); }
+.result.is-lost .result-answer {
+  color: var(--muted);
+}
+.result.is-lost {
+  border-color: var(--line-2);
+}
 
-.marks { display: flex; flex-direction: column; align-items: center; gap: 5px; margin: 18px 0; }
-.marks-row { display: flex; gap: 5px; }
+.marks {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  margin: 18px 0;
+}
+.marks-row {
+  display: flex;
+  gap: 5px;
+}
 
 .mark {
   width: 22px;
@@ -1211,11 +1480,25 @@ main {
   border: 1px solid var(--line);
 }
 
-.mark.is-d2 { background: var(--navy); border-color: var(--navy); }
-.mark.is-d3 { background: var(--amber); border-color: var(--amber); }
-.mark.is-d4 { background: var(--green); border-color: var(--green); }
+.mark.is-d2 {
+  background: var(--navy);
+  border-color: var(--navy);
+}
+.mark.is-d3 {
+  background: var(--amber);
+  border-color: var(--amber);
+}
+.mark.is-d4 {
+  background: var(--green);
+  border-color: var(--green);
+}
 
-.record { display: flex; justify-content: center; gap: 28px; margin-bottom: 14px; }
+.record {
+  display: flex;
+  justify-content: center;
+  gap: 28px;
+  margin-bottom: 14px;
+}
 
 .record dt {
   font-size: var(--t-xs);
@@ -1233,8 +1516,14 @@ main {
   font-variant-numeric: tabular-nums;
 }
 
-.result-actions { display: flex; gap: 10px; }
-.result-actions .btn { flex: 1; padding: 0 12px; }
+.result-actions {
+  display: flex;
+  gap: 10px;
+}
+.result-actions .btn {
+  flex: 1;
+  padding: 0 12px;
+}
 
 /* ── very short screens ──────────────────────────────────────── */
 
@@ -1243,42 +1532,97 @@ main {
    after the header grew a line overflowed Then & Now by 43px — the
    breakpoint was set against a header that no longer exists. */
 @media (max-height: 780px) {
-  .plate { min-height: clamp(140px, 22dvh / var(--z), 220px); }
-  .quote { font-size: var(--t-lg); }
-  .hl-half { padding: 14px 16px; }
-  .year-grid { grid-auto-rows: minmax(48px, 1fr); }
+  .plate {
+    min-height: clamp(140px, 22dvh / var(--z), 220px);
+  }
+  .quote {
+    font-size: var(--t-lg);
+  }
+  .hl-half {
+    padding: 14px 16px;
+  }
+  .year-grid {
+    grid-auto-rows: minmax(48px, 1fr);
+  }
 }
 
 /* The doc's own card is 660 tall, so this one stays well below it. */
 @media (max-height: 640px) {
-  :root { --pad: 16px; --pad-top: 11px; --gap: 8px; --bar-inset: 12px; }
-  .flag { font-size: var(--t-xl); }
-  .plate { min-height: clamp(120px, 20dvh / var(--z), 190px); }
-  .quote { font-size: var(--t-md); }
+  :root {
+    --pad: 16px;
+    --pad-top: 11px;
+    --gap: 8px;
+    --bar-inset: 12px;
+  }
+  .flag {
+    font-size: var(--t-xl);
+  }
+  .plate {
+    min-height: clamp(120px, 20dvh / var(--z), 190px);
+  }
+  .quote {
+    font-size: var(--t-md);
+  }
   /* clamp(38px, 12vw, 48px) was BIGGER than the 30–58px base scale
      resolves to at this width. A short-screen block that enlarges is
      the same bug that overflowed the Word grid by 63px; this one shrinks. */
-  .hl-value { font-size: clamp(28px, 10vw, 40px); }
-  .hl-half { padding: 12px 14px; }
-  .hl-buttons .btn { min-height: 48px; }
-  .year-grid { grid-auto-rows: minmax(44px, 1fr); }
-  .wg-cell { min-height: 0; font-size: var(--t-md); }
-  .wg-key { min-height: 30px; font-size: var(--t-xs); }
-  .result { padding: 14px; }
-  .record dd { font-size: var(--t-xl); }
+  .hl-value {
+    font-size: clamp(28px, 10vw, 40px);
+  }
+  .hl-half {
+    padding: 12px 14px;
+  }
+  .hl-buttons .btn {
+    min-height: 48px;
+  }
+  .year-grid {
+    grid-auto-rows: minmax(44px, 1fr);
+  }
+  .wg-cell {
+    min-height: 0;
+    font-size: var(--t-md);
+  }
+  .wg-key {
+    min-height: 30px;
+    font-size: var(--t-xs);
+  }
+  .result {
+    padding: 14px;
+  }
+  .record dd {
+    font-size: var(--t-xl);
+  }
 }
 
 /* Landscape phones: 390px of height minus 116 of padding leaves ~270 for
    the board. The plate has to give up most of it or nothing else fits. */
 @media (orientation: landscape) and (max-height: 560px) {
-  :root { --pad: 12px; --pad-top: 9px; --gap: 7px; --bar-inset: 10px; }
+  :root {
+    --pad: 12px;
+    --pad-top: 9px;
+    --gap: 7px;
+    --bar-inset: 10px;
+  }
   /* height is the scarce thing here, so the frame gives it up */
-  .plate { min-height: 0; max-height: 38dvh; }
-  .quote { font-size: var(--t-md); }
-  .hl-buttons .btn { min-height: 48px; }
-  .btn { min-height: 46px; }
-  .index-item { padding: 4px 2px; }
-  .flag { font-size: var(--t-xl); }
+  .plate {
+    min-height: 0;
+    max-height: 38dvh;
+  }
+  .quote {
+    font-size: var(--t-md);
+  }
+  .hl-buttons .btn {
+    min-height: 48px;
+  }
+  .btn {
+    min-height: 46px;
+  }
+  .index-item {
+    padding: 4px 2px;
+  }
+  .flag {
+    font-size: var(--t-xl);
+  }
 
   /* Rotating the phone does not just make everything shorter, it makes
      it much wider — 667px against 375 — and three of these layouts were
@@ -1293,22 +1637,43 @@ main {
     /* three rows now, so the 64px floor from portrait no longer fits */
     grid-auto-rows: minmax(44px, 1fr);
   }
-  .tile { font-size: clamp(12px, 2vw, 15px); hyphens: auto; }
+  .tile {
+    font-size: clamp(12px, 2vw, 15px);
+    hyphens: auto;
+  }
 
   /* Higher or Lower stacked its two halves, which is 252px of card in
      248px of room. Side by side is the obvious reading of a wide screen
      anyway: two things, compared. */
-  .hl-card { flex-direction: row; }
-  .hl-half { padding: 8px 14px; }
-  .hl-half + .hl-half { border-top: 0; border-left: 1px solid var(--line); }
+  .hl-card {
+    flex-direction: row;
+  }
+  .hl-half {
+    padding: 8px 14px;
+  }
+  .hl-half + .hl-half {
+    border-top: 0;
+    border-left: 1px solid var(--line);
+  }
 
   /* Six year tiles go two rows of three to three of two. */
-  .year-grid { grid-auto-rows: minmax(40px, 1fr); }
+  .year-grid {
+    grid-auto-rows: minmax(40px, 1fr);
+  }
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .index-item, .tile, .btn, .wg-key, .wg-cell, .guess, .theme {
-    transition: background-color 120ms ease, border-color 120ms ease, color 120ms ease;
+  .index-item,
+  .tile,
+  .btn,
+  .wg-key,
+  .wg-cell,
+  .guess,
+  .theme {
+    transition:
+      background-color 120ms ease,
+      border-color 120ms ease,
+      color 120ms ease;
   }
 }
 
@@ -1324,7 +1689,10 @@ main {
   letter-spacing: 0.02em;
 }
 
-.guess.is-correct .guess-warmth { background: rgba(0, 0, 0, 0.28); color: #fff; }
+.guess.is-correct .guess-warmth {
+  background: rgba(0, 0, 0, 0.28);
+  color: #fff;
+}
 
 /* ── how to play ─────────────────────────────────────────────── */
 
@@ -1347,8 +1715,6 @@ main {
   font-weight: 700;
   line-height: 1;
 }
-
-
 
 .howto-scrim {
   position: fixed;
@@ -1389,7 +1755,10 @@ main {
   line-height: 1.5;
 }
 
-.howto-list li { padding-left: 16px; position: relative; }
+.howto-list li {
+  padding-left: 16px;
+  position: relative;
+}
 .howto-list li::before {
   content: '';
   position: absolute;
@@ -1401,11 +1770,16 @@ main {
   background: var(--navy);
 }
 
-.howto .btn { width: 100%; }
+.howto .btn {
+  width: 100%;
+}
 
 /* ── privacy / terms / accessibility ─────────────────────────── */
 
-.howto-legal { margin-top: 14px; text-align: center; }
+.howto-legal {
+  margin-top: 14px;
+  text-align: center;
+}
 
 .linkish {
   /* 44px target, as the accessibility statement claims — this is the
@@ -1421,7 +1795,12 @@ main {
   text-underline-offset: 3px;
 }
 
-.legal { max-width: 520px; max-height: 82dvh; display: flex; flex-direction: column; }
+.legal {
+  max-width: 520px;
+  max-height: 82dvh;
+  display: flex;
+  flex-direction: column;
+}
 
 .legal-tabs {
   flex: none;
@@ -1447,7 +1826,10 @@ main {
   font-weight: 600;
 }
 
-.legal-tab.is-active { background: var(--navy); color: var(--on-navy); }
+.legal-tab.is-active {
+  background: var(--navy);
+  color: var(--on-navy);
+}
 
 .legal-body {
   flex: 1;
@@ -1467,7 +1849,11 @@ main {
   color: var(--muted);
 }
 
-.legal-para { margin-bottom: 10px; font-size: var(--t-sm); line-height: 1.55; }
+.legal-para {
+  margin-bottom: 10px;
+  font-size: var(--t-sm);
+  line-height: 1.55;
+}
 
 .legal-note {
   margin-top: 20px;
@@ -1502,7 +1888,6 @@ main {
    every state that animates is also a colour, a mark or a label. */
 
 @media (prefers-reduced-motion: no-preference) {
-
   /* ── Groups ─────────────────────────────────────────────────── */
 
   .tile {
@@ -1515,22 +1900,34 @@ main {
 
   /* Presses land. Without this a tap on a tile is the only interaction
      in the app with no physical response at all. */
-  .tile:active { transform: scale(0.96); }
-  .tile.is-selected { transform: scale(0.975); }
+  .tile:active {
+    transform: scale(0.96);
+  }
+  .tile.is-selected {
+    transform: scale(0.975);
+  }
 
   /* A rejected guess used to be a colour change held until your next
      tap, which is easy to miss on a board you are already staring at. */
-  .tile.is-rejected { animation: shake 400ms cubic-bezier(0.36, 0.07, 0.19, 0.97); }
+  .tile.is-rejected {
+    animation: shake 400ms cubic-bezier(0.36, 0.07, 0.19, 0.97);
+  }
 
   /* A solved group drops in above the board it just left. */
-  .band { animation: drop-in 340ms cubic-bezier(0.22, 1, 0.32, 1) both; }
+  .band {
+    animation: drop-in 340ms cubic-bezier(0.22, 1, 0.32, 1) both;
+  }
 
   /* ── The Word ───────────────────────────────────────────────── */
 
-  .wg-row { perspective: 700px; }
+  .wg-row {
+    perspective: 700px;
+  }
 
   /* A letter arriving in the row. */
-  .wg-cell.is-typing.has-letter { animation: pop 120ms ease-out; }
+  .wg-cell.is-typing.has-letter {
+    animation: pop 120ms ease-out;
+  }
 
   /* The reveal, left to right. The colour is held at the panel value
      through the first half of the turn, so the tile is still blank
@@ -1539,15 +1936,33 @@ main {
      rather than just rotating. */
   .wg-cell.is-correct,
   .wg-cell.is-present,
-  .wg-cell.is-absent { animation: flip 500ms ease both; }
+  .wg-cell.is-absent {
+    animation: flip 500ms ease both;
+  }
 
-  .wg-row .wg-cell:nth-child(2) { animation-delay: 90ms; }
-  .wg-row .wg-cell:nth-child(3) { animation-delay: 180ms; }
-  .wg-row .wg-cell:nth-child(4) { animation-delay: 270ms; }
-  .wg-row .wg-cell:nth-child(5) { animation-delay: 360ms; }
+  .wg-row .wg-cell:nth-child(2) {
+    animation-delay: 90ms;
+  }
+  .wg-row .wg-cell:nth-child(3) {
+    animation-delay: 180ms;
+  }
+  .wg-row .wg-cell:nth-child(4) {
+    animation-delay: 270ms;
+  }
+  .wg-row .wg-cell:nth-child(5) {
+    animation-delay: 360ms;
+  }
 
-  .wg-key { transition: transform 90ms ease, background-color 150ms ease, border-color 150ms ease, color 150ms ease; }
-  .wg-key:active { transform: scale(0.93); }
+  .wg-key {
+    transition:
+      transform 90ms ease,
+      background-color 150ms ease,
+      border-color 150ms ease,
+      color 150ms ease;
+  }
+  .wg-key:active {
+    transform: scale(0.93);
+  }
 
   /* ── Zoom ───────────────────────────────────────────────────── */
 
@@ -1555,62 +1970,138 @@ main {
      move and it was a hard cut: the plate simply appeared at the next
      scale. Slow and eased, because the point is to let you watch the
      frame widen and recognise what walks into it. */
-  .plate-inner { transition: transform 700ms cubic-bezier(0.22, 1, 0.32, 1); }
+  .plate-inner {
+    transition: transform 700ms cubic-bezier(0.22, 1, 0.32, 1);
+  }
 
-  .guess-list > li:not(.is-slot) .guess { animation: drop-in 300ms cubic-bezier(0.22, 1, 0.32, 1) both; }
+  .guess-list > li:not(.is-slot) .guess {
+    animation: drop-in 300ms cubic-bezier(0.22, 1, 0.32, 1) both;
+  }
 
   /* ── Higher or Lower ────────────────────────────────────────── */
 
   /* Keyed on the round in HigherLower.jsx, so this replays each time
      the pair changes rather than only on mount. */
-  .hl-card { animation: card-in 380ms cubic-bezier(0.22, 1, 0.32, 1) both; }
-  .pip { transition: background-color 260ms ease; }
+  .hl-card {
+    animation: card-in 380ms cubic-bezier(0.22, 1, 0.32, 1) both;
+  }
+  .pip {
+    transition: background-color 260ms ease;
+  }
 
   /* ── shared ─────────────────────────────────────────────────── */
 
-  .result { animation: drop-in 360ms cubic-bezier(0.22, 1, 0.32, 1) both; }
-  .howto { animation: sheet-in 260ms cubic-bezier(0.22, 1, 0.32, 1) both; }
-  .howto-scrim { animation: fade-in 180ms ease both; }
-  .btn { transition: transform 90ms ease, background-color 150ms ease, border-color 150ms ease; }
-  .btn:not(:disabled):active { transform: scale(0.97); }
+  .result {
+    animation: drop-in 360ms cubic-bezier(0.22, 1, 0.32, 1) both;
+  }
+  .howto {
+    animation: sheet-in 260ms cubic-bezier(0.22, 1, 0.32, 1) both;
+  }
+  .howto-scrim {
+    animation: fade-in 180ms ease both;
+  }
+  .btn {
+    transition:
+      transform 90ms ease,
+      background-color 150ms ease,
+      border-color 150ms ease;
+  }
+  .btn:not(:disabled):active {
+    transform: scale(0.97);
+  }
 }
 
 @keyframes shake {
-  10%, 90% { transform: translateX(-2px); }
-  20%, 80% { transform: translateX(3px); }
-  30%, 50%, 70% { transform: translateX(-5px); }
-  40%, 60% { transform: translateX(5px); }
+  10%,
+  90% {
+    transform: translateX(-2px);
+  }
+  20%,
+  80% {
+    transform: translateX(3px);
+  }
+  30%,
+  50%,
+  70% {
+    transform: translateX(-5px);
+  }
+  40%,
+  60% {
+    transform: translateX(5px);
+  }
 }
 
 @keyframes pop {
-  0% { transform: scale(1); }
-  55% { transform: scale(1.07); }
-  100% { transform: scale(1); }
+  0% {
+    transform: scale(1);
+  }
+  55% {
+    transform: scale(1.07);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 
 @keyframes flip {
-  0% { transform: rotateX(0); background-color: var(--panel); border-color: var(--line); color: var(--ink); }
-  49% { transform: rotateX(-90deg); background-color: var(--panel); border-color: var(--line); color: var(--ink); }
-  50% { transform: rotateX(-90deg); }
-  100% { transform: rotateX(0); }
+  0% {
+    transform: rotateX(0);
+    background-color: var(--panel);
+    border-color: var(--line);
+    color: var(--ink);
+  }
+  49% {
+    transform: rotateX(-90deg);
+    background-color: var(--panel);
+    border-color: var(--line);
+    color: var(--ink);
+  }
+  50% {
+    transform: rotateX(-90deg);
+  }
+  100% {
+    transform: rotateX(0);
+  }
 }
 
 @keyframes drop-in {
-  from { opacity: 0; transform: translateY(-8px); }
-  to { opacity: 1; transform: none; }
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 @keyframes card-in {
-  from { opacity: 0; transform: translateY(10px) scale(0.99); }
-  to { opacity: 1; transform: none; }
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.99);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 @keyframes sheet-in {
-  from { opacity: 0; transform: translateY(14px) scale(0.98); }
-  to { opacity: 1; transform: none; }
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 @keyframes fade-in {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }

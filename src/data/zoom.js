@@ -41,14 +41,6 @@ const hashId = (id) => {
   return h >>> 0
 }
 
-const mix = (n) => {
-  let h = (n * 2654435761) % 4294967296
-  h ^= h >>> 15
-  h = (h * 2246822519) % 4294967296
-  h ^= h >>> 13
-  return h >>> 0
-}
-
 // Where each motif's subject sits on the plate, in fractions. A random
 // focus opens half the puzzles on blank sky. Ordered by how much a crop
 // gives away, most telling first — the picker takes the earliest match.

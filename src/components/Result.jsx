@@ -53,14 +53,24 @@ export default function Result({ won, title, subtitle, squares, stats, onReplay 
 
       {stats && (
         <dl className="record">
-          <div><dt>Streak</dt><dd>{stats.streak}</dd></div>
-          <div><dt>Solved</dt><dd>{stats.played ? Math.round((stats.wins / stats.played) * 100) : 0}%</dd></div>
+          <div>
+            <dt>Streak</dt>
+            <dd>{stats.streak}</dd>
+          </div>
+          <div>
+            <dt>Solved</dt>
+            <dd>{stats.played ? Math.round((stats.wins / stats.played) * 100) : 0}%</dd>
+          </div>
         </dl>
       )}
 
       <div className="result-actions">
-        <button className="btn btn-primary" onClick={copy}>{copied ? 'Copied' : 'Copy result'}</button>
-        <button className="btn" onClick={onReplay}>Play again</button>
+        <button className="btn btn-primary" onClick={copy}>
+          {copied ? 'Copied' : 'Copy result'}
+        </button>
+        <button className="btn" onClick={onReplay}>
+          Play again
+        </button>
       </div>
     </div>
   )

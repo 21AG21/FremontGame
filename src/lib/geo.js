@@ -12,9 +12,7 @@ export function distanceMiles(a, b) {
   const lat1 = toRad(a.lat)
   const lat2 = toRad(b.lat)
 
-  const h =
-    Math.sin(dLat / 2) ** 2 +
-    Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLng / 2) ** 2
+  const h = Math.sin(dLat / 2) ** 2 + Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLng / 2) ** 2
 
   return 2 * R_MILES * Math.asin(Math.sqrt(h))
 }
@@ -25,14 +23,21 @@ export function bearingDegrees(a, b) {
   const dLng = toRad(b.lng - a.lng)
 
   const y = Math.sin(dLng) * Math.cos(lat2)
-  const x =
-    Math.cos(lat1) * Math.sin(lat2) -
-    Math.sin(lat1) * Math.cos(lat2) * Math.cos(dLng)
+  const x = Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1) * Math.cos(lat2) * Math.cos(dLng)
 
   return (toDeg(Math.atan2(y, x)) + 360) % 360
 }
 
-const COMPASS = ['north', 'northeast', 'east', 'southeast', 'south', 'southwest', 'west', 'northwest']
+const COMPASS = [
+  'north',
+  'northeast',
+  'east',
+  'southeast',
+  'south',
+  'southwest',
+  'west',
+  'northwest',
+]
 
 export function compassFrom(degrees) {
   return { label: COMPASS[Math.round(degrees / 45) % 8] }
