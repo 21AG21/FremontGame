@@ -68,6 +68,10 @@
   --glass-inner-bottom: rgba(8, 40, 72, 0.07);
   --glass-shadow-near: rgba(4, 25, 45, 0.1);
   --glass-shadow-far: rgba(4, 25, 45, 0.15);
+  /* the weaker highlight opposite the main one, and the shade
+     inside the pane's own body */
+  --glass-spec-2: rgba(255, 255, 255, 0.85);
+  --glass-body: rgba(8, 40, 72, 0.05);
   --bar-shadow: rgba(4, 25, 45, 0.16);
 }
 
@@ -111,6 +115,8 @@
   --glass-inner-bottom: rgba(0, 0, 0, 0.24);
   --glass-shadow-near: rgba(0, 0, 0, 0.3);
   --glass-shadow-far: rgba(0, 0, 0, 0.42);
+  --glass-spec-2: rgba(255, 255, 255, 0.28);
+  --glass-body: rgba(0, 0, 0, 0.16);
   --bar-shadow: rgba(0, 0, 0, 0.38);
 }
 
@@ -152,6 +158,8 @@
     --glass-inner-bottom: rgba(0, 0, 0, 0.24);
     --glass-shadow-near: rgba(0, 0, 0, 0.3);
     --glass-shadow-far: rgba(0, 0, 0, 0.42);
+    --glass-spec-2: rgba(255, 255, 255, 0.28);
+    --glass-body: rgba(0, 0, 0, 0.16);
     --bar-shadow: rgba(0, 0, 0, 0.38);
   }
 }
@@ -380,14 +388,43 @@ ul { list-style: none; }
   color: var(--muted);
 }
 
-.theme::before {
+/* Glass, not panel. These two discs sit on the same page as the bar and
+   were the only floating controls still painted as opaque cards — which
+   read as a different material two inches from one that isn't. Same
+   vibrancy, same pair of hairlines, no lens: see .tag for why a rim
+   effect on a 32px disc is not worth a filter pass. */
+.theme::before,
+.howto-open::before {
   content: '';
   position: absolute;
+  z-index: -1;
   width: 32px;
   height: 32px;
-  border: 1px solid var(--line);
+  border: 0;
   border-radius: 999px;
-  background: var(--panel);
+  background: var(--glass-tint);
+  -webkit-backdrop-filter: saturate(1.8) brightness(1.04) blur(12px);
+  backdrop-filter: saturate(1.8) brightness(1.04) blur(12px);
+  box-shadow:
+    inset 0 0.5px 0 var(--glass-inner-top),
+    inset 0 -0.5px 0 var(--glass-inner-bottom),
+    0 0 0 1px var(--glass-rim-side),
+    0 1px 2px var(--glass-shadow-near);
+}
+
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .theme::before,
+  .howto-open::before { background: var(--panel); box-shadow: 0 0 0 1px var(--line); }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .theme::before,
+  .howto-open::before {
+    background: var(--panel);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    box-shadow: 0 0 0 1px var(--line);
+  }
 }
 
 .theme { position: relative; }
@@ -428,12 +465,14 @@ main {
   -webkit-backdrop-filter: saturate(1.8) brightness(1.04) blur(24px);
   backdrop-filter: saturate(1.8) brightness(1.04) blur(24px);
   /* Thickness. Two hairlines — light along the top inside edge, a dark
-     one along the bottom — plus a tight contact shadow and a soft one
-     further out. The old single 6px/20px shadow made it float without
-     ever looking solid. */
+     one along the bottom — then an inner shadow that gives the pane a
+     depth rather than an edge, then a tight contact shadow and a soft
+     one further out. The inner 10px is what stops it reading as a decal
+     on the page: glass has a body, and the body catches shade. */
   box-shadow:
     inset 0 0.5px 0 var(--glass-inner-top),
     inset 0 -0.5px 0 var(--glass-inner-bottom),
+    inset 0 0 10px var(--glass-body),
     0 1px 2px var(--glass-shadow-near),
     0 8px 28px var(--glass-shadow-far);
   /* The bar claims horizontal drags and leaves vertical ones to the
@@ -443,14 +482,44 @@ main {
   --gx: 50%;
 }
 
+/* The lens.
+
+   Displaces the already-blurred backdrop through the map in art/Glass.jsx,
+   so the border bends what is behind it instead of only softening it.
+   This is the difference between glass and frosting, and it is the one
+   part of Apple's material that cannot be done with gradients.
+
+   Its own element, and deliberately not on .index itself: Safari drops
+   any backdrop-filter containing url(), so putting the lens in the same
+   declaration as the blur would cost Safari the blur as well. Here, a
+   browser that cannot do it simply paints nothing. */
+.index-lens {
+  position: absolute;
+  inset: 0;
+  /* Under the pill on purpose. Above it, the pill became part of the
+     lens's backdrop and bent along with the page whenever it slid into
+     the rim band — so Zoom and Word, the two end slots, got a visibly
+     warped selection. The glass refracts the view behind the bar; the
+     pill is an object sitting on the glass. */
+  z-index: 0;
+  border-radius: inherit;
+  corner-shape: squircle;
+  pointer-events: none;
+  -webkit-backdrop-filter: url(#glass-bar);
+  backdrop-filter: url(#glass-bar);
+}
+
 /* The rim.
 
-   This is the whole effect, and it cannot be a border: a border takes
-   one colour, and real glass is bright where the light lands and almost
-   nothing down the sides. So it is a 1px ring of gradient, drawn by
-   masking a padding box out of a border box — and the specular spot in
-   the first layer rides the pointer, so the edge lights up under your
-   finger the way a lit edge actually would. */
+   A border takes one colour. Real glass is bright where the light lands,
+   almost nothing down the sides, and picks up a weaker bounce along the
+   bottom from whatever it is sitting on — so this is a 1px ring of
+   gradient, drawn by masking a padding box out of a border box.
+
+   Two speculars, not one. Apple's material lights the top-left corner
+   hardest and leaves a second, softer highlight opposite it; a single
+   centred spot reads as a glow behind the bar rather than a light on it.
+   The first one rides the pointer. */
 .index::before {
   content: '';
   position: absolute;
@@ -461,7 +530,8 @@ main {
   padding: 1px;
   pointer-events: none;
   background:
-    radial-gradient(58% 200% at var(--gx) -10%, var(--glass-spec), transparent 46%),
+    radial-gradient(46% 190% at var(--gx) -12%, var(--glass-spec), transparent 42%),
+    radial-gradient(38% 160% at calc(100% - var(--gx)) 112%, var(--glass-spec-2), transparent 46%),
     linear-gradient(
       180deg,
       var(--glass-rim-top) 0%,
@@ -517,7 +587,6 @@ main {
    different numbers and the pill drifts a couple of pixels per slot. */
 .index-pill {
   position: absolute;
-  z-index: 0;
   top: 4px;
   bottom: 4px;
   left: 4px;
@@ -530,6 +599,7 @@ main {
      dark theme, which is a fail on the label sitting in it. One pixel
      of light at the top edge carries no text and costs nothing. */
   background: var(--navy);
+  z-index: 1;
   transform: translate3d(calc(var(--i) * 100%), 0, 0);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.28),
@@ -561,7 +631,7 @@ main {
 
 .index-item {
   position: relative;
-  z-index: 1;
+  z-index: 2;
   flex: 1;
   min-width: 0;
   display: flex;
@@ -672,19 +742,35 @@ main {
 
 .plate svg { display: block; width: 100%; height: 100%; }
 
+/* The bar's material at chip size — vibrancy, two hairlines, a contact
+   shadow — but no lens.
+
+   Refraction is a rim effect, and this chip is 24px tall. A band wide
+   enough to see would be most of it, and a band in proportion bends
+   about a pixel and a half that nobody will ever notice, for a whole
+   extra filter pass over the engraving on every frame. The bar earns it;
+   this does not.
+
+   The scrim stays opaque enough to hold white at 6.33:1 — the reading on
+   this label is not negotiable. */
 .tag {
   position: absolute;
   bottom: 8px;
   padding: 4px 9px;
   border-radius: 999px;
   background: var(--scrim);
-  -webkit-backdrop-filter: blur(6px);
-  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px) saturate(1.5);
+  backdrop-filter: blur(6px) saturate(1.5);
+  box-shadow:
+    inset 0 0.5px 0 rgba(255, 255, 255, 0.34),
+    inset 0 -0.5px 0 rgba(0, 0, 0, 0.22),
+    0 1px 3px rgba(4, 25, 45, 0.28);
   color: #fff;
   font-size: var(--t-sm);
   font-weight: 600;
   font-variant-numeric: tabular-nums;
 }
+
 
 .tag-left { left: 8px; }
 .tag-right { right: 8px; }
@@ -1330,16 +1416,7 @@ main {
   line-height: 1;
 }
 
-.howto-open::before {
-  content: '';
-  position: absolute;
-  z-index: -1;
-  width: 32px;
-  height: 32px;
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  background: var(--panel);
-}
+
 
 .howto-scrim {
   position: fixed;

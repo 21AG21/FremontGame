@@ -5,6 +5,7 @@ import { dayHasTurned } from './lib/day.js'
 import { getRecord } from './lib/storage.js'
 import { readTheme, applyTheme } from './lib/theme.js'
 import { Ridge, ICONS, ThemeIcon } from './art/Mark.jsx'
+import GlassDefs from './art/Glass.jsx'
 import HowTo from './components/HowTo.jsx'
 import Zoom from './puzzles/Zoom.jsx'
 import Connections from './puzzles/Connections.jsx'
@@ -126,6 +127,7 @@ export default function App() {
 
   return (
     <>
+      <GlassDefs />
       <Ridge />
 
       <div className="sheet">
@@ -176,6 +178,12 @@ export default function App() {
           onPointerCancel={onCancel}
           onPointerLeave={recentre}
         >
+          {/* The refraction pass. Its own layer because Safari ignores
+              url() inside backdrop-filter and drops the declaration —
+              there, this element renders as nothing and the blur on the
+              bar itself carries on unchanged. */}
+          <span className="index-lens" aria-hidden="true" />
+
           <span className="index-pill" style={{ '--i': shown }} aria-hidden="true" />
 
           {PUZZLE_TYPES.map((t, i) => {
