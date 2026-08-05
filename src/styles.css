@@ -55,10 +55,19 @@
   --art-ink: #043764;
   --art-paper: #ffffff;
 
-  /* the bar floats over the board rather than sitting behind it */
-  --bar-glass: rgba(255, 255, 255, 0.62);
-  --bar-edge: rgba(255, 255, 255, 0.85);
-  --bar-sheen: rgba(255, 255, 255, 0.75);
+  /* Glass. The rim is the whole effect: a real pane is brightest at
+     the top edge where the light lands, nearly invisible down the
+     sides, and picks up a soft bounce along the bottom. A flat border
+     colour cannot do that, so the rim is a masked gradient. */
+  --glass-tint: rgba(255, 255, 255, 0.55);
+  --glass-rim-top: rgba(255, 255, 255, 0.98);
+  --glass-rim-side: rgba(255, 255, 255, 0.32);
+  --glass-rim-bottom: rgba(255, 255, 255, 0.7);
+  --glass-spec: rgba(255, 255, 255, 1);
+  --glass-inner-top: rgba(255, 255, 255, 0.62);
+  --glass-inner-bottom: rgba(8, 40, 72, 0.07);
+  --glass-shadow-near: rgba(4, 25, 45, 0.1);
+  --glass-shadow-far: rgba(4, 25, 45, 0.15);
   --bar-shadow: rgba(4, 25, 45, 0.16);
 }
 
@@ -93,9 +102,15 @@
 
   --art-ink: #08203a;
 
-  --bar-glass: rgba(13, 44, 74, 0.58);
-  --bar-edge: rgba(255, 255, 255, 0.18);
-  --bar-sheen: rgba(255, 255, 255, 0.14);
+  --glass-tint: rgba(14, 40, 68, 0.52);
+  --glass-rim-top: rgba(255, 255, 255, 0.36);
+  --glass-rim-side: rgba(255, 255, 255, 0.07);
+  --glass-rim-bottom: rgba(255, 255, 255, 0.15);
+  --glass-spec: rgba(255, 255, 255, 0.65);
+  --glass-inner-top: rgba(255, 255, 255, 0.13);
+  --glass-inner-bottom: rgba(0, 0, 0, 0.24);
+  --glass-shadow-near: rgba(0, 0, 0, 0.3);
+  --glass-shadow-far: rgba(0, 0, 0, 0.42);
   --bar-shadow: rgba(0, 0, 0, 0.38);
 }
 
@@ -128,16 +143,26 @@
 
     --art-ink: #08203a;
 
-    --bar-glass: rgba(13, 44, 74, 0.58);
-    --bar-edge: rgba(255, 255, 255, 0.18);
-    --bar-sheen: rgba(255, 255, 255, 0.14);
+    --glass-tint: rgba(14, 40, 68, 0.52);
+    --glass-rim-top: rgba(255, 255, 255, 0.36);
+    --glass-rim-side: rgba(255, 255, 255, 0.07);
+    --glass-rim-bottom: rgba(255, 255, 255, 0.15);
+    --glass-spec: rgba(255, 255, 255, 0.65);
+    --glass-inner-top: rgba(255, 255, 255, 0.13);
+    --glass-inner-bottom: rgba(0, 0, 0, 0.24);
+    --glass-shadow-near: rgba(0, 0, 0, 0.3);
+    --glass-shadow-far: rgba(0, 0, 0, 0.42);
     --bar-shadow: rgba(0, 0, 0, 0.38);
   }
 }
 
 :root {
-  --gap: 12px;
+  --gap: 10px;
   --pad: 22px;
+  /* Less above the wordmark than beside it. 22px of sky over a 28px
+     masthead was the single biggest piece of dead height on the page,
+     and the side value has to stay 22 to match the doc's column. */
+  --pad-top: 15px;
   /* how far the section bar floats off the bottom and the side edges.
      One value, because the two used to be written out separately and
      drifted apart. */
@@ -224,7 +249,7 @@ ul { list-style: none; }
   min-height: calc(100dvh / var(--z));
   max-width: 440px;
   margin: 0 auto;
-  padding: var(--pad) var(--pad) calc(var(--bar-inset) + env(safe-area-inset-bottom));
+  padding: var(--pad-top) var(--pad) calc(var(--bar-inset) + env(safe-area-inset-bottom));
   display: flex;
   flex-direction: column;
   gap: var(--gap);
@@ -274,37 +299,38 @@ ul { list-style: none; }
 .lockup {
   position: relative;
   flex: none;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.masthead {
-  display: flex;
-  /* center, not baseline. Baseline in a row holding 44px buttons and a
-     22px rule aligned everything to a different edge — the icons sat
-     high and the hairline hung below the wordmark. */
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
-  gap: 10px;
-  min-height: 44px;
+  column-gap: 10px;
+  row-gap: 5px;
 }
 
 .flag {
-  flex: 1;
+  grid-column: 1;
+  grid-row: 1;
   min-width: 0;
   font-family: var(--serif);
   font-size: var(--t-2xl);
   font-weight: 600;
-  line-height: 1.1;
-  letter-spacing: -0.015em;
+  /* 1.0, and the row-gap goes up by the same amount. Two serif lines
+     stacked 2px apart read as one cramped block; this buys the
+     separation back out of the leading instead of out of the board. */
+  line-height: 1;
+  letter-spacing: -0.02em;
 }
 
 /* Both icon buttons in one group at the right edge. They used to take
    turns claiming `margin-left: auto` through an adjacent-sibling rule,
    which stopped matching the moment the How-to-play modal rendered
    between them and shunted the theme button back across the header. */
+/* Spans both rows, so its 44px touch targets sit alongside the
+   wordmark and the deck instead of setting the height of a row of
+   their own. */
 .chrome {
-  flex: none;
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  align-self: center;
   display: flex;
   align-items: center;
   gap: 2px;
@@ -315,9 +341,10 @@ ul { list-style: none; }
    & Now and Higher or Lower, so the header was two different heights
    and the whole board jumped a line every time you changed game. */
 .deck {
+  grid-column: 1;
+  grid-row: 2;
   display: flex;
   flex-direction: column;
-  gap: 1px;
   min-width: 0;
 }
 
@@ -333,7 +360,7 @@ ul { list-style: none; }
   min-width: 0;
   font-size: var(--t-md);
   font-weight: 500;
-  line-height: 1.3;
+  line-height: 1.2;
   color: var(--muted);
 }
 
@@ -392,16 +419,23 @@ main {
   padding: 4px;
   border-radius: var(--r-md);
   corner-shape: squircle;
-  /* Liquid glass: a pane you can see the board through, lifted off it
-     by a shadow and lit along its top edge. saturate() is what stops
-     blurred colour going muddy behind it. */
-  background: var(--bar-glass);
-  border: 1px solid var(--bar-edge);
-  -webkit-backdrop-filter: saturate(1.35) blur(20px);
-  backdrop-filter: saturate(1.35) blur(20px);
+  /* Vibrancy first. A plain blur turns whatever is behind it into grey
+     soup; the saturation and the touch of brightness are what make it
+     read as a clear pane rather than frosted plastic. Apple's material
+     pushes saturation well past 1 for exactly this reason. */
+  background: var(--glass-tint);
+  border: 0;
+  -webkit-backdrop-filter: saturate(1.8) brightness(1.04) blur(24px);
+  backdrop-filter: saturate(1.8) brightness(1.04) blur(24px);
+  /* Thickness. Two hairlines — light along the top inside edge, a dark
+     one along the bottom — plus a tight contact shadow and a soft one
+     further out. The old single 6px/20px shadow made it float without
+     ever looking solid. */
   box-shadow:
-    0 6px 20px var(--bar-shadow),
-    inset 0 1px 0 var(--bar-sheen);
+    inset 0 0.5px 0 var(--glass-inner-top),
+    inset 0 -0.5px 0 var(--glass-inner-bottom),
+    0 1px 2px var(--glass-shadow-near),
+    0 8px 28px var(--glass-shadow-far);
   /* The bar claims horizontal drags and leaves vertical ones to the
      page, so sliding between games and scrolling never fight. */
   touch-action: pan-y;
@@ -409,9 +443,40 @@ main {
   --gx: 50%;
 }
 
-/* The specular highlight, following your finger along the top edge.
-   Painted above the pane and the pill so the glass reads as one
-   surface with something moving over it, rather than five buttons. */
+/* The rim.
+
+   This is the whole effect, and it cannot be a border: a border takes
+   one colour, and real glass is bright where the light lands and almost
+   nothing down the sides. So it is a 1px ring of gradient, drawn by
+   masking a padding box out of a border box — and the specular spot in
+   the first layer rides the pointer, so the edge lights up under your
+   finger the way a lit edge actually would. */
+.index::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  border-radius: inherit;
+  corner-shape: squircle;
+  padding: 1px;
+  pointer-events: none;
+  background:
+    radial-gradient(58% 200% at var(--gx) -10%, var(--glass-spec), transparent 46%),
+    linear-gradient(
+      180deg,
+      var(--glass-rim-top) 0%,
+      var(--glass-rim-side) 34%,
+      var(--glass-rim-side) 66%,
+      var(--glass-rim-bottom) 100%
+    );
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+}
+
+/* The light that gets through the pane, as opposed to the light on its
+   edge. Broad, weak, and following the same pointer. */
 .index::after {
   content: '';
   position: absolute;
@@ -420,15 +485,30 @@ main {
   border-radius: inherit;
   corner-shape: squircle;
   pointer-events: none;
-  background:
-    radial-gradient(90% 150% at var(--gx) -30%, var(--bar-sheen), transparent 62%);
-  opacity: 0.55;
+  background: radial-gradient(70% 170% at var(--gx) 0%, var(--glass-inner-top), transparent 58%);
+  opacity: 0.5;
 }
 
 /* Without backdrop-filter the pane would just be washed out, so fall
    back to the solid panel it used to be. */
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-  .index { background: var(--panel); border-color: var(--line); }
+  .index { background: var(--panel); box-shadow: 0 6px 20px var(--bar-shadow); }
+  .index::before { background: var(--line); }
+}
+
+/* Reduce Transparency, which is a real switch a lot of people leave on.
+   Apple drops the material entirely rather than thinning it, and so
+   should we — a half-transparent bar is worse for the person who asked
+   for none than an opaque one. */
+@media (prefers-reduced-transparency: reduce) {
+  .index {
+    background: var(--panel);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    box-shadow: 0 6px 20px var(--bar-shadow);
+  }
+  .index::before { background: var(--line); }
+  .index::after { display: none; }
 }
 
 /* One pill that travels, not five backgrounds taking turns. Sized to
@@ -444,11 +524,18 @@ main {
   width: calc((100% - 8px) / 5);
   border-radius: var(--r-xs);
   corner-shape: squircle;
+  /* Solid navy, and the highlight is a hairline rather than a gradient
+     down the face. A white-to-navy wash across the top half looks more
+     like glass and drops white-on-navy from 4.56:1 to 3.64:1 in the
+     dark theme, which is a fail on the label sitting in it. One pixel
+     of light at the top edge carries no text and costs nothing. */
   background: var(--navy);
   transform: translate3d(calc(var(--i) * 100%), 0, 0);
   box-shadow:
-    0 2px 8px var(--bar-shadow),
-    inset 0 1px 0 rgba(255, 255, 255, 0.22);
+    inset 0 1px 0 rgba(255, 255, 255, 0.28),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.2),
+    0 1px 2px var(--glass-shadow-near),
+    0 4px 12px var(--glass-shadow-far);
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -1163,8 +1250,7 @@ main {
 
 /* The doc's own card is 660 tall, so this one stays well below it. */
 @media (max-height: 640px) {
-  :root { --pad: 16px; --gap: 9px; --bar-inset: 12px; }
-  .masthead { min-height: 40px; }
+  :root { --pad: 16px; --pad-top: 11px; --gap: 8px; --bar-inset: 12px; }
   .flag { font-size: var(--t-xl); }
   .deck-game { font-size: var(--t-lg); }
   .deck-prompt { font-size: var(--t-sm); }
@@ -1186,7 +1272,7 @@ main {
 /* Landscape phones: 390px of height minus 116 of padding leaves ~270 for
    the board. The plate has to give up most of it or nothing else fits. */
 @media (orientation: landscape) and (max-height: 560px) {
-  :root { --pad: 12px; --gap: 8px; --bar-inset: 10px; }
+  :root { --pad: 12px; --pad-top: 9px; --gap: 7px; --bar-inset: 10px; }
   .plate { width: min(100%, calc(clamp(110px, 42dvh / var(--z), 170px) * 4 / 3)); }
   .quote { font-size: var(--t-md); }
   .hl-half { padding: 10px 14px; }
@@ -1196,8 +1282,7 @@ main {
   /* Still two rows — a phone on its side is 660px wide, so the deck has
      all the room it wants; height is the thing there is none of. Both
      rows just get shorter. */
-  .lockup { gap: 2px; }
-  .masthead { min-height: 38px; }
+  .lockup { row-gap: 0; }
   .flag { font-size: var(--t-xl); }
   .deck-game { font-size: var(--t-lg); }
   .deck-prompt { font-size: var(--t-sm); }
@@ -1399,4 +1484,124 @@ main {
   corner-shape: squircle;
   background: var(--panel);
   border: 1px solid var(--line);
+}
+
+/* ── motion ──────────────────────────────────────────────────────
+   Everything below is inside prefers-reduced-motion: no-preference,
+   so a person who has asked their OS for less gets the same site
+   without any of it. Nothing here carries information on its own —
+   every state that animates is also a colour, a mark or a label. */
+
+@media (prefers-reduced-motion: no-preference) {
+
+  /* ── Groups ─────────────────────────────────────────────────── */
+
+  .tile {
+    transition:
+      transform 150ms cubic-bezier(0.2, 0.8, 0.3, 1),
+      background-color 150ms ease,
+      border-color 150ms ease,
+      color 150ms ease;
+  }
+
+  /* Presses land. Without this a tap on a tile is the only interaction
+     in the app with no physical response at all. */
+  .tile:active { transform: scale(0.96); }
+  .tile.is-selected { transform: scale(0.975); }
+
+  /* A rejected guess used to be a colour change held until your next
+     tap, which is easy to miss on a board you are already staring at. */
+  .tile.is-rejected { animation: shake 400ms cubic-bezier(0.36, 0.07, 0.19, 0.97); }
+
+  /* A solved group drops in above the board it just left. */
+  .band { animation: drop-in 340ms cubic-bezier(0.22, 1, 0.32, 1) both; }
+
+  /* ── The Word ───────────────────────────────────────────────── */
+
+  .wg-row { perspective: 700px; }
+
+  /* A letter arriving in the row. */
+  .wg-cell.is-typing.has-letter { animation: pop 120ms ease-out; }
+
+  /* The reveal, left to right. The colour is held at the panel value
+     through the first half of the turn, so the tile is still blank
+     edge-on and the answer appears as it comes back round — which is
+     the whole trick, and why the keyframes repeat background-color
+     rather than just rotating. */
+  .wg-cell.is-correct,
+  .wg-cell.is-present,
+  .wg-cell.is-absent { animation: flip 500ms ease both; }
+
+  .wg-row .wg-cell:nth-child(2) { animation-delay: 90ms; }
+  .wg-row .wg-cell:nth-child(3) { animation-delay: 180ms; }
+  .wg-row .wg-cell:nth-child(4) { animation-delay: 270ms; }
+  .wg-row .wg-cell:nth-child(5) { animation-delay: 360ms; }
+
+  .wg-key { transition: transform 90ms ease, background-color 150ms ease, border-color 150ms ease, color 150ms ease; }
+  .wg-key:active { transform: scale(0.93); }
+
+  /* ── Zoom ───────────────────────────────────────────────────── */
+
+  /* The pull-back between levels. This is the game's one signature
+     move and it was a hard cut: the plate simply appeared at the next
+     scale. Slow and eased, because the point is to let you watch the
+     frame widen and recognise what walks into it. */
+  .plate-inner { transition: transform 700ms cubic-bezier(0.22, 1, 0.32, 1); }
+
+  .guess-list > li:not(.is-slot) .guess { animation: drop-in 300ms cubic-bezier(0.22, 1, 0.32, 1) both; }
+
+  /* ── Higher or Lower ────────────────────────────────────────── */
+
+  /* Keyed on the round in HigherLower.jsx, so this replays each time
+     the pair changes rather than only on mount. */
+  .hl-card { animation: card-in 380ms cubic-bezier(0.22, 1, 0.32, 1) both; }
+  .pip { transition: background-color 260ms ease; }
+
+  /* ── shared ─────────────────────────────────────────────────── */
+
+  .result { animation: drop-in 360ms cubic-bezier(0.22, 1, 0.32, 1) both; }
+  .howto { animation: sheet-in 260ms cubic-bezier(0.22, 1, 0.32, 1) both; }
+  .howto-scrim { animation: fade-in 180ms ease both; }
+  .btn { transition: transform 90ms ease, background-color 150ms ease, border-color 150ms ease; }
+  .btn:not(:disabled):active { transform: scale(0.97); }
+}
+
+@keyframes shake {
+  10%, 90% { transform: translateX(-2px); }
+  20%, 80% { transform: translateX(3px); }
+  30%, 50%, 70% { transform: translateX(-5px); }
+  40%, 60% { transform: translateX(5px); }
+}
+
+@keyframes pop {
+  0% { transform: scale(1); }
+  55% { transform: scale(1.07); }
+  100% { transform: scale(1); }
+}
+
+@keyframes flip {
+  0% { transform: rotateX(0); background-color: var(--panel); border-color: var(--line); color: var(--ink); }
+  49% { transform: rotateX(-90deg); background-color: var(--panel); border-color: var(--line); color: var(--ink); }
+  50% { transform: rotateX(-90deg); }
+  100% { transform: rotateX(0); }
+}
+
+@keyframes drop-in {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes card-in {
+  from { opacity: 0; transform: translateY(10px) scale(0.99); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes sheet-in {
+  from { opacity: 0; transform: translateY(14px) scale(0.98); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }

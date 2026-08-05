@@ -88,7 +88,11 @@ export default function HigherLower() {
         ))}
       </div>
 
-      <div className="hl-card">
+      {/* Keyed on the round so React replaces the node rather than
+          patching it. Without that the CSS entry animation runs once on
+          mount and never again, and rounds two to five arrive with no
+          indication that anything changed but the numbers. */}
+      <div className="hl-card" key={round}>
         <div className="hl-half">
           <span className="hl-name">{r.a.name}</span>
           <b className="hl-value">{r.a.value.toLocaleString()}</b>

@@ -129,24 +129,30 @@ export default function App() {
       <Ridge />
 
       <div className="sheet">
+        {/* A two-column grid, not two stacked rows.
+
+            Stacked, the wordmark's row was floored at 44px by the icon
+            buttons in it while the wordmark itself is 31px tall — 13px
+            of the header existed only to hold a touch target. Here the
+            buttons span both rows, so the left column sets the height
+            and the targets stay 44px. */}
         <header className="lockup">
-          <div className="masthead">
-            <h1 className="flag">{TOWN.name}</h1>
-            <div className="chrome">
-              <HowTo key={active} game={active} />
-              <button
-                className="theme"
-                onClick={flipTheme}
-                aria-label={
-                  theme === 'dark' ? 'Switch to the light theme' : 'Switch to the dark theme'
-                }
-              >
-                <ThemeIcon dark={theme === 'dark'} />
-              </button>
-            </div>
+          <h1 className="flag">{TOWN.name}</h1>
+
+          <div className="chrome">
+            <HowTo key={active} game={active} />
+            <button
+              className="theme"
+              onClick={flipTheme}
+              aria-label={
+                theme === 'dark' ? 'Switch to the light theme' : 'Switch to the dark theme'
+              }
+            >
+              <ThemeIcon dark={theme === 'dark'} />
+            </button>
           </div>
 
-          {/* Section head and deck. Both used to be one nowrap line
+          {/* Section head and deck. These used to be one nowrap line
               beside the wordmark, where two 44px icon buttons left the
               deck about 88px on a 360px phone — it ellipsised to four
               characters, so the only label naming the game was gone. */}
