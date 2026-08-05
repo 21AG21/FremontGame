@@ -34,26 +34,57 @@
 // not work, the layer renders as nothing and the blur underneath is
 // untouched.
 
-// One displacement pass, not three.
+// Red bends most, blue least — the same order as a real prism, and the
+// reason a rim reads as glass rather than as a soft edge.
 //
-// Real glass throws a colour fringe at the rim, and the way to fake it
-// is to displace red, green and blue by slightly different amounts —
-// split the channels with feColorMatrix, run three feDisplacementMaps,
-// screen them back together. It was built that way first and it is
-// wrong: feBlend screens PREMULTIPLIED colour, so wherever alpha is
-// under 1 — the antialiased corners, anywhere a sample lands on a soft
-// edge — three passes inflate it as 1-(1-a)³ and the recombination
-// drifts. On the dark theme it hid; on the light one the whole bar went
-// silver-grey with a dark seam down the right edge.
+// ±9%, which on the bar's throw is about a pixel and a half of
+// separation. ±16% was tried first and the corners gave it away: that is
+// where the horizontal and vertical displacements compound, so the
+// widest fringe in the whole pane appears exactly where the eye is drawn
+// to look for a seam. It stopped reading as glass and started reading as
+// a rendering fault.
+const CHANNEL = { r: 1.09, g: 1, b: 0.91 }
+
+// Isolate one channel and FORCE alpha to 1 — the last column, not the
+// alpha row.
 //
-// A fringe nobody can see is not worth a cast everybody can. If this is
-// ever revisited, the fix is to composite the channels additively over
-// an opaque base rather than screening them.
+// This is the whole reason the first attempt at chromatic aberration had
+// to be thrown away. The obvious recombination is feBlend mode="screen",
+// and feBlend screens PREMULTIPLIED colour: wherever alpha is under 1 —
+// antialiased corners, any sample landing on a soft edge — three passes
+// inflate it as 1-(1-a)³ and the colour drifts with it. On the dark
+// theme it hid. On the light theme the whole bar went silver-grey with a
+// dark seam down the right edge.
+//
+// Pinning alpha to 1 makes premultiplied and straight colour the same
+// thing, so the channels can be added back with plain arithmetic and the
+// sum is exact. Safe here because the pane never samples outside itself:
+// both ramps run inward, and the backdrop inside the element is opaque.
+const KEEP = {
+  r: '1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0 1',
+  g: '0 0 0 0 0  0 1 0 0 0  0 0 0 0 0  0 0 0 0 1',
+  b: '0 0 0 0 0  0 0 0 0 0  0 0 1 0 0  0 0 0 0 1',
+}
+
 /**
  * band  how far in from the edge the glass bends, in pixels
  * scale how hard it bends
  */
 function Lens({ id, band, scale }) {
+  const pass = (k) => (
+    <>
+      <feDisplacementMap
+        in="SourceGraphic"
+        in2="map"
+        scale={scale * CHANNEL[k]}
+        xChannelSelector="R"
+        yChannelSelector="G"
+        result={`d${k}`}
+      />
+      <feColorMatrix in={`d${k}`} type="matrix" values={KEEP[k]} result={k.toUpperCase()} />
+    </>
+  )
+
   return (
     <filter
       id={id}
@@ -123,13 +154,16 @@ function Lens({ id, band, scale }) {
       />
       <feBlend in="mr" in2="mg" mode="screen" result="map" />
 
-      <feDisplacementMap
-        in="SourceGraphic"
-        in2="map"
-        scale={scale}
-        xChannelSelector="R"
-        yChannelSelector="G"
-      />
+      {pass('r')}
+      {pass('g')}
+      {pass('b')}
+
+      {/* Additive, not screen. With alpha pinned to 1 on all three and
+          the channels disjoint, k2=k3=1 sums them back exactly: R+0+0,
+          0+G+0, 0+0+B. Alpha sums past 1 and clamps, which is what we
+          want — the pane is opaque. */}
+      <feComposite in="R" in2="G" operator="arithmetic" k1="0" k2="1" k3="1" k4="0" result="RG" />
+      <feComposite in="RG" in2="B" operator="arithmetic" k1="0" k2="1" k3="1" k4="0" />
     </filter>
   )
 }
