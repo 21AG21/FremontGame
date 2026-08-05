@@ -16,7 +16,7 @@ Then open http://localhost:5173
 | I   | **Zoom**            | A line engraving of one of **63 Fremont places**, opening at 2.6×. Every miss pulls the camera back one stop. Wrong guesses report a warmth word, a compass bearing and a coarse distance. |
 | II  | **Groups**          | Twelve tiles, **three groups of four**, off a pool of 100 categories. Mission San Jose is _both_ a township and a high school — the puzzle is built around that.                           |
 | III | **Then & Now**      | Drag-wipe between two eras of the same place, then name the year of the older one.                                                                                                         |
-| IV  | **Higher or Lower** | Five rounds drawn from **134 sourced facts** in ten units. The side you are shown is always something a resident can picture.                                                              |
+| IV  | **Higher or Lower** | Five rounds drawn from **137 sourced facts** in ten units. The side you are shown is always something a resident can picture.                                                              |
 | V   | **The Word**        | Five letters, refereed by the published Wordle guess list. Two-pass scoring, so double letters behave.                                                                                     |
 
 Each writes a spoiler-free share card and tracks streaks in `localStorage`.
@@ -27,22 +27,34 @@ Every game comes off a pool indexed by day number, so everyone in town gets the
 same puzzle and reloading doesn't reroll it. Nothing has to run at midnight — a
 build from six months ago still serves today's board.
 
-|                 | pool                              | comes round again              |
-| --------------- | --------------------------------- | ------------------------------ |
-| Zoom            | 63 answers, from 113 places       | every 63 days                  |
-| Groups          | 100 categories, 25 per difficulty | ≥11 days between repeats       |
-| Higher or Lower | 134 facts in 10 units             | no pair repeats within 28 days |
-| Then & Now      | **14 scenes**                     | every 14 days                  |
-| The Word        | 24 queued, **18 playable**        | every 18 days                  |
+|                 | pool                              | before a player sees it again |
+| --------------- | --------------------------------- | ----------------------------- |
+| Zoom            | 63 answers, from 113 places       | 63 days                       |
+| The Word        | 52 queued, 44 playable            | 44 days                       |
+| Higher or Lower | 137 facts in 10 units             | 32 days to the same question  |
+| Then & Now      | 30 scenes                         | 30 days                       |
+| Groups          | 100 categories, 25 per difficulty | 11 days to the same category  |
 
-The two in bold are thin, and they are the first place to spend an hour.
+**Those numbers are a test, not a claim.** `rotation.test.js` fails the build
+if any pool drops under thirty days, because a daily puzzle dies of thin
+content rather than of bugs, and it dies silently — nothing errors, the same
+board just comes round again and people stop opening it. Whoever is authoring
+should hear it from CI, not from a reader who noticed first.
 
-The Word's queue loses six entries to a fairness filter: an answer is rejected
+Two of these were under a fortnight until recently. Then & Now had 14 scenes
+and The Word 18 playable answers; the sixteen scenes that closed the gap were
+each checked against a source before they went in, and one of them corrected a
+date this repo had guessed (the Niles Canyon Railway ran its first passenger
+train in May 1988, not 1987 — 1987 is when the agreement was signed).
+
+The Word's queue loses eight entries to a fairness filter: an answer is rejected
 if too many words differ from it in one position, because once you know four of
 five letters each guess eliminates exactly one candidate and six guesses are not
 enough. `HILLS` lost from every standard opener. It costs `NILES`, which is the
 best word on the list — the filter is a filter rather than a hand-edited list
 precisely so that adding a new answer cannot quietly reintroduce the problem.
+It took `CRANE` and `MOUND` out of the batch added last, without being asked
+and without anyone having to remember the rule, which is the whole point of it.
 
 Groups deals all four items of each category, so nothing is hidden off-board.
 A board takes one category from the easiest tier, one from the hardest, and
@@ -180,6 +192,26 @@ starts honouring this, the refraction turns on with no code change.
 `corner-shape: squircle` is progressive enhancement — Safari reports false and
 gets the plain `border-radius` underneath.
 
+## One thing to know about the service worker
+
+The whole app is precached, so a returning player who already has it installed
+loads **the previous deploy** and gets the new one on their next visit. That is
+how precaching works everywhere and it is the right trade for a game that has
+to open on a train — but it will catch you out when you push a fix and cannot
+see it. It caught me: a production check appeared to fail until I noticed the
+bundle being tested was two builds old.
+
+To check a deploy immediately, unregister the worker and clear its cache:
+
+```js
+navigator.serviceWorker.getRegistrations().then((r) => r.forEach((x) => x.unregister()))
+caches.keys().then((k) => k.forEach((n) => caches.delete(n)))
+```
+
+It matters for the day rollover too, but only cosmetically: which puzzle you
+get is worked out in the browser from the date, so a stale bundle still serves
+the correct day.
+
 ## Screens
 
 One phone-sized column that **scales up rather than staying a 440px stamp on a
@@ -210,15 +242,17 @@ Four pixels of scroll is the correct trade.
 
 ## Known gaps
 
-- **Then & Now has 14 scenes and The Word 18 playable answers.** Both repeat
-  inside a fortnight. This is the real gap: the mechanics are done, the content
-  queue is not. Bank thirty days before you launch, or you'll quit authoring in
-  week three — that, not code, is what kills daily puzzles.
+- **Every pool clears thirty days, and none of them clears ninety.** The floor
+  is a test now, so it cannot rot silently — but a month is the minimum to open
+  with, not a year of runway. The habit to build before launch is authoring a
+  few rows a week, not a sprint in week one.
 - **No refraction on Safari.** A WebKit limitation, not a bug here. See above.
 - Switching games restarts that puzzle's animations; play state itself is saved
   per day and survives.
 - Streaks are per-device. Supabase would fix that and give you a leaderboard.
-- Neither modal traps focus or handles Escape, and no screen reader user has
-  ever tested this.
+- No screen reader user has ever tested this, and no automated accessibility
+  suite runs against it. The dialogs now hold focus and answer Escape, with
+  tests, but that is the part that is easy to verify from a keyboard — it says
+  nothing about how the puzzles are actually announced.
 - The legal documents are drafts. They describe what the site actually does, but
   they have not been read by a lawyer.

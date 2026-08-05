@@ -541,6 +541,18 @@ export default [
    {
     "name": "The Southern Pacific",
     "value": 131
+   },
+   {
+    "name": "The California Beet Sugar Company at Alvarado",
+    "value": 3
+   },
+   {
+    "name": "The bay refuge, before it was renamed for Don Edwards",
+    "value": 23
+   },
+   {
+    "name": "The Nike missile site at Coyote Hills",
+    "value": 8
    }
   ]
  },

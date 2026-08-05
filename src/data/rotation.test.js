@@ -243,3 +243,75 @@ describe('every game, every day', () => {
     }
   })
 })
+
+// ── how long the queue lasts ──────────────────────────────────
+//
+// A daily puzzle dies of thin content, not of bugs. The mechanics were
+// finished months before there was a month of material to put through
+// them, and the failure is silent: nothing errors, the same board just
+// comes round again and people quietly stop opening it.
+//
+// So the depth is a test rather than a line in a README. Thirty days is
+// the floor — a player should not meet a repeat inside their first
+// month, and whoever is authoring should find out from CI, not from a
+// reader who noticed first.
+const MONTH = 30
+
+describe('how long before a player sees a repeat', () => {
+  const report = (name, days) => {
+    console.log(`  ${name}: ${days} days`)
+    return days
+  }
+
+  it('Zoom lasts more than a month', () => {
+    expect(report('Zoom', ZOOM_POOL.length)).toBeGreaterThanOrEqual(MONTH)
+  })
+
+  it('Then & Now lasts more than a month', () => {
+    expect(report('Then & Now', SCENES.length)).toBeGreaterThanOrEqual(MONTH)
+  })
+
+  it('The Word lasts more than a month', () => {
+    // ANSWERS, not the raw queue: the fairness filter drops any answer
+    // with too many one-letter neighbours, so the number that matters is
+    // what survives it.
+    expect(report('The Word', ANSWERS.length)).toBeGreaterThanOrEqual(MONTH)
+  })
+
+  // These two deal several items a day off a much larger pool, so they
+  // are measured differently: not "how long until anything repeats",
+  // which for a three-a-day draw is always short, but how long between
+  // seeing the same one twice. That is what a player actually notices.
+  const closestRepeat = (perDay) => {
+    const lastSeen = new Map()
+    let closest = Infinity
+    let where = ''
+    for (let d = 1; d <= 1100; d++) {
+      for (const key of perDay(d)) {
+        if (lastSeen.has(key)) {
+          const gap = d - lastSeen.get(key)
+          if (gap < closest) {
+            closest = gap
+            where = `${key} on day ${lastSeen.get(key)}, again on ${d}`
+          }
+        }
+        lastSeen.set(key, d)
+      }
+    }
+    return { closest, where }
+  }
+
+  it('Groups goes a fortnight before repeating a category', () => {
+    const { closest, where } = closestRepeat((d) => groupsForDay(d).map((g) => g.label))
+    report('Groups (closest repeat of a category)', closest)
+    expect(closest, where).toBeGreaterThanOrEqual(11)
+  })
+
+  it('Higher or Lower goes a month before repeating a question', () => {
+    const { closest, where } = closestRepeat((d) =>
+      roundsForDay(d).map((r) => `${r.unit}|${r.a.name} vs ${r.b.name}`)
+    )
+    report('Higher or Lower (closest repeat of a question)', closest)
+    expect(closest, where).toBeGreaterThanOrEqual(MONTH)
+  })
+})

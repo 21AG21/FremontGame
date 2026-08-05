@@ -236,5 +236,303 @@ export default [
    "dome",
    "oaks"
   ]
+ },
+ {
+  "id": "vallejo-mill",
+  "placeId": "vallejo-mill",
+  "caption": "The flour mill at the mouth of the canyon, when Niles was still called Vallejo Mills",
+  "year": 1853,
+  "then": [
+   "canyon",
+   "creek",
+   "barn",
+   "water",
+   "oaks"
+  ],
+  "now": [
+   "canyon",
+   "creek",
+   "ruin",
+   "stones",
+   "oaks"
+  ]
+ },
+ {
+  "id": "hayward-quake",
+  "placeId": "mission-san-jose",
+  "caption": "The mission church, the year the fault moved underneath it",
+  "year": 1868,
+  "then": [
+   "mission",
+   "adobe",
+   "olives",
+   "oaks"
+  ],
+  "now": [
+   "ruin",
+   "stones",
+   "olives",
+   "oaks"
+  ]
+ },
+ {
+  "id": "alvarado-sugar",
+  "placeId": "alvarado",
+  "caption": "The beet sugar works on Alameda Creek, the first in the country that paid",
+  "year": 1870,
+  "then": [
+   "creek",
+   "factory",
+   "stacks",
+   "field",
+   "road"
+  ],
+  "now": [
+   "creek",
+   "field",
+   "tract",
+   "road"
+  ]
+ },
+ {
+  "id": "california-nursery",
+  "placeId": "california-nursery",
+  "caption": "Four hundred acres of fruit and nut stock, newly moved down from San José",
+  "year": 1884,
+  "then": [
+   "orchard",
+   "vines",
+   "palms",
+   "barn",
+   "road"
+  ],
+  "now": [
+   "orchard",
+   "palms",
+   "oaks",
+   "lawn",
+   "road"
+  ]
+ },
+ {
+  "id": "dumbarton-rail",
+  "placeId": "dumbarton-rail-bridge",
+  "caption": "The first structure ever to cross the bay, and it was built for freight",
+  "year": 1910,
+  "then": [
+   "bay",
+   "trestle",
+   "locomotive",
+   "levee"
+  ],
+  "now": [
+   "bay",
+   "trestle",
+   "levee",
+   "birds"
+  ]
+ },
+ {
+  "id": "washington-hospital",
+  "placeId": "washington-hospital",
+  "caption": "The hospital the township taxed itself to build",
+  "year": 1958,
+  "then": [
+   "orchard",
+   "field",
+   "road"
+  ],
+  "now": [
+   "civic",
+   "lot",
+   "lawn",
+   "road"
+  ]
+ },
+ {
+  "id": "coyote-hills-park",
+  "placeId": "coyote-hills",
+  "caption": "The hills above the salt ponds, the year they became a park",
+  "year": 1967,
+  "then": [
+   "hills",
+   "saltponds",
+   "marsh",
+   "levee"
+  ],
+  "now": [
+   "hills",
+   "marsh",
+   "boardwalk",
+   "tules",
+   "birds"
+  ]
+ },
+ {
+  "id": "lake-elizabeth",
+  "placeId": "lake-elizabeth",
+  "caption": "A new lake dug out of the marsh, named for a sister city in Australia",
+  "year": 1969,
+  "then": [
+   "marsh",
+   "tules",
+   "field",
+   "oaks"
+  ],
+  "now": [
+   "water",
+   "lawn",
+   "oaks",
+   "geese"
+  ]
+ },
+ {
+  "id": "alameda-creek-channel",
+  "placeId": "alameda-creek",
+  "caption": "The creek, straightened and levelled the whole way to the bay",
+  "year": 1972,
+  "then": [
+   "creek",
+   "tules",
+   "oaks",
+   "grass"
+  ],
+  "now": [
+   "levee",
+   "water",
+   "trail",
+   "grass"
+  ]
+ },
+ {
+  "id": "don-edwards",
+  "placeId": "don-edwards",
+  "caption": "The salt ponds become the country's first city wildlife refuge",
+  "year": 1972,
+  "then": [
+   "saltponds",
+   "levee",
+   "bay",
+   "poles"
+  ],
+  "now": [
+   "saltponds",
+   "marsh",
+   "boardwalk",
+   "birds",
+   "levee"
+  ]
+ },
+ {
+  "id": "mission-rebuilt",
+  "placeId": "mission-san-jose",
+  "caption": "The adobe church put back the way it stood before the earthquake",
+  "year": 1985,
+  "then": [
+   "victorian",
+   "oaks",
+   "olives",
+   "road"
+  ],
+  "now": [
+   "mission",
+   "adobe",
+   "olives",
+   "oaks"
+  ]
+ },
+ {
+  "id": "ardenwood-farm",
+  "placeId": "ardenwood",
+  "caption": "The Patterson ranch opens as a working farm anybody can walk around",
+  "year": 1985,
+  "then": [
+   "victorian",
+   "orchard",
+   "field",
+   "barn"
+  ],
+  "now": [
+   "victorian",
+   "barn",
+   "orchard",
+   "lawn",
+   "oaks"
+  ]
+ },
+ {
+  "id": "niles-canyon-railway",
+  "placeId": "niles-canyon-railway",
+  "caption": "Passenger trains come back to the canyon, most of a century late",
+  "year": 1988,
+  "then": [
+   "canyon",
+   "tracks",
+   "creek",
+   "oaks"
+  ],
+  "now": [
+   "canyon",
+   "tracks",
+   "locomotive",
+   "creek",
+   "oaks"
+  ]
+ },
+ {
+  "id": "quarry-lakes",
+  "placeId": "quarry-lakes",
+  "caption": "The gravel pits that built the railroad, filled in and opened for swimming",
+  "year": 2001,
+  "then": [
+   "quarry",
+   "gravel",
+   "creek",
+   "stones"
+  ],
+  "now": [
+   "water",
+   "lawn",
+   "trail",
+   "oaks",
+   "geese"
+  ]
+ },
+ {
+  "id": "tesla-plant",
+  "placeId": "tesla-factory",
+  "caption": "The line starts a third time, under a third flag",
+  "year": 2010,
+  "then": [
+   "factory",
+   "stacks",
+   "lot",
+   "poles"
+  ],
+  "now": [
+   "factory",
+   "lot",
+   "towers",
+   "poles"
+  ]
+ },
+ {
+  "id": "vargas-plateau",
+  "placeId": "vargas-plateau",
+  "caption": "Cattle range in the hills above the fault, opened to walk on",
+  "year": 2016,
+  "then": [
+   "hills",
+   "grass",
+   "pond",
+   "barn"
+  ],
+  "now": [
+   "hills",
+   "grass",
+   "trail",
+   "pond",
+   "oaks"
+  ]
  }
 ]

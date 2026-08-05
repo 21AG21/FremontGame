@@ -1,10 +1,15 @@
 // ─────────────────────────────────────────────────────────────
 //  TODAY'S PUZZLES — Fremont, California. One per type.
 //
-//  Three of the five now come off a pool rather than being written
-//  out once: Zoom draws from 106 places, Groups from 100 categories,
-//  Higher or Lower from 136 facts. This file is the assembler — it
-//  asks each pool for the day's puzzle and hands it to the view.
+//  All five come off a pool rather than being written out once: Zoom
+//  from 63 answers, Groups from 100 categories, Higher or Lower from
+//  137 facts, Then & Now from 30 scenes, The Word from 44 playable
+//  answers. This file is the assembler — it asks each pool for the
+//  day's puzzle and hands it to the view.
+//
+//  Those counts go stale the moment somebody edits a CSV, so nothing
+//  depends on them; rotation.test.js measures the real ones and fails
+//  if any pool drops under thirty days.
 //
 //  Every fact in those pools is real. That is the whole point: a
 //  hyperlocal puzzle with invented facts is worse than no puzzle,

@@ -13,3 +13,19 @@ nummi,tesla-factory,The plant reopens under two flags,1984,factory | lot | poles
 bart-arrives,fremont-bart,The first train reaches the end of the line,1972,orchard | guideway | lot,guideway | train | lot
 warm-springs-bart,warm-springs-bart,The line pushes south past the old end of the road,2017,warehouse | road | poles,guideway | train | lot
 ohlone-college,ohlone-college,The college opens its campus on the hill,1974,ridge | orchard | oaks,ridge | civic | dome | oaks
+vallejo-mill,vallejo-mill,"The flour mill at the mouth of the canyon, when Niles was still called Vallejo Mills",1853,canyon | creek | barn | water | oaks,canyon | creek | ruin | stones | oaks
+hayward-quake,mission-san-jose,"The mission church, the year the fault moved underneath it",1868,mission | adobe | olives | oaks,ruin | stones | olives | oaks
+alvarado-sugar,alvarado,"The beet sugar works on Alameda Creek, the first in the country that paid",1870,creek | factory | stacks | field | road,creek | field | tract | road
+california-nursery,california-nursery,"Four hundred acres of fruit and nut stock, newly moved down from San José",1884,orchard | vines | palms | barn | road,orchard | palms | oaks | lawn | road
+dumbarton-rail,dumbarton-rail-bridge,"The first structure ever to cross the bay, and it was built for freight",1910,bay | trestle | locomotive | levee,bay | trestle | levee | birds
+washington-hospital,washington-hospital,The hospital the township taxed itself to build,1958,orchard | field | road,civic | lot | lawn | road
+coyote-hills-park,coyote-hills,"The hills above the salt ponds, the year they became a park",1967,hills | saltponds | marsh | levee,hills | marsh | boardwalk | tules | birds
+lake-elizabeth,lake-elizabeth,"A new lake dug out of the marsh, named for a sister city in Australia",1969,marsh | tules | field | oaks,water | lawn | oaks | geese
+alameda-creek-channel,alameda-creek,"The creek, straightened and levelled the whole way to the bay",1972,creek | tules | oaks | grass,levee | water | trail | grass
+don-edwards,don-edwards,The salt ponds become the country's first city wildlife refuge,1972,saltponds | levee | bay | poles,saltponds | marsh | boardwalk | birds | levee
+mission-rebuilt,mission-san-jose,The adobe church put back the way it stood before the earthquake,1985,victorian | oaks | olives | road,mission | adobe | olives | oaks
+ardenwood-farm,ardenwood,The Patterson ranch opens as a working farm anybody can walk around,1985,victorian | orchard | field | barn,victorian | barn | orchard | lawn | oaks
+niles-canyon-railway,niles-canyon-railway,"Passenger trains come back to the canyon, most of a century late",1988,canyon | tracks | creek | oaks,canyon | tracks | locomotive | creek | oaks
+quarry-lakes,quarry-lakes,"The gravel pits that built the railroad, filled in and opened for swimming",2001,quarry | gravel | creek | stones,water | lawn | trail | oaks | geese
+tesla-plant,tesla-factory,"The line starts a third time, under a third flag",2010,factory | stacks | lot | poles,factory | lot | towers | poles
+vargas-plateau,vargas-plateau,"Cattle range in the hills above the fault, opened to walk on",2016,hills | grass | pond | barn,hills | grass | trail | pond | oaks

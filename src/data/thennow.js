@@ -7,11 +7,17 @@
 //  sourcing job. The engraving composer removes that: both sides are
 //  drawn from motifs, so a pair is two motif lists and a date.
 //
-//  Fourteen entries, not a hundred. Every year below is one I could
-//  stand behind — where I could not pin a date (when Lake Elizabeth
-//  was dedicated, when the California Nursery moved to Niles) the
-//  entry is not here. A wrong date in a history game is worse than a
-//  short queue, because the person who catches it never comes back.
+//  Thirty entries, not a hundred. Every year is one that was checked
+//  against a source before it went in, because a wrong date in a
+//  history game is worse than a short queue: the person who catches it
+//  never comes back.
+//
+//  This started at fourteen, and two of the sixteen added later were
+//  the exact ones an earlier version of this note listed as
+//  unpinnable — Lake Elizabeth was dedicated to its Australian sister
+//  city on 22 March 1969, and John Rock moved the California Nursery
+//  down from San José in 1884. "I could not find it" is a note to come
+//  back to, not a verdict.
 // ─────────────────────────────────────────────────────────────
 
 import SCENES_DATA from './generated/scenes.js'
@@ -74,10 +80,22 @@ function optionsFor(scene, day) {
     .map((o) => o.y)
 }
 
-// Fourteen scenes hashed at random repeated back-to-back 39 times in 400
-// days — one day in ten showed yesterday's puzzle again, same answer.
-// A walk cannot do that.
-const SCENE_STEP = 9 // coprime with 14
+// Scenes hashed at random repeated back-to-back 39 times in 400 days —
+// one day in ten showed yesterday's puzzle again, same answer. A walk
+// coprime with the pool cannot do that: it visits every scene before it
+// repeats any.
+//
+// Derived rather than written down. It used to be a literal 9 with
+// "coprime with 14" beside it, which was true of fourteen scenes and
+// silently false the moment there were thirty — gcd(9, 30) is 3, so the
+// pool would have shrunk to ten scenes on a three-day cycle while every
+// test about validity still passed. The stride now follows the pool.
+const gcd = (a, b) => (b ? gcd(b, a % b) : a)
+const SCENE_STEP = (() => {
+  const n = SCENES.length
+  for (let s = Math.max(7, Math.round(n * 0.618)); s < n + 7; s++) if (gcd(s, n) === 1) return s
+  return 1
+})()
 
 export function thenNowForDay(day) {
   const scene = SCENES[(day * SCENE_STEP) % SCENES.length]
