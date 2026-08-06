@@ -180,9 +180,16 @@
 :root {
   --gap: 10px;
   --pad: 22px;
-  /* Less above the wordmark than beside it. The side value stays 22 to
-     match the doc's column. */
-  --pad-top: 15px;
+  /* Much less above the wordmark than beside it. The side value stays 22
+     to match the doc's column, but there is nothing above the nameplate
+     that needs breathing room — the status bar or the notch is already
+     doing that job — and this is the cheapest 7px the picture will ever
+     get. */
+  --pad-top: 5px;
+  /* How far the picture reaches past the text column on each side. The
+     column stays 22 for everything made of words; the engraving is the
+     one thing on the page that is only worth having big. */
+  --plate-bleed: 12px;
   /* how far the section bar floats off the bottom and the side edges.
      One value, because the two used to be written out separately and
      drifted apart. */
@@ -301,7 +308,13 @@ ul {
   min-height: calc(100dvh / var(--z));
   max-width: 440px;
   margin: 0 auto;
-  padding: var(--pad-top) var(--pad) calc(var(--bar-inset) + env(safe-area-inset-bottom));
+  /* The top inset is zero in Safari, which hands us a viewport that
+     already starts below the status bar. It stops being zero the moment
+     somebody adds this to their Home Screen and the status bar style
+     changes — and the failure mode there is the wordmark printed under
+     the clock, on the one install that was meant to feel like an app. */
+  padding: calc(var(--pad-top) + env(safe-area-inset-top)) var(--pad)
+    calc(var(--bar-inset) + env(safe-area-inset-bottom));
   display: flex;
   flex-direction: column;
   gap: var(--gap);
@@ -357,39 +370,109 @@ ul {
   height: 100%;
   opacity: var(--ridge-alpha, 0.09);
   pointer-events: none;
+  /* Faded out before the bottom edge, and this is the seam fix.
+     Safari fills the strip behind its own toolbar with the *document's*
+     background colour — flat, ignoring theme-color (setting it to red
+     changed nothing) and ignoring anything we render there, so painting
+     under the toolbar is not available. The ridge therefore ran at full
+     strength right up to the cut and stopped dead: a hard 19-per-channel
+     step straight across the screen at 754pt, which is what read as an
+     unfinished bottom edge. Fading to nothing over the last 90px means
+     the two surfaces meet at the same colour and there is no line. */
+  -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 90px), transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 calc(100% - 90px), transparent 100%);
 }
 
-/* One row: wordmark, then the two utilities at the right edge. The
-   44px touch targets set the height, and nothing else is competing for
-   it. */
+/* One row: mark and wordmark, then the two utilities at the right edge.
+   36, not 44. The touch targets used to set this height, which meant the
+   header was as tall as a finger whether or not anything up here needed
+   the room — and every pixel of it comes off the picture, which is the
+   only thing on the Zoom screen anyone is trying to look at. The targets
+   stay 44 and overhang the row instead; see .chrome below. */
 .lockup {
   position: relative;
   flex: none;
   display: flex;
   align-items: center;
   gap: 10px;
-  min-height: 44px;
+  min-height: 36px;
+}
+
+/* Takes the slack, so the utilities sit against the right margin. */
+.nameplate {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+/* Green, not ink. The hills are the one thing on this page that is not
+   navy, and the mark reads as landscape rather than as a second piece
+   of chrome sitting next to two buttons. */
+.peak {
+  flex: none;
+  color: var(--ridge);
 }
 
 .flag {
-  flex: 1;
+  flex: none;
   min-width: 0;
   font-family: var(--serif);
   font-size: var(--t-2xl);
   font-weight: 600;
   line-height: 1;
   letter-spacing: -0.02em;
+  /* Centre the letters, not the em box.
+     align-items: center on the row centres a 28px box that reserves
+     descender space "Fremont" — no descenders in it — never uses, which
+     left the wordmark sitting 2.9px above the two icons beside it.
+     Visible, and almost impossible to name. Trimming the box to cap
+     height and baseline makes the box the letters. */
+  text-box: trim-both cap alphabetic;
+}
+
+/* Same correction by hand where text-box has not landed yet. 0.1em is
+   half the descender Newsreader reserves below the baseline, which is
+   the space the untrimmed box was centring on. */
+@supports not (text-box-trim: trim-both) {
+  .flag {
+    transform: translateY(0.1em);
+  }
 }
 
 /* One group, so the two buttons cannot take turns claiming an auto
    margin — an adjacent-sibling rule used to do that and broke the
    moment the How-to-play modal rendered between them. */
 .chrome {
+  /* what the glyph inside each 44px target actually measures */
+  --icon: 20px;
+  /* and how far short of its own box the drawing stops. The moon's arc
+     runs x 4 to 20.5 of a 24-unit viewBox, so at 20px it leaves ~2.4px
+     of empty svg on each side — invisible in the markup, and the reason
+     the right margin measured 4pt against the wordmark's 0.3 even after
+     the target slack was accounted for. */
+  --icon-bearing: 2.4px;
   flex: none;
   display: flex;
   align-items: center;
   gap: 2px;
-  margin-right: -6px;
+  /* Optical edge, not box edge.
+     The glyph sits centred in a 44px target, so (44 - icon) / 2 either
+     side of it is empty air. At -6px the moon sat 8px inside the margin
+     while the F sat flush against it, and the whole row read as shifted
+     left. Pull the full slack back, less the 1px side bearing the F has
+     of its own. The target keeps its 44px and stays inside the page
+     padding. */
+  margin-right: calc((44px - var(--icon)) / -2 - var(--icon-bearing) + 0.3px);
+}
+
+/* 44px targets in a 36px row. The negative block margin takes the button
+   out of the row's height calculation while leaving its border box — the
+   part a finger actually hits — untouched, so the header loses 8px and
+   the tap area loses nothing. */
+.chrome > * {
+  margin-block: -4px;
 }
 
 /* Not in the design doc. Kept to the size of the section-bar icons and
@@ -488,7 +571,11 @@ main {
     inset 0 -0.5px 0 var(--glass-inner-bottom),
     inset 0 0 10px var(--glass-body),
     0 1px 2px var(--glass-shadow-near),
-    0 8px 28px var(--glass-shadow-far);
+    /* 8px down and 28px of blur reaches ~36px below the bar, and there
+       are only 14 between it and the bottom of the viewport — the rest
+       was being sliced off flat by Safari's toolbar, which is the other
+       half of the seam. Pulled in to fall off inside the room it has. */
+    0 4px 12px -2px var(--glass-shadow-far);
   /* The bar claims horizontal drags and leaves vertical ones to the
      page, so sliding between games and scrolling never fight. */
   touch-action: pan-y;
@@ -726,14 +813,23 @@ main {
 .plate {
   position: relative;
   flex: 1 1 auto;
-  width: 100%;
+  /* Reaches past the text column on both sides.
+     The ceiling below is derived from the width, so height freed up
+     anywhere else on the screen cannot reach the picture — trimming the
+     header by 15px moved the plate up 7pt and grew it by nothing at all,
+     because it was already sitting on this cap. Width is the only lever
+     that raises it, and widening is the good direction: a wider frame
+     takes a wider slice of the engraving, so the picture gets bigger and
+     is cropped *less*, where raising the 1.2 would have done the
+     opposite. */
+  width: calc(100% + var(--plate-bleed) * 2);
+  margin-inline: calc(var(--plate-bleed) * -1);
   min-height: clamp(150px, 26dvh / var(--z), 260px);
   /* A fifth taller than it is wide, and no more. A landscape engraving
      in a portrait frame loses its own sides to the slice crop, and past
      about 1.2 the thing you are being asked to recognise starts falling
      off the left and right edges. */
-  max-height: min(100%, calc((min(440px, 100vw) - var(--pad) * 2) * 1.2));
-  margin-inline: auto;
+  max-height: min(100%, calc((min(440px, 100vw) - var(--pad) * 2 + var(--plate-bleed) * 2) * 1.2));
   overflow: hidden;
   border-radius: var(--r-lg);
   corner-shape: squircle;
@@ -862,6 +958,10 @@ main {
   color: var(--muted);
 }
 
+/* Opens upward, because on a phone everything below the input is under
+   the keyboard. That makes its height a budget: whatever this covers is
+   the drawing you are being asked to name. See PlaceSearch for why the
+   rows run worst-to-best. */
 .search-list {
   position: absolute;
   left: 0;
@@ -874,12 +974,23 @@ main {
   background: var(--panel);
   border: 1px solid var(--line);
   box-shadow: 0 10px 30px rgba(4, 25, 45, 0.14);
+  /* A hard ceiling on how much of the engraving this may cover. The
+     four-row cap in PlaceSearch normally keeps it well under; this is
+     what holds on a short landscape phone, where four rows would bury a
+     120px plate. Rows are ordered worst-first and the list is pinned to
+     its bottom, so what scrolls out of reach is the weakest match. */
+  max-height: min(224px, 40dvh);
+  overflow-y: auto;
+  overscroll-behavior: contain;
 }
 
 .search-item {
   display: block;
   width: 100%;
-  padding: 15px 16px;
+  /* 13, not 15. Four rows have to fit inside the ceiling above without
+     the plate losing its share of the screen; 13px still leaves the row
+     comfortably past the 44px target. */
+  padding: 13px 16px;
   border: 0;
   border-radius: var(--r-xs);
   corner-shape: squircle;
@@ -1021,11 +1132,48 @@ main {
 }
 
 .band-label {
-  display: block;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 7px;
   font-size: var(--t-xs);
   font-weight: 600;
   letter-spacing: 0.1em;
   text-transform: uppercase;
+}
+
+/* Three pips, filled up to this group's rank, so the scale is readable
+   at a glance and again in a screenshot printed in grey. */
+.band-rank {
+  flex: none;
+  display: flex;
+  gap: 3px;
+}
+
+.band-pip {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.34;
+}
+
+.band-pip.is-lit {
+  opacity: 1;
+}
+
+/* Darkened, not lightened. A white scrim over the green raises the fill
+   toward the label and drops white type to about 4:1; taking the fill
+   down instead keeps it past 6.5:1 in both themes. */
+.band-grade {
+  flex: none;
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.band-name {
+  min-width: 0;
 }
 
 .band-items {
@@ -1044,12 +1192,65 @@ main {
   gap: 8px;
 }
 
+/* A named category, still unclaimed. Outlined rather than filled, so it
+   reads as a question standing open next to the solid bands of the
+   groups already lifted out. */
+.hints {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.hint {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 14px;
+  border-radius: var(--r-md);
+  corner-shape: squircle;
+  border: 1px dashed var(--line-2);
+  color: var(--muted);
+  font-size: var(--t-xs);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.hint-tag {
+  flex: none;
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: var(--sunk);
+}
+
 .conn-bar {
   flex: none;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
+}
+
+.conn-actions {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Sits between the dots and the buttons and is empty most of the time,
+   which is the point: the bar never changes height, so feedback about
+   the last guess cannot move the board you are about to tap. */
+.conn-say {
+  flex: 1 1 auto;
+  min-width: 0;
+  text-align: center;
+  font-size: var(--t-sm);
+  font-weight: 600;
+  color: var(--amber);
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 .mistakes {
@@ -1469,6 +1670,14 @@ main {
   line-height: 1.1;
 }
 
+/* Stated on screen and carried into the shared text, so a board solved
+   with help never passes as one solved cold. */
+.result-note {
+  font-size: var(--t-sm);
+  font-weight: 600;
+  color: var(--muted);
+}
+
 .result.is-won .result-answer {
   color: var(--green-ink);
 }
@@ -1575,7 +1784,7 @@ main {
 @media (max-height: 640px) {
   :root {
     --pad: 16px;
-    --pad-top: 11px;
+    --pad-top: 4px;
     --gap: 8px;
     --bar-inset: 12px;
   }
@@ -1624,7 +1833,7 @@ main {
 @media (orientation: landscape) and (max-height: 560px) {
   :root {
     --pad: 12px;
-    --pad-top: 9px;
+    --pad-top: 3px;
     --gap: 7px;
     --bar-inset: 10px;
   }

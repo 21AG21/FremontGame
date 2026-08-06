@@ -1,9 +1,13 @@
-// The ridge behind everything, and the five section icons.
+// The ridge behind everything, the nameplate mark, and the five
+// section icons.
 //
-// There is no logo lockup any more — the design doc sets the wordmark
-// in Newsreader on its own, with the day's question after a hairline
-// rule. A mark small enough to sit beside 23px type was never legible
-// as Mission Peak anyway; the ridge does that job full-bleed at 9%.
+// A mark did live here once and was dropped as illegible — correctly,
+// because it was a filled triangle, and a filled triangle at 24px is
+// every mountain in the world. What makes this one Mission Peak is the
+// pole at the summit: the thing everybody queues to be photographed
+// beside, and a single vertical stroke, which is the one detail that
+// survives being shrunk. The ridgeline is the same profile as the
+// full-bleed ridge below, so the mark and the background are one hill.
 
 // Fixed to the viewport, not to the column: a ridge scoped to the 440px
 // sheet reads as a grey slab with two hard edges once the window is
@@ -26,11 +30,50 @@ export function Ridge() {
   )
 }
 
-// The theme control. Shows where pressing it takes you, not where you
-// are — a sun on the dark theme, a moon on the light one.
+// The nameplate mark. Points taken off the Ridge polygon above and
+// rescaled, so the skyline beside the wordmark is the skyline behind
+// the page rather than a second, different set of hills.
+export function PeakMark() {
+  return (
+    <svg
+      className="peak"
+      width="28"
+      height="28"
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <g
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.9"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        {/* One summit, not four, and nothing else on the slopes. The
+            ridge's real profile has three false tops in it, which at
+            this size came out as a zigzag — a heart-rate trace, not a
+            hill. A shoulder stroke on the left flank was no better: at
+            26px a short diagonal beside a peak is a stray tick. */}
+        {/* Ink centred in the box, not the path bounds. Drawn from 2.2
+            to 20.6 the mark sat 0.6 units — half a point on screen —
+            above the two icons and the wordmark it stands beside. */}
+        <path d="M13 8.8V2.8" />
+        <path d="M1.6 21.2 13 8.8 22.4 21.2" />
+      </g>
+    </svg>
+  )
+}
+
+// The two header controls, drawn to the same recipe as the section
+// icons below: 24-unit box, 1.9 stroke, round joins, no fill. The help
+// control used to be a bold sans "?" set as text, which was the one
+// glyph on the site that belonged to no drawing — beside a stroked moon
+// it read as a different alphabet, and at 10px wide against the moon's
+// 16 it did not even weigh the same.
 export function ThemeIcon({ dark }) {
   return (
-    <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+    <HeaderFrame>
       {dark ? (
         <g fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round">
           <circle cx="12" cy="12" r="4" />
@@ -45,6 +88,38 @@ export function ThemeIcon({ dark }) {
           strokeLinejoin="round"
         />
       )}
+    </HeaderFrame>
+  )
+}
+
+// The question mark is stroked, not set: the hook is drawn as a path and
+// the point below it is a zero-length segment with a round cap, so both
+// take the same 1.9 as everything else in the chrome.
+export function HelpIcon() {
+  return (
+    <HeaderFrame>
+      <g
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.9"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <circle cx="12" cy="12" r="9" />
+        <path d="M9.3 9.4a2.8 2.8 0 1 1 3.5 3.1c-.55.2-.9.72-.9 1.3v.5" />
+        <path d="M12 17.4v.01" />
+      </g>
+    </HeaderFrame>
+  )
+}
+
+// 20, not 16. Two small glyphs adrift in 44px targets read as an
+// afterthought at the end of an empty row; at 20 they carry the same
+// weight as the wordmark opposite them.
+function HeaderFrame({ children }) {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      {children}
     </svg>
   )
 }

@@ -102,6 +102,27 @@ describe('Groups', () => {
     }
   })
 
+  // The board grades itself easy, medium, hard, and the screen and the
+  // share card both read off that rank. If rank ever stopped tracking
+  // the pool tier, every board would still look fine and every one of
+  // them would be labelled wrong.
+  it('ranks the board easy, medium, hard, in that order', () => {
+    for (const day of days) {
+      const board = groupsForDay(day)
+      expect(
+        board.map((g) => g.rank),
+        `day ${day}`
+      ).toEqual([0, 1, 2])
+      const tiers = board.map((g) => g.difficulty)
+      for (let i = 1; i < tiers.length; i++) {
+        expect(
+          tiers[i],
+          `day ${day}: tier ${tiers[i]} ranked above ${tiers[i - 1]}`
+        ).toBeGreaterThan(tiers[i - 1])
+      }
+    }
+  })
+
   it('keeps a fortnight between showing a category again', () => {
     const lastSeen = new Map()
     let closest = Infinity

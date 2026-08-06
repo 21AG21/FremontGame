@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import Legal from './Legal.jsx'
 import { useDialog } from '../lib/dialog.js'
+import { HelpIcon } from '../art/Mark.jsx'
 
 // How to play.
 //
@@ -30,7 +31,10 @@ const RULES = {
     lines: [
       'Twelve tiles hide three groups of four.',
       'Tap four that belong together, then Submit. Get it right and they lift out with their category named.',
+      'Every board has one easy group, one middling and one genuinely hard. Each says which it was as it lifts out.',
       'Some tiles fit more than one group. That is the puzzle.',
+      'A wrong guess tells you how close it was — “One away” means three of the four belong together.',
+      'Stuck? Hint names a category without saying which tiles are in it. Your result says if you used one.',
       'Three wrong guesses and the round is over.',
     ],
   },
@@ -81,7 +85,7 @@ export default function HowTo({ game }) {
         onClick={() => setOpen(true)}
         aria-label={`How to play ${rules.title}`}
       >
-        ?
+        <HelpIcon />
       </button>
 
       {open && (

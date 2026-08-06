@@ -4,7 +4,7 @@ import { PUZZLE_TYPES, DAY_KEY } from './data/puzzles.js'
 import { dayHasTurned } from './lib/day.js'
 import { getRecord } from './lib/storage.js'
 import { readTheme, applyTheme } from './lib/theme.js'
-import { Ridge, ICONS, ThemeIcon } from './art/Mark.jsx'
+import { Ridge, ICONS, ThemeIcon, PeakMark } from './art/Mark.jsx'
 import GlassDefs from './art/Glass.jsx'
 import HowTo from './components/HowTo.jsx'
 import Zoom from './puzzles/Zoom.jsx'
@@ -160,7 +160,12 @@ export default function App() {
             icon, on every screen. Two lines of header for something
             stated twice cost 35px off the top of a phone. */}
         <header className="lockup">
-          <h1 className="flag">{TOWN.name}</h1>
+          {/* Mark and wordmark are one lockup, so the gap between them
+              stays tight while the row's slack falls after it. */}
+          <div className="nameplate">
+            <PeakMark />
+            <h1 className="flag">{TOWN.name}</h1>
+          </div>
 
           <div className="chrome">
             <HowTo key={active} game={active} />

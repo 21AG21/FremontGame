@@ -7,7 +7,7 @@ import { DAY_NUMBER } from '../data/puzzles.js'
 // four grades take the state colours — sunk, navy, amber, green.
 const MARK_CLASS = { '░': 'is-d1', '▒': 'is-d2', '▓': 'is-d3', '█': 'is-d4' }
 
-export default function Result({ won, title, subtitle, squares, stats, onReplay }) {
+export default function Result({ won, title, subtitle, squares, stats, note, onReplay }) {
   const [copied, setCopied] = useState(false)
   const box = useRef(null)
 
@@ -16,11 +16,18 @@ export default function Result({ won, title, subtitle, squares, stats, onReplay 
     box.current?.scrollIntoView({ block: 'nearest' })
   }, [])
 
+  // `note` goes on the shared text as well as on screen. A board solved
+  // with help and one solved cold produce the same squares, and quietly
+  // sharing the first as the second is the kind of thing that makes a
+  // daily's scores worthless to everybody.
   const shareText = [
     `${TOWN.name} No. ${DAY_NUMBER} — ${title}`,
     squares,
+    note || '',
     typeof location !== 'undefined' ? location.host : '',
-  ].join('\n')
+  ]
+    .filter(Boolean)
+    .join('\n')
 
   const copy = async () => {
     try {
@@ -50,6 +57,8 @@ export default function Result({ won, title, subtitle, squares, stats, onReplay 
           </div>
         ))}
       </div>
+
+      {note && <p className="result-note">{note}</p>}
 
       {stats && (
         <dl className="record">
