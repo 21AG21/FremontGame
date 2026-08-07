@@ -21,11 +21,19 @@ export default function Result({ won, game, title, subtitle, squares, stats, not
   // with help and one solved cold produce the same squares, and quietly
   // sharing the first as the second is the kind of thing that makes a
   // daily's scores worthless to everybody.
+  // The origin, with its scheme, not the bare host. This line is the
+  // whole growth loop: the game is built to be pasted into a group chat,
+  // and everything the page does to make a link arrive with a picture on
+  // it — og:image, the card in public/og.png, the absolute URL filled in
+  // at build time — is wasted if what lands in the thread is
+  // "fremontgame.vercel.app" as plain text. Clients linkify a bare host
+  // inconsistently and unfurl a preview for one far less often than for
+  // a full https:// URL, so the twelve extra characters buy the card.
   const shareText = [
     `${TOWN.name} No. ${DAY_NUMBER} — ${title}`,
     squares,
     note || '',
-    typeof location !== 'undefined' ? location.host : '',
+    typeof location !== 'undefined' ? location.origin : '',
   ]
     .filter(Boolean)
     .join('\n')

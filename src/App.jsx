@@ -23,6 +23,8 @@ const VIEWS = {
 
 const N = PUZZLE_TYPES.length
 
+const PUZZLES_BY_ID = Object.fromEntries(PUZZLE_TYPES.map((t) => [t.id, t]))
+
 export default function App() {
   const [active, setActive] = useState('connections')
   const [theme, setTheme] = useState(readTheme)
@@ -189,6 +191,20 @@ export default function App() {
             </button>
           </div>
         </header>
+
+        {/* What to do, for somebody who has never done it.
+            The prompt has been sitting in PUZZLE_TYPES unrendered since
+            the masthead lost its second line — which was the right call
+            for the date, and quietly wrong for this. A visitor arriving
+            cold from a link meets twelve unlabelled tiles, three dots and
+            a greyed-out Submit, and nothing on the page says the board is
+            three groups of four.
+
+            Only until you have finished that game once. A returning
+            player knows the rules and would rather have the 20px back;
+            the deck disappears per game, so learning Groups does not
+            silently un-explain Zoom. */}
+        {!getRecord(active) && <p className="deck">{PUZZLES_BY_ID[active].prompt}</p>}
 
         <main>
           <View key={active} />

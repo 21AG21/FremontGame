@@ -593,6 +593,18 @@ ul {
   position: relative;
 }
 
+/* The deck: what this game asks, for a player who has not finished it
+   yet. One line, and it takes itself away — see App.jsx for why it is
+   conditional rather than permanent. */
+.deck {
+  flex: none;
+  margin-top: var(--s-1);
+  font-size: var(--t-sm);
+  line-height: 1.3;
+  color: var(--muted);
+  text-wrap: pretty;
+}
+
 main {
   position: relative;
   flex: 1;
