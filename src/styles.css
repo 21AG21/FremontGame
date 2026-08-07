@@ -178,31 +178,68 @@
 }
 
 :root {
-  --gap: 10px;
-  --pad: 22px;
-  /* Much less above the wordmark than beside it. The side value stays 22
-     to match the doc's column, but there is nothing above the nameplate
-     that needs breathing room — the status bar or the notch is already
-     doing that job — and this is the cheapest 7px the picture will ever
+  /* ── the spacing scale ─────────────────────────────────────────
+     Four-point steps, and nothing else may be invented.
+
+     This is not decoration. Audited before it existed, the stylesheet
+     held twenty-two distinct spacing values, fifteen of them off any
+     grid — 13px here, 19px there, 9, 7, 5, 3 — every one of them a
+     number somebody nudged until a screenshot looked right, and none of
+     them agreeing with any other. A reader never sees "13px"; they see
+     a page whose gaps do not rhyme, and that reads as unfinished no
+     matter how careful everything else is.
+
+     Two values sit below the grid on purpose. --s-1 is 2px, for the gap
+     between two things that are meant to touch, and hairlines are
+     written as literal 0.5px or 1px because a rule is not spacing.
+
+     What this scale does NOT govern: distances derived by measurement
+     rather than chosen by eye — the optical margin on .chrome, the
+     bearing inside an icon's own box. Those are calculations with a
+     right answer, and rounding them to the nearest 4 would put back
+     exactly the misalignment they were written to remove. They stay
+     derived, and they say so where they are. */
+  --s-1: 2px;
+  --s-2: 4px;
+  --s-3: 8px;
+  --s-4: 12px;
+  --s-5: 16px;
+  --s-6: 20px;
+  --s-7: 24px;
+  --s-8: 32px;
+
+  --gap: var(--s-4);
+  --pad: var(--s-6);
+  /* Much less above the wordmark than beside it. The side value holds
+     the doc's column, but there is nothing above the nameplate that
+     needs breathing room — the status bar or the notch is already doing
+     that job — and this is the cheapest space the picture will ever
      get. */
-  --pad-top: 5px;
+  --pad-top: var(--s-2);
   /* The column, in one place. The plate's ceiling is derived from it, so
      when these two were written out separately a wider layout widened
      the frame and left the height cap behind. */
   --col: 440px;
   /* How far the picture reaches past the text column on each side. The
-     column stays 22 for everything made of words; the engraving is the
-     one thing on the page that is only worth having big. */
-  --plate-bleed: 12px;
+     column holds for everything made of words; the engraving is the one
+     thing on the page that is only worth having big. */
+  --plate-bleed: var(--s-4);
   /* how far the section bar floats off the bottom and the side edges.
      One value, because the two used to be written out separately and
      drifted apart. */
-  --bar-inset: 14px;
+  --bar-inset: var(--s-4);
 
-  --r-lg: 26px;
-  --r-md: 18px;
-  --r-sm: 16px;
-  --r-xs: 12px;
+  /* Four radii, one per element size, and every corner on the page uses
+     one of them. Stray 4px and 6px values had appeared on the two
+     smallest things — a scale nobody can name is the same as no scale,
+     and mismatched corners are the fastest way to make a considered
+     layout look assembled. */
+  --r-lg: var(--s-7);
+  --r-md: var(--s-6);
+  --r-sm: var(--s-5);
+  --r-xs: var(--s-4);
+  /* not a radius so much as the absence of a straight edge */
+  --r-pill: 999px;
 
   --serif: 'Newsreader', Georgia, 'Times New Roman', serif;
   --sans: 'Work Sans', system-ui, -apple-system, sans-serif;
@@ -247,7 +284,7 @@ body {
   background: var(--bg);
   color: var(--ink);
   font-family: var(--sans);
-  font-size: 16px;
+  font-size: var(--t-md);
   line-height: 1.4;
   -webkit-text-size-adjust: 100%;
   -webkit-font-smoothing: antialiased;
@@ -398,7 +435,7 @@ ul {
   flex: none;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: var(--s-3);
   min-height: 36px;
 }
 
@@ -408,7 +445,7 @@ ul {
   min-width: 0;
   display: flex;
   align-items: center;
-  gap: 7px;
+  gap: var(--s-3);
 }
 
 /* Green, not ink. The hills are the one thing on this page that is not
@@ -467,7 +504,7 @@ ul {
   flex: none;
   display: flex;
   align-items: center;
-  gap: 2px;
+  gap: var(--s-1);
   /* Optical edge, not box edge.
      The glyph sits centred in a 44px target, so (44 - icon) / 2 either
      side of it is empty air. At -6px the moon sat 8px inside the margin
@@ -483,7 +520,7 @@ ul {
    part a finger actually hits — untouched, so the header loses 8px and
    the tap area loses nothing. */
 .chrome > * {
-  margin-block: -4px;
+  margin-block: -var(--s-2);
 }
 
 /* Not in the design doc. Kept to the size of the section-bar icons and
@@ -557,7 +594,7 @@ main {
   z-index: 10;
   margin: auto calc(var(--pad) * -1 + var(--bar-inset)) 0;
   display: flex;
-  padding: 4px;
+  padding: var(--s-2);
   border-radius: var(--r-md);
   corner-shape: squircle;
   /* Vibrancy first. A plain blur turns whatever is behind it into grey
@@ -759,10 +796,10 @@ main {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 3px;
+  gap: var(--s-1);
   /* 6+18+3+13+6 = 46px tall, over the 44 target floor and 8px shorter
      than it was. */
-  padding: 6px 2px;
+  padding: var(--s-2) var(--s-1);
   border: 0;
   border-radius: var(--r-xs);
   corner-shape: squircle;
@@ -785,7 +822,7 @@ main {
    pull — the dot is the whole notification. */
 .index-item.is-done:not(.is-active) .index-name::after {
   content: '·';
-  margin-left: 3px;
+  margin-left: var(--s-1);
   color: var(--green-ink);
   font-weight: 700;
 }
@@ -803,7 +840,7 @@ main {
 
 .btn {
   min-height: 56px;
-  padding: 0 26px;
+  padding: 0 var(--s-7);
   border-radius: var(--r-sm);
   corner-shape: squircle;
   background: var(--panel);
@@ -879,8 +916,8 @@ main {
 .tag {
   position: absolute;
   bottom: 8px;
-  padding: 4px 9px;
-  border-radius: 999px;
+  padding: var(--s-2) var(--s-3);
+  border-radius: var(--r-pill);
   background: var(--scrim);
   /* Same normalising contrast as the bar. This chip sits on the
      engraving, which is pure white paper and near-black ink — the
@@ -912,14 +949,14 @@ main {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 6px;
+  padding: var(--s-2);
   border-radius: var(--r-sm);
   corner-shape: squircle;
   background: var(--panel);
   border: 1px solid var(--line);
   color: var(--ink);
   text-align: center;
-  font-size: clamp(13px, 3.9vw, 16px);
+  font-size: clamp(var(--t-xs), 3.9vw, var(--t-md));
   font-weight: 600;
   line-height: 1.25;
   overflow-wrap: break-word;
@@ -966,7 +1003,7 @@ main {
 .search-input {
   display: block;
   width: 100%;
-  padding: 19px 20px;
+  padding: var(--s-6) var(--s-6);
   border-radius: var(--r-md);
   corner-shape: squircle;
   background: var(--panel);
@@ -991,7 +1028,7 @@ main {
   right: 0;
   bottom: calc(100% + 6px);
   z-index: 5;
-  padding: 4px;
+  padding: var(--s-2);
   border-radius: var(--r-md);
   corner-shape: squircle;
   background: var(--panel);
@@ -1013,7 +1050,7 @@ main {
   /* 13, not 15. Four rows have to fit inside the ceiling above without
      the plate losing its share of the screen; 13px still leaves the row
      comfortably past the 44px target. */
-  padding: 13px 16px;
+  padding: var(--s-4) var(--s-5);
   border: 0;
   border-radius: var(--r-xs);
   corner-shape: squircle;
@@ -1029,7 +1066,7 @@ main {
 }
 
 .search-empty {
-  padding: 14px 16px;
+  padding: var(--s-4) var(--s-5);
   color: var(--muted);
   font-size: var(--t-md);
 }
@@ -1060,7 +1097,7 @@ main {
   min-height: 0;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: var(--s-3);
   overflow-y: auto;
   /* overflow-y: auto makes overflow-x compute to auto too, so a row
      that was one pixel too wide gave the list a horizontal scrollbar
@@ -1084,8 +1121,8 @@ main {
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: 4px 12px;
-  padding: 10px 18px;
+  gap: var(--s-2) var(--s-4);
+  padding: var(--s-3) var(--s-5);
   border-radius: var(--r-md);
   corner-shape: squircle;
   background: var(--panel);
@@ -1113,7 +1150,7 @@ main {
   flex-wrap: wrap;
   align-items: center;
   justify-content: flex-end;
-  gap: 4px 6px;
+  gap: var(--s-2) var(--s-2);
   font-size: var(--t-md);
   font-weight: 600;
   font-variant-numeric: tabular-nums;
@@ -1142,11 +1179,11 @@ main {
   flex: none;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: var(--s-3);
 }
 
 .band {
-  padding: 14px 16px;
+  padding: var(--s-4) var(--s-5);
   border-radius: var(--r-md);
   corner-shape: squircle;
   background: var(--green);
@@ -1158,7 +1195,7 @@ main {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 4px 7px;
+  gap: var(--s-2) var(--s-3);
   font-size: var(--t-xs);
   font-weight: 600;
   letter-spacing: 0.1em;
@@ -1170,7 +1207,7 @@ main {
 .band-rank {
   flex: none;
   display: flex;
-  gap: 3px;
+  gap: var(--s-1);
 }
 
 .band-pip {
@@ -1190,8 +1227,8 @@ main {
    down instead keeps it past 6.5:1 in both themes. */
 .band-grade {
   flex: none;
-  padding: 2px 7px;
-  border-radius: 999px;
+  padding: var(--s-1) var(--s-3);
+  border-radius: var(--r-pill);
   background: rgba(0, 0, 0, 0.2);
 }
 
@@ -1201,7 +1238,7 @@ main {
 
 .band-items {
   display: block;
-  margin-top: 5px;
+  margin-top: var(--s-2);
   font-size: var(--t-lg);
   font-weight: 600;
 }
@@ -1212,7 +1249,7 @@ main {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   grid-auto-rows: minmax(64px, 1fr);
-  gap: 8px;
+  gap: var(--s-3);
 }
 
 /* A named category, still unclaimed. Outlined rather than filled, so it
@@ -1222,14 +1259,14 @@ main {
   flex: none;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: var(--s-2);
 }
 
 .hint {
   display: flex;
   align-items: center;
-  gap: 7px;
-  padding: 9px 14px;
+  gap: var(--s-3);
+  padding: var(--s-3) var(--s-4);
   border-radius: var(--r-md);
   corner-shape: squircle;
   border: 1px dashed var(--line-2);
@@ -1242,8 +1279,8 @@ main {
 
 .hint-tag {
   flex: none;
-  padding: 2px 7px;
-  border-radius: 999px;
+  padding: var(--s-1) var(--s-3);
+  border-radius: var(--r-pill);
   background: var(--sunk);
 }
 
@@ -1252,14 +1289,14 @@ main {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
+  gap: var(--s-4);
 }
 
 .conn-actions {
   flex: none;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--s-3);
 }
 
 /* Sits between the dots and the buttons and is empty most of the time,
@@ -1278,7 +1315,7 @@ main {
 
 .mistakes {
   display: flex;
-  gap: 7px;
+  gap: var(--s-3);
 }
 
 .dot {
@@ -1335,7 +1372,7 @@ main {
   background: #fff;
   border: 3px solid var(--art-ink);
   color: var(--art-ink);
-  font-size: 16px;
+  font-size: var(--t-md);
 }
 
 .wipe .tag {
@@ -1357,7 +1394,7 @@ main {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   grid-auto-rows: minmax(54px, 1fr);
-  gap: 8px;
+  gap: var(--s-3);
 }
 
 .year-hint {
@@ -1370,13 +1407,13 @@ main {
 .progress {
   flex: none;
   display: flex;
-  gap: 6px;
+  gap: var(--s-2);
 }
 
 .pip {
   flex: 1;
   height: 8px;
-  border-radius: 4px;
+  border-radius: var(--r-xs);
   background: var(--sunk);
   border: 1px solid var(--line-2);
 }
@@ -1415,7 +1452,7 @@ main {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 22px 18px;
+  padding: var(--s-6) var(--s-5);
 }
 
 .hl-half + .hl-half {
@@ -1429,7 +1466,7 @@ main {
 
 .hl-value {
   display: block;
-  margin: 10px 0 6px;
+  margin: var(--s-3) 0 var(--s-2);
   font-size: var(--t-4xl);
   font-weight: 600;
   line-height: 0.95;
@@ -1445,7 +1482,7 @@ main {
 .hl-buttons {
   flex: none;
   display: flex;
-  gap: 10px;
+  gap: var(--s-3);
 }
 
 .hl-buttons .btn {
@@ -1487,13 +1524,13 @@ main {
   min-height: 0;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: var(--s-2);
 }
 .wg-row {
   flex: 1;
   min-height: 0;
   display: flex;
-  gap: 6px;
+  gap: var(--s-2);
 }
 
 .wg-cell {
@@ -1514,7 +1551,7 @@ main {
      letterform, because the whole task is recognising WHICH letter it is
      at a glance and nothing else. */
   font-family: var(--sans);
-  font-size: clamp(26px, 5vh, 40px);
+  font-size: clamp(var(--t-2xl), 5vh, var(--t-4xl));
   font-weight: 700;
   letter-spacing: 0.01em;
 }
@@ -1534,7 +1571,7 @@ main {
   top: 2px;
   right: 4px;
   font-family: var(--sans);
-  font-size: 11px;
+  font-size: var(--t-xs);
   font-weight: 700;
   line-height: 1;
 }
@@ -1573,8 +1610,8 @@ main {
 .wg-notice {
   flex: none;
   align-self: center;
-  padding: 6px 12px;
-  border-radius: 999px;
+  padding: var(--s-2) var(--s-4);
+  border-radius: var(--r-pill);
   background: var(--sunk);
   color: var(--muted);
   font-size: var(--t-sm);
@@ -1586,20 +1623,20 @@ main {
   min-height: 0;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: var(--s-3);
 }
 
 .wg-keyrow {
   flex: 1;
   min-height: 0;
   display: flex;
-  gap: 6px;
+  gap: var(--s-2);
 }
 .wg-keyrow:nth-child(2) {
-  padding: 0 10px;
+  padding: 0 var(--s-3);
 }
 .wg-keyrow:nth-child(3) {
-  padding: 0 22px;
+  padding: 0 var(--s-6);
 }
 
 .wg-key {
@@ -1616,7 +1653,7 @@ main {
   corner-shape: squircle;
   background: var(--panel);
   border: 1px solid var(--line);
-  font-size: clamp(17px, 2.5vh, 22px);
+  font-size: clamp(var(--t-md), 2.5vh, var(--t-xl));
   font-weight: 600;
 }
 
@@ -1640,7 +1677,7 @@ main {
    on a phone. This is the one row added to it — kept off the three
    lettered rows so those still match the drawing exactly. */
 .wg-keyrow-actions {
-  padding: 0 22px;
+  padding: 0 var(--s-6);
 }
 .wg-keyrow-actions .wg-key {
   font-size: var(--t-sm);
@@ -1666,10 +1703,10 @@ main {
   .wg-grid,
   .wg-row,
   .wg-keyrow {
-    gap: 4px;
+    gap: var(--s-2);
   }
   .wg-keys {
-    gap: 5px;
+    gap: var(--s-2);
   }
 }
 
@@ -1678,7 +1715,7 @@ main {
 .result {
   flex: none;
   margin-top: auto;
-  padding: 18px;
+  padding: var(--s-5);
   border-radius: var(--r-lg);
   corner-shape: squircle;
   background: var(--panel);
@@ -1714,8 +1751,8 @@ main {
    actually for — loud enough to be worth buying, plain enough that
    nobody mistakes it for a puzzle. */
 .sponsor {
-  margin-top: 4px;
-  padding-top: 14px;
+  margin-top: var(--s-2);
+  padding-top: var(--s-4);
   border-top: 1px solid var(--line);
   text-align: center;
 }
@@ -1730,7 +1767,7 @@ main {
 
 .sponsor-name {
   display: inline-block;
-  margin-top: 4px;
+  margin-top: var(--s-2);
   font-family: var(--serif);
   font-size: var(--t-xl);
   font-weight: 600;
@@ -1741,7 +1778,7 @@ main {
 }
 
 .sponsor-line {
-  margin-top: 2px;
+  margin-top: var(--s-1);
   font-size: var(--t-sm);
   color: var(--muted);
 }
@@ -1773,18 +1810,18 @@ main {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 5px;
-  margin: 18px 0;
+  gap: var(--s-2);
+  margin: var(--s-5) 0;
 }
 .marks-row {
   display: flex;
-  gap: 5px;
+  gap: var(--s-2);
 }
 
 .mark {
   width: 22px;
   height: 22px;
-  border-radius: 6px;
+  border-radius: var(--r-xs);
   corner-shape: squircle;
   background: var(--sunk);
   border: 1px solid var(--line);
@@ -1806,8 +1843,8 @@ main {
 .record {
   display: flex;
   justify-content: center;
-  gap: 28px;
-  margin-bottom: 14px;
+  gap: var(--s-7);
+  margin-bottom: var(--s-4);
 }
 
 .record dt {
@@ -1828,11 +1865,11 @@ main {
 
 .result-actions {
   display: flex;
-  gap: 10px;
+  gap: var(--s-3);
 }
 .result-actions .btn {
   flex: 1;
-  padding: 0 12px;
+  padding: 0 var(--s-4);
 }
 
 /* ── very short screens ──────────────────────────────────────── */
@@ -1849,7 +1886,7 @@ main {
     font-size: var(--t-lg);
   }
   .hl-half {
-    padding: 14px 16px;
+    padding: var(--s-4) var(--s-5);
   }
   .year-grid {
     grid-auto-rows: minmax(48px, 1fr);
@@ -1877,10 +1914,10 @@ main {
      resolves to at this width. A short-screen block that enlarges is
      the same bug that overflowed the Word grid by 63px; this one shrinks. */
   .hl-value {
-    font-size: clamp(28px, 10vw, 40px);
+    font-size: clamp(var(--t-2xl), 10vw, var(--t-4xl));
   }
   .hl-half {
-    padding: 12px 14px;
+    padding: var(--s-4) var(--s-4);
   }
   .hl-buttons .btn {
     min-height: 48px;
@@ -1897,7 +1934,7 @@ main {
     font-size: var(--t-xs);
   }
   .result {
-    padding: 14px;
+    padding: var(--s-4);
   }
   .record dd {
     font-size: var(--t-xl);
@@ -1928,7 +1965,7 @@ main {
     min-height: 46px;
   }
   .index-item {
-    padding: 4px 2px;
+    padding: var(--s-2) var(--s-1);
   }
   .flag {
     font-size: var(--t-xl);
@@ -1948,7 +1985,7 @@ main {
     grid-auto-rows: minmax(44px, 1fr);
   }
   .tile {
-    font-size: clamp(12px, 2vw, 15px);
+    font-size: clamp(var(--t-xs), 2vw, var(--t-sm));
     hyphens: auto;
   }
 
@@ -1959,7 +1996,7 @@ main {
     flex-direction: row;
   }
   .hl-half {
-    padding: 8px 14px;
+    padding: var(--s-3) var(--s-4);
   }
   .hl-half + .hl-half {
     border-top: 0;
@@ -1990,8 +2027,8 @@ main {
 /* The one word that makes a wrong Zoom guess useful to someone without
    a mile-scale map of Fremont in their head. */
 .guess-warmth {
-  padding: 2px 7px;
-  border-radius: 999px;
+  padding: var(--s-1) var(--s-3);
+  border-radius: var(--r-pill);
   background: var(--sunk);
   color: var(--ink);
   font-size: var(--t-sm);
@@ -2032,7 +2069,7 @@ main {
   z-index: 20;
   display: grid;
   place-items: center;
-  padding: 22px;
+  padding: var(--s-6);
   background: rgba(4, 25, 45, 0.45);
   -webkit-backdrop-filter: blur(3px);
   backdrop-filter: blur(3px);
@@ -2041,7 +2078,7 @@ main {
 .howto {
   width: 100%;
   max-width: 380px;
-  padding: 22px;
+  padding: var(--s-6);
   border-radius: var(--r-lg);
   corner-shape: squircle;
   background: var(--panel);
@@ -2057,16 +2094,16 @@ main {
 }
 
 .howto-list {
-  margin: 14px 0 18px;
+  margin: var(--s-4) 0 var(--s-5);
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: var(--s-3);
   font-size: var(--t-md);
   line-height: 1.5;
 }
 
 .howto-list li {
-  padding-left: 16px;
+  padding-left: var(--s-5);
   position: relative;
 }
 .howto-list li::before {
@@ -2087,7 +2124,7 @@ main {
 /* ── privacy / terms / accessibility ─────────────────────────── */
 
 .howto-legal {
-  margin-top: 14px;
+  margin-top: var(--s-4);
   text-align: center;
 }
 
@@ -2095,7 +2132,7 @@ main {
   /* 44px target, as the accessibility statement claims — this is the
      control that opens that very statement. */
   min-height: 44px;
-  padding: 6px 12px;
+  padding: var(--s-2) var(--s-4);
   border: 0;
   background: none;
   color: var(--muted);
@@ -2115,9 +2152,9 @@ main {
 .legal-tabs {
   flex: none;
   display: flex;
-  gap: 4px;
-  margin-bottom: 14px;
-  padding: 4px;
+  gap: var(--s-2);
+  margin-bottom: var(--s-4);
+  padding: var(--s-2);
   border-radius: var(--r-sm);
   corner-shape: squircle;
   background: var(--sunk);
@@ -2126,7 +2163,7 @@ main {
 .legal-tab {
   flex: 1;
   min-height: 44px;
-  padding: 0 8px;
+  padding: 0 var(--s-3);
   border: 0;
   border-radius: var(--r-xs);
   corner-shape: squircle;
@@ -2146,12 +2183,12 @@ main {
   scrollbar-gutter: stable;
   min-height: 0;
   overflow-y: auto;
-  margin-bottom: 14px;
+  margin-bottom: var(--s-4);
   -webkit-overflow-scrolling: touch;
 }
 
 .legal-heading {
-  margin: 16px 0 6px;
+  margin: var(--s-5) 0 var(--s-2);
   font-size: var(--t-xs);
   font-weight: 700;
   letter-spacing: 0.06em;
@@ -2160,14 +2197,14 @@ main {
 }
 
 .legal-para {
-  margin-bottom: 10px;
+  margin-bottom: var(--s-3);
   font-size: var(--t-sm);
   line-height: 1.55;
 }
 
 .legal-note {
-  margin-top: 20px;
-  padding: 12px 14px;
+  margin-top: var(--s-6);
+  padding: var(--s-4) var(--s-4);
   border-radius: var(--r-sm);
   corner-shape: squircle;
   background: var(--sunk);
@@ -2183,8 +2220,8 @@ main {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 14px;
-  padding: 22px;
+  gap: var(--s-4);
+  padding: var(--s-6);
   border-radius: var(--r-lg);
   corner-shape: squircle;
   background: var(--panel);
@@ -2446,9 +2483,9 @@ main {
      rule under it, and the date it gave up on the phone. */
   .lockup {
     order: 0;
-    gap: 14px;
+    gap: var(--s-4);
     min-height: 44px;
-    padding-bottom: 12px;
+    padding-bottom: var(--s-4);
     border-bottom: 1px solid var(--line);
   }
 
@@ -2458,7 +2495,7 @@ main {
     min-width: 0;
     align-items: center;
     justify-content: flex-end;
-    gap: 6px;
+    gap: var(--s-2);
     font-size: var(--t-sm);
     font-variant-numeric: tabular-nums;
     color: var(--muted);
@@ -2470,7 +2507,7 @@ main {
 
   .dateline-no::before {
     content: '·';
-    margin-right: 6px;
+    margin-right: var(--s-2);
   }
 
   /* Out of the corner and into the flow, between the masthead and the
@@ -2503,8 +2540,8 @@ main {
   .index-item {
     flex-direction: row;
     justify-content: center;
-    gap: 7px;
-    padding: 8px 2px;
+    gap: var(--s-3);
+    padding: var(--s-3) var(--s-1);
   }
 
   .index-name {
