@@ -84,6 +84,26 @@ Action that pulls, validates and commits — so an edit at nine at night is live
 by morning without anyone touching git. See [`content/README.md`](content/README.md),
 which is written for someone who does not want to read this file.
 
+### One more thing about Fremont
+
+Finish any board and the card ends with a fact about the town, from
+`content/tidbits.csv`. It sits where a sponsor line briefly did, which is
+the same slot doing the opposite job — the most attention this page ever
+gets, handed back to the reader.
+
+Every row carries a `source`, and the validator rejects one that does
+not. That is not bookkeeping: a puzzle that is wrong is a bad puzzle, but
+a _fact_ that is wrong is the site lying to somebody about the place they
+live. Requiring the column is what stops a half-remembered thing being
+typed in at midnight and shipped as local history.
+
+Five games a day each hand one over, so the pool drains five times faster
+than its length suggests. The walk is strided coprime with the pool, the
+same trick the scenes and words use, so all five in a day differ, none
+carries over from yesterday, and every fact is seen before any repeats —
+`tidbits.test.js` checks all three over 400 days. The build warns when
+the pool gets thin.
+
 ### The Zoom drawings are composed, not drawn
 
 A hundred hand-drawn engravings is not a thing anyone finishes. So a place says

@@ -126,6 +126,20 @@ function HeaderFrame({ children }) {
 
 // Section icons, 18px, drawn in currentColor so the active item can
 // flip the whole thing to white against navy without a second asset.
+//
+// All five draw their ink from 3 to 21 of the 24-unit box. That is not
+// tidiness — the box being identical is exactly what hid the problem.
+// Measured in the bar, the drawings inside those identical boxes ran
+// from 8 units tall (the word row, a third of its frame) to 20 (the
+// then-and-now divider, which overshot its own rectangle), so a row of
+// nominally equal icons rendered at wildly unequal weights and the bar
+// read as ragged. The word row went from a letterbox to three full-height
+// cells, the arrow grew from 14 to 18, and the divider was pulled back
+// inside the frame it splits.
+//
+// Widths still differ, and should: an arrow is narrower than a grid and
+// forcing it wider would only make it a worse arrow. It is the height
+// that sets the line the eye reads across.
 const line = {
   fill: 'none',
   stroke: 'currentColor',
@@ -163,23 +177,26 @@ export const ICONS = {
   // one frame, split down the middle
   thennow: () => (
     <Frame>
-      <rect x="3" y="4" width="18" height="16" {...line} />
-      <path d="M12 2v20" {...line} />
+      <rect x="3" y="3" width="18" height="18" {...line} />
+      <path d="M12 3v18" {...line} />
     </Frame>
   ),
   // higher
   higherlower: () => (
     <Frame>
-      <path d="M12 5v14" {...line} />
-      <path d="M6 11l6-6 6 6" {...line} />
+      <path d="M12 3v18" {...line} />
+      <path d="M5 10l7-7 7 7" {...line} />
     </Frame>
   ),
-  // letters in a row
+  // letters in a row, one of them found. The fill is what keeps this
+  // from being the then-and-now frame with an extra line in it — both
+  // are a rectangle divided by verticals, and once the word row was
+  // grown to the same height as everything else the two read as the
+  // same icon. A solved cell is also what the game itself draws.
   wordgrid: () => (
     <Frame>
-      <rect x="3" y="8" width="18" height="8" {...line} />
-      <path d="M9 8v8" {...line} />
-      <path d="M15 8v8" {...line} />
+      <rect x="3" y="3" width="18" height="18" {...line} />
+      <rect x="9" y="3" width="6" height="18" {...line} fill="currentColor" />
     </Frame>
   ),
 }

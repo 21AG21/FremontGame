@@ -124,6 +124,7 @@ export default function WordGrid() {
 
       {done ? (
         <Result
+          game="wordgrid"
           won={done === 'won'}
           title="The Word"
           subtitle={P.answer}

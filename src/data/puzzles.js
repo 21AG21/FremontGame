@@ -46,8 +46,8 @@ export { DAY_KEY, DAY_NUMBER }
 // the whole bar at 12px, which was the smallest type on the site. The
 // first word of the name is the half that says what the puzzle asks.
 export const PUZZLE_TYPES = [
-  { id: 'zoom', name: 'Zoom', short: 'Zoom', prompt: 'Name the place, five guesses' },
   { id: 'connections', name: 'Groups', short: 'Groups', prompt: 'Three groups of four' },
+  { id: 'zoom', name: 'Zoom', short: 'Zoom', prompt: 'Name the place, five guesses' },
   { id: 'thennow', name: 'Then & Now', short: 'Then', prompt: 'Pick the year, three guesses' },
   {
     id: 'higherlower',

@@ -187,6 +187,7 @@ export default function Connections() {
 
       {done ? (
         <Result
+          game="connections"
           won={done === 'won'}
           title="Groups"
           subtitle={done === 'won' ? 'All three groups' : 'Out of mistakes'}

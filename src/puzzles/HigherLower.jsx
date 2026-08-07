@@ -59,6 +59,7 @@ export default function HigherLower() {
     return (
       <div className="puzzle">
         <Result
+          game="higherlower"
           won={done === 'won'}
           title="Higher or Lower"
           subtitle={`${score} of ${P.rounds.length} right`}

@@ -24,7 +24,7 @@ const VIEWS = {
 const N = PUZZLE_TYPES.length
 
 export default function App() {
-  const [active, setActive] = useState('zoom')
+  const [active, setActive] = useState('connections')
   const [theme, setTheme] = useState(readTheme)
   const View = VIEWS[active]
 

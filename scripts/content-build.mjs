@@ -297,6 +297,64 @@ else if (candidates.length < 30)
     `${candidates.length} answers means the word repeats every ${candidates.length} days`
   )
 
+// ── tidbits ───────────────────────────────────────────────────
+// One fact about the town, handed over after a game is finished.
+//
+// A source is required on every row, and that is the whole point of this
+// block rather than a nicety. The site's claim on anybody's attention is
+// that what it says about Fremont is true; a puzzle that is wrong is a
+// bad puzzle, but a *fact* that is wrong is the site lying to someone
+// about the place they live. Requiring the column is what stops a
+// half-remembered thing getting typed in at midnight and shipped as
+// local history.
+//
+// The length cap is real too. This sits under a result on a phone, and
+// anything past a couple of lines stops being a gift and starts being
+// homework.
+const MAX_TIDBIT = 190
+
+const tidbitsTable = await table('tidbits.csv')
+const tidbits = []
+const tidbitIds = new Set()
+const tidbitText = new Map()
+
+for (const r of tidbitsTable.rows) {
+  const at = ['tidbits.csv', r.__line]
+  const id = (r.id || '').trim()
+  const text = (r.text || '').trim()
+  const source = (r.source || '').trim()
+
+  if (!id) fail(...at, 'no id')
+  else if (tidbitIds.has(id)) fail(...at, `duplicate id "${id}"`)
+  else tidbitIds.add(id)
+
+  if (!text) fail(...at, `"${id}" has no text`)
+  if (text.length > MAX_TIDBIT)
+    fail(...at, `"${id}" is ${text.length} characters — ${MAX_TIDBIT} is the most that fits`)
+  if (!source) fail(...at, `"${id}" has no source — every claim about the town carries one`)
+
+  // Two rows saying the same thing halve the pool without looking like
+  // they have.
+  const key = text
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, ' ')
+    .trim()
+  if (key && tidbitText.has(key)) fail(...at, `"${id}" repeats what "${tidbitText.get(key)}" says`)
+  else if (key) tidbitText.set(key, id)
+
+  tidbits.push({ id, text, source })
+}
+
+// Five games a day each hand one over, so the pool empties five times as
+// fast as it looks. Warn before somebody notices by seeing the same fact
+// twice in a week.
+if (tidbits.length < 35)
+  warn(
+    'tidbits.csv',
+    0,
+    `${tidbits.length} tidbits is ${Math.floor(tidbits.length / 5)} days before one repeats`
+  )
+
 // ── report ────────────────────────────────────────────────────
 for (const w of warnings) console.warn(`  warning  ${w}`)
 
@@ -317,12 +375,14 @@ const OUTPUTS = {
   'facts.js': factSets,
   'scenes.js': scenes,
   'words.js': { candidates, localWords },
+  'tidbits.js': tidbits,
 }
 
 console.log(
   `  ok  ${places.length} places, ${groups.length} categories, ` +
     `${factsTable.rows.length} facts in ${factSets.length} units, ` +
-    `${scenes.length} scenes, ${candidates.length} answers` +
+    `${scenes.length} scenes, ${candidates.length} answers, ` +
+    `${tidbits.length} tidbits` +
     (warnings.length ? `  (${warnings.length} warning${warnings.length > 1 ? 's' : ''})` : '')
 )
 

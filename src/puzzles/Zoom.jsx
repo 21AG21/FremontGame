@@ -85,6 +85,7 @@ export default function Zoom() {
 
       {done ? (
         <Result
+          game="zoom"
           won={done === 'won'}
           title="Zoom"
           subtitle={answer.name}

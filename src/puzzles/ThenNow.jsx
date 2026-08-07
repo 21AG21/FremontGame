@@ -103,6 +103,7 @@ export default function ThenNow() {
 
       {done ? (
         <Result
+          game="thennow"
           won={done === 'won'}
           title="Then &amp; Now"
           subtitle={String(P.answerYear)}

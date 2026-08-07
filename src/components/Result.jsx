@@ -1,13 +1,14 @@
 import { useState, useEffect, useRef } from 'react'
 import { TOWN } from '../data/town.js'
 import { DAY_NUMBER } from '../data/puzzles.js'
+import Tidbit from './Tidbit.jsx'
 
 // Drawn as boxes, not glyphs: Work Sans has no block characters, and a
 // fallback face for four of them would be four different shapes. The
 // four grades take the state colours — sunk, navy, amber, green.
 const MARK_CLASS = { '░': 'is-d1', '▒': 'is-d2', '▓': 'is-d3', '█': 'is-d4' }
 
-export default function Result({ won, title, subtitle, squares, stats, note, onReplay }) {
+export default function Result({ won, game, title, subtitle, squares, stats, note, onReplay }) {
   const [copied, setCopied] = useState(false)
   const box = useRef(null)
 
@@ -81,6 +82,10 @@ export default function Result({ won, title, subtitle, squares, stats, note, onR
           Play again
         </button>
       </div>
+
+      {/* Last, under the share buttons: the day's fact about the town,
+          in the slot the sponsor used to occupy. */}
+      <Tidbit game={game} />
     </div>
   )
 }
