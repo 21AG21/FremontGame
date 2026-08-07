@@ -11,7 +11,7 @@ import {
   warmthWord,
 } from '../lib/geo.js'
 import { saveResult, getRecord, loadState, saveState } from '../lib/storage.js'
-import PlaceSearch from '../components/PlaceSearch.jsx'
+import PlacePicker from '../components/PlacePicker.jsx'
 import Result from '../components/Result.jsx'
 
 const squareFor = (miles) => {
@@ -81,7 +81,7 @@ export default function Zoom() {
         {!done && <span className="tag tag-right">{scale.toFixed(1)}×</span>}
       </div>
 
-      {!done && <PlaceSearch onGuess={handleGuess} used={guesses.map((g) => g.place.id)} />}
+      {!done && <PlacePicker onGuess={handleGuess} used={guesses.map((g) => g.place.id)} />}
 
       {done ? (
         <Result
