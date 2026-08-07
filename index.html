@@ -98,7 +98,207 @@
     </script>
   </head>
   <body>
-    <div id="root"></div>
+    <!--
+      The masthead, before the bundle.
+
+      The stylesheet is 31kB and the bundle is 355kB, so the CSS lands
+      roughly nineteen times sooner — and until React mounted, an empty
+      #root meant every one of those milliseconds was a blank page. On a
+      phone over mobile data that is most of a second of white.
+
+      This is the same first frame React draws, written out flat: the
+      ridge, the masthead, and the section bar with Zoom lit, because
+      those three are identical on every load. What is *not* here is the
+      board, and that is the honest part — which puzzle you get depends
+      on the day, and the day is computed in the bundle. So the page
+      arrives as itself with the middle still filling in, rather than as
+      nothing at all.
+
+      It is aria-hidden and holds no buttons: there is nothing to press
+      yet, and a control that vanishes the moment it is announced is
+      worse than silence. createRoot() empties this container when it
+      commits, so the swap is one paint with nothing to clean up. Keep
+      it in step with App.jsx — a shell that disagrees with the first
+      real frame trades a blank page for a flicker, which is worse.
+    -->
+    <div id="root">
+      <svg
+        class="ridge"
+        viewBox="0 0 340 660"
+        preserveAspectRatio="none"
+        aria-hidden="true"
+        focusable="false"
+      >
+        <polygon
+          points="0,660 0,300 84,140 150,214 232,36 300,180 340,120 340,660"
+          fill="currentColor"
+        />
+      </svg>
+
+      <div class="sheet" aria-hidden="true">
+        <header class="lockup">
+          <div class="nameplate">
+            <svg class="peak" width="28" height="28" viewBox="0 0 24 24" focusable="false">
+              <g
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.9"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M13 8.8V2.8" />
+                <path d="M1.6 21.2 13 8.8 22.4 21.2" />
+              </g>
+            </svg>
+            <h1 class="flag">Fremont</h1>
+          </div>
+
+          <!-- Desktop only, and empty: the date is the one thing up here
+               the bundle has to compute. The box is the same either way,
+               so the text fills in without moving anything. -->
+          <p class="dateline"></p>
+
+          <div class="chrome">
+            <span class="howto-open">
+              <svg width="20" height="20" viewBox="0 0 24 24" focusable="false">
+                <g
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.9"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <circle cx="12" cy="12" r="9" />
+                  <path d="M9.3 9.4a2.8 2.8 0 1 1 3.5 3.1c-.55.2-.9.72-.9 1.3v.5" />
+                  <path d="M12 17.4v.01" />
+                </g>
+              </svg>
+            </span>
+            <!-- Sun or moon, chosen in CSS off the same two conditions
+                 the rest of the sheet themes on, so the saved theme is
+                 already right in the first frame. -->
+            <span class="theme">
+              <svg class="boot-moon" width="20" height="20" viewBox="0 0 24 24" focusable="false">
+                <path
+                  d="M20 14.2A8.2 8.2 0 0 1 9.8 4 8.4 8.4 0 1 0 20 14.2z"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.9"
+                  stroke-linejoin="round"
+                />
+              </svg>
+              <svg class="boot-sun" width="20" height="20" viewBox="0 0 24 24" focusable="false">
+                <g fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round">
+                  <circle cx="12" cy="12" r="4" />
+                  <path
+                    d="M12 2.6v2.2M12 19.2v2.2M2.6 12h2.2M19.2 12h2.2M5.4 5.4l1.6 1.6M17 17l1.6 1.6M18.6 5.4L17 7M7 17l-1.6 1.6"
+                  />
+                </g>
+              </svg>
+            </span>
+          </div>
+        </header>
+
+        <main></main>
+
+        <nav class="index">
+          <span class="index-lens"></span>
+          <span class="index-pill" style="--i: 0"></span>
+
+          <span class="index-item is-active">
+            <svg width="18" height="18" viewBox="0 0 24 24" focusable="false">
+              <g
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.9"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M3 8V3h5" />
+                <path d="M21 16v5h-5" />
+                <circle cx="12" cy="12" r="5" />
+              </g>
+            </svg>
+            <span class="index-name">Zoom</span>
+          </span>
+
+          <span class="index-item">
+            <svg width="18" height="18" viewBox="0 0 24 24" focusable="false">
+              <g
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.9"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <rect x="3" y="3" width="7.5" height="7.5" fill="currentColor" />
+                <rect x="13.5" y="3" width="7.5" height="7.5" />
+                <rect x="3" y="13.5" width="7.5" height="7.5" />
+                <rect x="13.5" y="13.5" width="7.5" height="7.5" fill="currentColor" />
+              </g>
+            </svg>
+            <span class="index-name">Groups</span>
+          </span>
+
+          <span class="index-item">
+            <svg width="18" height="18" viewBox="0 0 24 24" focusable="false">
+              <g
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.9"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <rect x="3" y="4" width="18" height="16" />
+                <path d="M12 2v20" />
+              </g>
+            </svg>
+            <span class="index-name">Then</span>
+          </span>
+
+          <span class="index-item">
+            <svg width="18" height="18" viewBox="0 0 24 24" focusable="false">
+              <g
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.9"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M12 5v14" />
+                <path d="M6 11l6-6 6 6" />
+              </g>
+            </svg>
+            <span class="index-name">Higher?</span>
+          </span>
+
+          <span class="index-item">
+            <svg width="18" height="18" viewBox="0 0 24 24" focusable="false">
+              <g
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.9"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <rect x="3" y="8" width="18" height="8" />
+                <path d="M9 8v8" />
+                <path d="M15 8v8" />
+              </g>
+            </svg>
+            <span class="index-name">Word</span>
+          </span>
+        </nav>
+      </div>
+    </div>
+
+    <noscript>
+      <p class="noscript">
+        The Fremont Daily needs JavaScript. The puzzles are worked out in your browser — there is no
+        server to fall back on.
+      </p>
+    </noscript>
+
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

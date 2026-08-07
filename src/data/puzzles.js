@@ -38,10 +38,17 @@ export { DAY_KEY, DAY_NUMBER }
 // lower?", "Groups · Find the groups" — which wastes the one line the
 // game has to explain itself. Every prompt now says what you do and
 // what it costs you, so name and deck carry different information.
+//
+// "Then", not "Then/Now". A fifth of a 320px screen leaves a label 57px
+// to sit in; "Then/Now" measured 61 at the old 12px and was already
+// overlapping the two slots beside it there — nothing clipped it, so it
+// simply drew over its neighbours. It was also the single label holding
+// the whole bar at 12px, which was the smallest type on the site. The
+// first word of the name is the half that says what the puzzle asks.
 export const PUZZLE_TYPES = [
   { id: 'zoom', name: 'Zoom', short: 'Zoom', prompt: 'Name the place, five guesses' },
   { id: 'connections', name: 'Groups', short: 'Groups', prompt: 'Three groups of four' },
-  { id: 'thennow', name: 'Then & Now', short: 'Then/Now', prompt: 'Pick the year, three guesses' },
+  { id: 'thennow', name: 'Then & Now', short: 'Then', prompt: 'Pick the year, three guesses' },
   {
     id: 'higherlower',
     name: 'Higher or Lower',

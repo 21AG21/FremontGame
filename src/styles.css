@@ -336,6 +336,45 @@ ul {
 
 /* ── shell ───────────────────────────────────────────────────── */
 
+/* The static first paint — see the shell inside #root in index.html.
+   Everything it draws is styled by the rules the real app uses; these
+   are the only two things it needs of its own.
+
+   The theme glyph, without waiting for the bundle. The condition is the
+   same pair the whole sheet themes on (an explicit [data-theme], else
+   the media query), so somebody who chose dark gets the sun in the very
+   first frame rather than a moon that flips a moment later. */
+.boot-sun {
+  display: none;
+}
+:root[data-theme='dark'] .boot-moon {
+  display: none;
+}
+:root[data-theme='dark'] .boot-sun {
+  display: block;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) .boot-moon {
+    display: none;
+  }
+  :root:not([data-theme='light']) .boot-sun {
+    display: block;
+  }
+}
+
+/* Not a fallback board — there isn't one to give. Every puzzle is
+   worked out on the device, so with scripting off there is no server
+   rendering to degrade to, and saying so is more use than a blank page. */
+.noscript {
+  margin: var(--s-8) auto;
+  max-width: 32ch;
+  padding: 0 var(--pad);
+  font-size: var(--t-md);
+  line-height: 1.5;
+  text-align: center;
+  color: var(--muted);
+}
+
 .sheet {
   position: relative;
   /* zoom, not transform: transform would scale a finished layout and
@@ -520,7 +559,7 @@ ul {
    part a finger actually hits — untouched, so the header loses 8px and
    the tap area loses nothing. */
 .chrome > * {
-  margin-block: -var(--s-2);
+  margin-block: calc(var(--s-2) * -1);
 }
 
 /* Not in the design doc. Kept to the size of the section-bar icons and
@@ -796,10 +835,17 @@ main {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--s-1);
-  /* 6+18+3+13+6 = 46px tall, over the 44 target floor and 8px shorter
-     than it was. */
-  padding: var(--s-2) var(--s-1);
+  /* 4 + 18 + 4 + 15.4 + 4 = 45.4px tall, which clears the 44px target
+     floor. The comment here used to claim 46 and the button measured
+     41 — the icon, the gap and the label had all changed under it. It
+     is measured now, and the gap is 4 rather than 2 because that is the
+     2px that puts a finger's worth of button under the finger. */
+  gap: var(--s-2);
+  /* No side padding. There is no per-item background to inset — the
+     pill behind them is a full slot wide — so the 2px each side bought
+     nothing and cost the label 4px of the 54 it has on a 320px screen,
+     which is the width that decides how big the label can be. */
+  padding: var(--s-2) 0;
   border: 0;
   border-radius: var(--r-xs);
   corner-shape: squircle;
@@ -811,11 +857,19 @@ main {
   color: var(--on-navy);
 }
 
+/* 14, not 12. This was the smallest type on the site, and it was the
+   smallest because of one label: at 12px "Then/Now" measured 61px into
+   a 54px slot on a 320px screen and drew over the items either side of
+   it. Shortening it to "Then" freed the whole bar, and the binding
+   label became "Higher?" — 53px at 14px against the 58 a slot now has.
+   Nowrap because nothing here should ever become two lines: the bar's
+   height is fixed and a second line would push the icon out of it. */
 .index-name {
-  font-size: var(--t-xs);
+  font-size: var(--t-sm);
   font-weight: 600;
   line-height: 1.1;
   text-align: center;
+  white-space: nowrap;
 }
 
 /* A game you have already finished today keeps its label but loses the
