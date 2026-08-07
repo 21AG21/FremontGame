@@ -91,11 +91,23 @@ Finish any board and the card ends with a fact about the town, from
 the same slot doing the opposite job — the most attention this page ever
 gets, handed back to the reader.
 
-Every row carries a `source`, and the validator rejects one that does
-not. That is not bookkeeping: a puzzle that is wrong is a bad puzzle, but
-a _fact_ that is wrong is the site lying to somebody about the place they
-live. Requiring the column is what stops a half-remembered thing being
-typed in at midnight and shipped as local history.
+Every row carries a source **and a link**, and the validator rejects a row
+missing either. A puzzle that is wrong is a bad puzzle; a _fact_ that is
+wrong is the site lying to somebody about the place they live.
+
+The link is the half that works, and it is there because the other half
+did not. The first version of this table required only a source name,
+shipped forty facts with a tidy-looking attribution on every one, and an
+adversarial pass found four of them credited to a local museum whose site
+says nothing of the kind — three of those four were also wrong. A name is
+something you can write from memory. A URL is something somebody can
+open.
+
+That same pass found **ten of the forty outright wrong and fourteen
+misleading**: an operator named wrong, a plant opening a year early, a
+character invented in Los Angeles claimed for Niles, a flea market that
+runs one Sunday a year described as though it were permanent. Run the
+same check over any batch that gets added.
 
 Five games a day each hand one over, so the pool drains five times faster
 than its length suggests. The walk is strided coprime with the pool, the

@@ -71,6 +71,31 @@ describe('what the facts themselves have to be', () => {
     }
   })
 
+  // The link, not the name. Forty facts once shipped with a plausible
+  // attribution on every row and no link on any; four of those names
+  // turned out to credit a museum that had never said it. A name can be
+  // written from memory. A URL is a thing somebody can go and open.
+  it('all point at something openable', () => {
+    for (const t of TIDBITS) {
+      expect(t.url, t.id).toMatch(/^https?:\/\/\S+$/)
+    }
+  })
+
+  // Nothing that reads as a repeated template. "which is why" appeared
+  // four times in the first draft and the em-dash-into-a-summary six.
+  it('does not lean on one construction', () => {
+    const count = (re) => TIDBITS.filter((t) => re.test(t.text)).length
+    expect(count(/which is (why|exactly why)/i), 'which is why').toBeLessThanOrEqual(1)
+    expect(count(/ — /), 'em-dash tails').toBeLessThanOrEqual(4)
+  })
+
+  // American spellings, for an American city.
+  it('is written in the language of the town it is about', () => {
+    for (const t of TIDBITS) {
+      expect(t.text, t.id).not.toMatch(/\b(colour|centre|kerb|the other way round|has done)\b/i)
+    }
+  })
+
   it('are short enough to sit under a result', () => {
     for (const t of TIDBITS) expect(t.text.length, `${t.id}: ${t.text}`).toBeLessThanOrEqual(190)
   })

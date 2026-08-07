@@ -300,13 +300,17 @@ else if (candidates.length < 30)
 // ── tidbits ───────────────────────────────────────────────────
 // One fact about the town, handed over after a game is finished.
 //
-// A source is required on every row, and that is the whole point of this
-// block rather than a nicety. The site's claim on anybody's attention is
-// that what it says about Fremont is true; a puzzle that is wrong is a
-// bad puzzle, but a *fact* that is wrong is the site lying to someone
-// about the place they live. Requiring the column is what stops a
-// half-remembered thing getting typed in at midnight and shipped as
-// local history.
+// Every row carries a source AND a link, and the link is the part that
+// matters. Requiring a source name alone did not work: the first pass
+// of this table shipped forty facts with a tidy-looking attribution on
+// every one, and an adversarial check found four of them credited to a
+// local museum whose site says nothing of the kind — three of those four
+// were also wrong. A name is something you can write from memory. A URL
+// is something somebody can open.
+//
+// The site's claim on anybody's attention is that what it says about
+// Fremont is true. A puzzle that is wrong is a bad puzzle; a *fact* that
+// is wrong is the site lying to somebody about the place they live.
 //
 // The length cap is real too. This sits under a result on a phone, and
 // anything past a couple of lines stops being a gift and starts being
@@ -323,6 +327,7 @@ for (const r of tidbitsTable.rows) {
   const id = (r.id || '').trim()
   const text = (r.text || '').trim()
   const source = (r.source || '').trim()
+  const url = (r.url || '').trim()
 
   if (!id) fail(...at, 'no id')
   else if (tidbitIds.has(id)) fail(...at, `duplicate id "${id}"`)
@@ -332,6 +337,9 @@ for (const r of tidbitsTable.rows) {
   if (text.length > MAX_TIDBIT)
     fail(...at, `"${id}" is ${text.length} characters — ${MAX_TIDBIT} is the most that fits`)
   if (!source) fail(...at, `"${id}" has no source — every claim about the town carries one`)
+  if (!url)
+    fail(...at, `"${id}" has no url — a source you cannot open is a source you cannot check`)
+  else if (!/^https?:\/\/\S+$/.test(url)) fail(...at, `"${id}" url "${url}" is not an http(s) link`)
 
   // Two rows saying the same thing halve the pool without looking like
   // they have.
@@ -342,7 +350,7 @@ for (const r of tidbitsTable.rows) {
   if (key && tidbitText.has(key)) fail(...at, `"${id}" repeats what "${tidbitText.get(key)}" says`)
   else if (key) tidbitText.set(key, id)
 
-  tidbits.push({ id, text, source })
+  tidbits.push({ id, text, source, url })
 }
 
 // Five games a day each hand one over, so the pool empties five times as
