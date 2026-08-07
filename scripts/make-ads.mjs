@@ -118,13 +118,29 @@ const poster = ({ w, h, pad, plateH, title, sub, foot, placeId, crop }) => {
 
 // A different place per format, so somebody who sees two of these does
 // not see the same drawing twice.
-// Crops read off the full plates rather than guessed. The first pass was
-// picked by eye and came out as brickwork and diagonal hatching — true
-// crops of the drawing, but of the parts that carry no information. Each
-// window below is set to hold the one feature that makes the place
-// itself: the bell tower, the tracks, the shopfronts, the summits. Each
-// crop's aspect also matches its plate's, because the nested svg slices
-// to fill and any mismatch crops again on top of these numbers.
+//
+// Crops are read off the full plates with a coordinate grid drawn over
+// them, never guessed. Two passes were guessed and both shipped: the
+// first came out as brickwork and hatching — true crops, but of the
+// parts of the drawing that carry no information — and the second
+// framed the right subjects badly. What "badly" means is specific, and
+// it is what the numbers below are set against:
+//
+//   1. Never cut a part in half. The wide poster used to end at y=305,
+//      ten units into the Mission Peeker post (392,300 → 402,450) and
+//      four into its sign. What reached the frame was a stray vertical
+//      and a small floating box, which reads as scanner debris rather
+//      than as a landmark. A part belongs wholly in or wholly out.
+//   2. Do not frame empty ground. The story poster ran to y=594 on a
+//      drawing whose sidewalk ends at 470, so a quarter of a 1080×1920
+//      plate was blank paper with one tree trunk crossing it.
+//   3. Hold the whole subject. The portrait crop was narrower than the
+//      depot, so the building ran off both edges and read as a wall.
+//
+// Aspect is checked below rather than trusted: the nested svg slices to
+// fill, so a crop whose ratio differs from its plate's is silently
+// cropped a second time. The story crop was out by 8.6% and lost that
+// much off its sides on top of everything above.
 const SIZES = [
   // Instagram and Facebook feed, and Nextdoor's post image.
   // The mission: bell tower, arch, and the road in front. 1.42:1.
@@ -142,7 +158,13 @@ const SIZES = [
   },
   // The tallest thing Instagram will show in feed — most screen for the
   // same scroll, so this is the one to lead with.
-  // The depot, its poles and the rails. 1.06:1.
+  // The whole depot, three of its poles and the rails under it. The
+  // building spans x 150–590 and the window is 90–600, so it sits inside
+  // the frame instead of running off it. The left edge is 90 rather than
+  // anything closer in because the telegraph pole at x=120 carries
+  // crossarms out to about 95 — cut between those two numbers and what
+  // reaches the poster is a pair of horizontal dashes hanging in the
+  // sky. Bottom is the foot of the plate, which is ballast. 1.06:1.
   {
     file: 'portrait-1080x1350.png',
     w: 1080,
@@ -153,14 +175,19 @@ const SIZES = [
     sub: 32,
     foot: 32,
     placeId: 'centerville-depot',
-    crop: [120, 190, 430, 404],
+    crop: [90, 120, 510, 480],
   },
   // Stories and Reels covers. The margins are wider than the other
   // three on purpose: Instagram lays its own chrome over roughly the
   // top and bottom 250px of a story, so anything inside those bands is
   // sitting under a profile row or a reply box. 120 top and ~300 under
   // the last line keeps every word clear of both.
-  // Two Niles shopfronts and the street trees. 0.74:1.
+  // One Niles shopfront head-on with its street tree, and the edge of
+  // the next one so it still reads as a row. A 0.68:1 window over a
+  // drawing of a street is a fight — the subject is horizontal and the
+  // frame is not — so this takes one bay rather than trying to fit three
+  // and filling the difference with sky. Bottom stops at 500, the foot
+  // of the canopy, because there is nothing under that but paper.
   {
     file: 'story-1080x1920.png',
     w: 1080,
@@ -171,10 +198,16 @@ const SIZES = [
     sub: 36,
     foot: 36,
     placeId: 'niles-plaza',
-    crop: [190, 200, 290, 394],
+    crop: [20, 150, 237, 350],
   },
   // Link cards: Nextdoor, Facebook, X.
-  // The ridge line, all three summits and the top of the post. 3.63:1.
+  // All three summits, and the Mission Peeker deliberately left out. At
+  // 3.63:1 the post cannot fit: the ridge occupies y 96–320 and the post
+  // runs to 450, so a window tall enough for both would need to be 1300
+  // units wide on an 800-unit plate. Given in-or-out, out — the summits
+  // are the recognisable thing and a severed post is not a landmark.
+  // Bottom is 290 rather than 300 so the ridge line meets the corner at
+  // x=38 instead of leaving a wedge of blank sky in it.
   {
     file: 'wide-1200x630.png',
     w: 1200,
@@ -185,9 +218,24 @@ const SIZES = [
     sub: 26,
     foot: 26,
     placeId: 'mission-peak',
-    crop: [20, 95, 760, 210],
+    crop: [38, 80, 762, 210],
   },
 ]
+
+// The second crop of a crop. `preserveAspectRatio="slice"` scales the
+// window to cover its box and throws away the overflow, so a mismatch
+// here does not fail, it just quietly takes a slice off the sides that
+// none of the numbers above account for. Loud, because it is invisible.
+for (const s of SIZES) {
+  const box = (s.w - s.pad * 2) / s.plateH
+  const win = s.crop[2] / s.crop[3]
+  const off = Math.abs(win - box) / box
+  if (off > 0.01)
+    throw new Error(
+      `${s.file}: crop is ${win.toFixed(3)}:1 into a ${box.toFixed(3)}:1 plate — ` +
+        `${(off * 100).toFixed(1)}% gets sliced off. Adjust crop[2]/crop[3].`
+    )
+}
 
 await mkdir(OUT, { recursive: true })
 console.log(`\n  domain on the creative: ${URL_TEXT}\n`)
