@@ -14,11 +14,20 @@
   browser runs it.
 
   Not linked from anywhere and not part of the app — /lens-test.html.
+
+  Kept rather than deleted: re-run it in a year and if WebKit has
+  shipped the filter, the lens turns on with no code change. But it is
+  served from public/, so it is a real public URL on a site we are about
+  to put in front of a newspaper, and "unlinked" has never meant
+  "unindexed" — crawlers find URLs from referrers, toolbars and
+  certificate logs. noindex here and a Disallow in robots.txt, so it
+  stays a tool without being a page.
 -->
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
     <title>lens test</title>
     <style>
       body {

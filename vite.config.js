@@ -28,13 +28,22 @@ const injectSiteUrl = () => ({
   // robots.txt and sitemap.xml are emitted here rather than kept in
   // public/ for the same reason as og:image: a sitemap has to carry
   // absolute URLs, and one with the wrong domain in it is worse than
-  // none at all.
+  // none at all. Note that this beats public/robots.txt rather than
+  // merging with it — a copy put there is silently discarded, so the
+  // rules below are the only ones that ship.
   generateBundle() {
     const base = siteUrl()
     this.emitFile({
       type: 'asset',
       fileName: 'robots.txt',
-      source: `User-agent: *\nAllow: /\n\nSitemap: ${base}/sitemap.xml\n`,
+      // /lens-test.html is a browser probe kept in public/ so it can be
+      // re-run against a future Safari. Being unlinked was enough while
+      // nobody was looking at the site; it is not enough now that the
+      // domain is going to a newspaper, because crawlers find URLs from
+      // referrers and certificate logs, not only from links. The page
+      // also carries its own noindex — this stops the fetch, that stops
+      // the listing.
+      source: `User-agent: *\nAllow: /\nDisallow: /lens-test.html\n\nSitemap: ${base}/sitemap.xml\n`,
     })
     this.emitFile({
       type: 'asset',
