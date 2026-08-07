@@ -84,6 +84,34 @@ Action that pulls, validates and commits — so an edit at nine at night is live
 by morning without anyone touching git. See [`content/README.md`](content/README.md),
 which is written for someone who does not want to read this file.
 
+### Selling a day
+
+`content/sponsors.csv` books one local business over a date range:
+
+```csv
+start,end,name,line,url
+2026-08-10,2026-08-16,Niles Canyon Coffee,Roasting on Main Street since 1998,https://example.com
+```
+
+It appears under the result, labelled **Today's sponsor**, and nowhere else —
+never inside a puzzle. The whole product rests on the claim that what it tells
+you about Fremont is true, and paid copy sitting inside that claim is worth more
+to a sponsor than it is to us.
+
+This is the one table somebody has paid for, so it is the one where a bad row
+costs more than a bad puzzle. The validator rejects a date that isn't a date, an
+end before its start, a missing name, a link that isn't `http(s)` — a
+`javascript:` cell here is a script in every player's page, delivered by
+spreadsheet — and two bookings that overlap, which means someone paid for a slot
+they were never going to get. The runtime refuses the same things again, because
+the generated file is committed JavaScript that a person can hand-edit, and
+`sponsor.test.js` fires eleven kinds of malformed row at it to prove a billing
+mistake can never take the board down with it.
+
+Taps are counted as a `sponsor_click` event so the business can be told how many
+people came. That is the number they are buying, and it needs Vercel Analytics
+switched on in the dashboard to be recorded at all.
+
 ### The Zoom drawings are composed, not drawn
 
 A hundred hand-drawn engravings is not a thing anyone finishes. So a place says

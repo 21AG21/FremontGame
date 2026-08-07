@@ -297,6 +297,68 @@ else if (candidates.length < 30)
     `${candidates.length} answers means the word repeats every ${candidates.length} days`
   )
 
+// ── sponsors ──────────────────────────────────────────────────
+// The one table in here that somebody has been paid for, which makes it
+// the one where a bad row costs more than a bad puzzle. Two sponsors
+// booked on the same day is a booking somebody paid for and did not
+// get; a link that does not go where the business thinks it goes is
+// worse. All of it is caught here rather than discovered by the person
+// who bought the week.
+const ISO = /^\d{4}-\d{2}-\d{2}$/
+const isRealDate = (s) => ISO.test(s) && !Number.isNaN(Date.parse(`${s}T00:00:00Z`))
+
+const sponsorsTable = await table('sponsors.csv')
+const sponsors = []
+
+for (const r of sponsorsTable.rows) {
+  const at = ['sponsors.csv', r.__line]
+  const start = (r.start || '').trim()
+  const end = (r.end || '').trim()
+  const name = (r.name || '').trim()
+  const url = (r.url || '').trim()
+  const line = (r.line || '').trim()
+
+  if (!name) fail(...at, 'no name — there is nothing to credit')
+  if (!isRealDate(start)) fail(...at, `start "${r.start}" is not a real YYYY-MM-DD date`)
+  if (!isRealDate(end)) fail(...at, `end "${r.end}" is not a real YYYY-MM-DD date`)
+  if (isRealDate(start) && isRealDate(end) && end < start)
+    fail(...at, `"${name}" ends (${end}) before it starts (${start})`)
+
+  // http(s) only, parsed rather than pattern-matched. A javascript: or
+  // data: URL in this cell is a script injected into every player's
+  // page by way of a spreadsheet, which is the last door this pipeline
+  // leaves open.
+  let parsed = null
+  try {
+    parsed = new URL(url)
+  } catch {
+    fail(...at, `"${name}" url "${url}" is not a URL`)
+  }
+  if (parsed && parsed.protocol !== 'http:' && parsed.protocol !== 'https:')
+    fail(...at, `"${name}" url uses ${parsed.protocol} — only http and https are allowed`)
+
+  if (line.length > 80)
+    fail(...at, `"${name}" line is ${line.length} characters — 80 is the most that fits`)
+
+  sponsors.push({ start, end, name, line, url })
+}
+
+// Sorted, so "which sponsor is booked today" has one answer arrived at
+// the same way every time, and so the overlap check below only has to
+// look at its neighbour.
+sponsors.sort((a, b) => (a.start < b.start ? -1 : a.start > b.start ? 1 : 0))
+for (let i = 1; i < sponsors.length; i++) {
+  const prev = sponsors[i - 1]
+  const cur = sponsors[i]
+  if (cur.start <= prev.end)
+    fail(
+      'sponsors.csv',
+      0,
+      `"${prev.name}" (${prev.start}–${prev.end}) and "${cur.name}" (${cur.start}–${cur.end}) ` +
+        'are booked on the same day — one of them paid for a slot they will not get'
+    )
+}
+
 // ── report ────────────────────────────────────────────────────
 for (const w of warnings) console.warn(`  warning  ${w}`)
 
@@ -317,12 +379,14 @@ const OUTPUTS = {
   'facts.js': factSets,
   'scenes.js': scenes,
   'words.js': { candidates, localWords },
+  'sponsors.js': sponsors,
 }
 
 console.log(
   `  ok  ${places.length} places, ${groups.length} categories, ` +
     `${factsTable.rows.length} facts in ${factSets.length} units, ` +
-    `${scenes.length} scenes, ${candidates.length} answers` +
+    `${scenes.length} scenes, ${candidates.length} answers, ` +
+    `${sponsors.length} sponsor${sponsors.length === 1 ? '' : 's'}` +
     (warnings.length ? `  (${warnings.length} warning${warnings.length > 1 ? 's' : ''})` : '')
 )
 
