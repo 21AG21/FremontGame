@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { TOWN } from './data/town.js'
-import { PUZZLE_TYPES, DAY_KEY } from './data/puzzles.js'
-import { dayHasTurned } from './lib/day.js'
+import { PUZZLE_TYPES, DAY_KEY, DAY_NUMBER } from './data/puzzles.js'
+import { dayHasTurned, longDate } from './lib/day.js'
 import { getRecord } from './lib/storage.js'
 import { readTheme, applyTheme } from './lib/theme.js'
 import { Ridge, ICONS, ThemeIcon, PeakMark } from './art/Mark.jsx'
@@ -166,6 +166,15 @@ export default function App() {
             <PeakMark />
             <h1 className="flag">{TOWN.name}</h1>
           </div>
+
+          {/* Desktop only — hidden below 1000px, where the row's height
+              is worth more to the picture than the date is to anyone.
+              On a laptop that trade does not exist, and a masthead with
+              no date on it is the one thing every paper has. */}
+          <p className="dateline">
+            <span>{longDate(DAY_KEY)}</span>
+            <span className="dateline-no">No. {DAY_NUMBER}</span>
+          </p>
 
           <div className="chrome">
             <HowTo key={active} game={active} />

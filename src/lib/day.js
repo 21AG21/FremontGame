@@ -39,6 +39,26 @@ export function dayBefore(key) {
   return new Date(utc(key) - 86400000).toISOString().slice(0, 10)
 }
 
+// The masthead date. Rendered only on a window wide enough to spend the
+// room on it — see the desktop block in styles.css.
+//
+// Built from the parts rather than by handing the key to Date.parse:
+// 'YYYY-MM-DD' parses as UTC, so west of Greenwich the formatter would
+// print yesterday's weekday against today's puzzle, which is the same
+// class of bug this module exists to avoid.
+//
+// Pinned to en-US, not the browser's locale: it is a masthead for one
+// town in California, and a masthead that reads differently depending
+// on who is looking is not a masthead.
+export function longDate(key) {
+  const [y, m, d] = key.split('-').map(Number)
+  return new Intl.DateTimeFormat('en-US', {
+    weekday: 'long',
+    month: 'long',
+    day: 'numeric',
+  }).format(new Date(y, m - 1, d))
+}
+
 // Both constants are captured at import, so a tab left open overnight is
 // still playing yesterday. App.jsx watches for the turn and reloads.
 export const DAY_KEY = civilDate()
