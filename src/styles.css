@@ -633,7 +633,14 @@ main {
   z-index: 10;
   margin: auto calc(var(--pad) * -1 + var(--bar-inset)) 0;
   display: flex;
-  padding: var(--s-2);
+  /* No padding, and it clips. The pill is full-bleed now — it fills the
+     bar's height and runs into its ends — so the bar's own rounded
+     corners are what shape it there. That is the whole trick: the pill
+     stays a plain rectangle and never needs to know it is in a corner,
+     because the corner does the rounding. overflow rather than a
+     clip-path, so corner-shape below applies to the clip too. */
+  padding: 0;
+  overflow: hidden;
   border-radius: var(--r-md);
   corner-shape: squircle;
   /* Vibrancy first. A plain blur turns whatever is behind it into grey
@@ -796,21 +803,17 @@ main {
    different numbers and the pill drifts a couple of pixels per slot. */
 .index-pill {
   position: absolute;
-  top: 4px;
-  bottom: 4px;
-  left: 4px;
-  width: calc((100% - 8px) / 5);
-  /* Concentric with the bar, not a size down from it. The bar rounds at
-     20 and insets the pill by 4, so the curve the pill has to sit inside
-     is 16 — at 12 the pill's corner cut across the bar's, and the 4px
-     margin closed to 2.83 on each diagonal while staying 4 along the
-     straight edges. Measured on an iPhone: a visible pinch at both ends
-     of the bar, worst on Zoom and Word where the pill is in a corner.
-     Safari makes it worse because corner-shape below is Chrome-only, so
-     the bar's corner there is a plain arc, which cuts in further than
-     the squircle these radii were first judged against. */
-  border-radius: var(--r-sm);
-  corner-shape: squircle;
+  inset: 0 auto 0 0;
+  width: calc(100% / 5);
+  /* Square, and left square on purpose. A rounded full-height pill in a
+     middle slot would show a wedge of glass at each of its corners
+     against the bar's straight edge; in an end slot it would need the
+     bar's radius on one side and none on the other. Both problems go
+     away by not rounding it at all and letting the bar's overflow clip
+     do the corners — which is also the only version that stays right on
+     Safari, where corner-shape is not supported and the bar's corner is
+     a plain arc rather than a squircle. */
+  border-radius: 0;
   /* Solid navy, and the highlight is a hairline rather than a gradient
      down the face. A white-to-navy wash across the top half looks more
      like glass and drops white-on-navy from 4.56:1 to 3.64:1 in the
@@ -861,11 +864,12 @@ main {
      is measured now, and the gap is 4 rather than 2 because that is the
      2px that puts a finger's worth of button under the finger. */
   gap: var(--s-2);
-  /* No side padding. There is no per-item background to inset — the
-     pill behind them is a full slot wide — so the 2px each side bought
-     nothing and cost the label 4px of the 54 it has on a 320px screen,
-     which is the width that decides how big the label can be. */
-  padding: var(--s-2) 0;
+  /* The bar has no padding of its own any more, so the row's height is
+     entirely this. 8 rather than 4 keeps the bar exactly the height it
+     was, and the target grows from 45 to 53 for free. No side padding:
+     there is no per-item background to inset, and the 2px each side cost
+     the label 4px of the 54 it has on a 320px screen. */
+  padding: var(--s-3) 0;
   border: 0;
   /* Same curve as the pill it shares a box with — otherwise the focus
      ring draws a different corner from the thing it is ringing. */

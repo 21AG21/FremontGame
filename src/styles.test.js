@@ -107,6 +107,16 @@ describe('the section bar', () => {
   it('has no side padding to give away', () => {
     // The label's whole budget is the slot. There is no per-item
     // background to inset — the pill behind them is a full slot wide.
-    expect(rule('.index-item')).toMatch(/padding:\s*var\(--s-2\)\s+0/)
+    expect(rule('.index-item')).toMatch(/padding:\s*var\(--s-\d\)\s+0/)
+  })
+
+  // The pill is full-bleed: it fills the bar's height and runs into its
+  // ends, and the bar's own overflow is what rounds it there. Round the
+  // pill as well and every middle slot shows a wedge of glass at its
+  // corners; stop the bar clipping and the end slots square off outside
+  // the bar's curve. The two go together.
+  it('lets the bar shape the pill rather than the pill shaping itself', () => {
+    expect(rule('.index')).toMatch(/overflow:\s*hidden/)
+    expect(rule('.index-pill')).toMatch(/border-radius:\s*0/)
   })
 })
