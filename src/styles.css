@@ -672,9 +672,20 @@ main {
 
 /* The lens — displaces the blurred backdrop through the map in
    art/Glass.jsx, so the border bends what is behind it rather than only
-   softening it. Its own element on purpose: Safari no-ops url() inside
-   backdrop-filter, and sharing a declaration with the blur would cost
-   Safari the blur too. */
+   softening it.
+
+   Its own element on purpose, and the reason is worth stating exactly,
+   because the note here used to say Safari "drops the declaration" and
+   that is not what Safari does. Measured on iOS 26.5: CSS.supports()
+   answers yes to backdrop-filter: url(), the computed style keeps
+   url("#glass-bar"), and the pane renders with no displacement at all —
+   claimed, retained, and silently ignored. So there is no feature query
+   that can find this, and the only reliable signal is what the pixels
+   do. Keeping the lens on its own element is what makes that harmless:
+   the blur lives on .index and survives, and a bar sharing one
+   declaration with the lens would lose the blur too. Verified both
+   ways on the simulator — blur alone, and blur with the lens over it,
+   render identically there. */
 .index-lens {
   position: absolute;
   inset: 0;
@@ -789,7 +800,16 @@ main {
   bottom: 4px;
   left: 4px;
   width: calc((100% - 8px) / 5);
-  border-radius: var(--r-xs);
+  /* Concentric with the bar, not a size down from it. The bar rounds at
+     20 and insets the pill by 4, so the curve the pill has to sit inside
+     is 16 — at 12 the pill's corner cut across the bar's, and the 4px
+     margin closed to 2.83 on each diagonal while staying 4 along the
+     straight edges. Measured on an iPhone: a visible pinch at both ends
+     of the bar, worst on Zoom and Word where the pill is in a corner.
+     Safari makes it worse because corner-shape below is Chrome-only, so
+     the bar's corner there is a plain arc, which cuts in further than
+     the squircle these radii were first judged against. */
+  border-radius: var(--r-sm);
   corner-shape: squircle;
   /* Solid navy, and the highlight is a hairline rather than a gradient
      down the face. A white-to-navy wash across the top half looks more
@@ -847,7 +867,9 @@ main {
      which is the width that decides how big the label can be. */
   padding: var(--s-2) 0;
   border: 0;
-  border-radius: var(--r-xs);
+  /* Same curve as the pill it shares a box with — otherwise the focus
+     ring draws a different corner from the thing it is ringing. */
+  border-radius: var(--r-sm);
   corner-shape: squircle;
   background: transparent;
   color: var(--muted);
