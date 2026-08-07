@@ -7,7 +7,7 @@ gets precached by the service worker for every player.
 ## Regenerating
 
 ```bash
-SITE_URL=https://your-domain node scripts/make-ads.mjs
+SITE_URL=https://fremontgame.vercel.app node scripts/make-ads.mjs
 ```
 
 `SITE_URL` is the only thing you have to supply. Without it every poster

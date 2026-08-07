@@ -29,20 +29,22 @@ can push to your repo.
 **Do not paste the new one anywhere, including to me.** I do not need it
 and cannot use it safely.
 
-### 0.2 Tell me the production URL
+### 0.2 Check the link card on the live site — done here, needs one look
 
-I do not have it, and it blocks three things: the posters, confirming the
-link-preview card renders, and every outreach email.
+The site is at **fremontgame.vercel.app**. The posters carry it, and both
+outreach drafts have it in place of the old `[URL]` placeholder.
 
-Then:
+Regenerate any time with:
 
 ```bash
-SITE_URL=https://your-real-domain node scripts/make-ads.mjs
+SITE_URL=https://fremontgame.vercel.app node scripts/make-ads.mjs
 ```
 
-Until you do, all four posters read **SET-YOUR-DOMAIN** in bold across
-the bottom. That is deliberate — a poster with a placeholder domain is
-worse than no poster.
+The one thing left is a look you have to take yourself: paste the link
+into a group chat and check the preview card renders with the wordmark
+and the NILES tiles. `og:image` has to be absolute, and it is filled in
+at build time from Vercel's own environment — so it is right in
+production and wrong on localhost, which means localhost cannot prove it.
 
 ---
 

@@ -1,6 +1,6 @@
 // The advertising creative, drawn from the game's own artwork.
 //
-//   SITE_URL=https://your-domain node scripts/make-ads.mjs
+//   SITE_URL=https://fremontgame.vercel.app node scripts/make-ads.mjs
 //
 // Writes to marketing/ — deliberately NOT public/, because these are
 // posters for elsewhere, not files the site serves. Anything in public/

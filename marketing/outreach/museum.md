@@ -31,7 +31,7 @@ there says yes in writing.
 > I'm a teacher in Fremont and I've built a small free daily puzzle site
 > about the town — five short puzzles a morning, all of them about
 > Fremont specifically: naming places from a drawing, sorting local
-> things into groups, dating a scene, and so on. It's at [URL].
+> things into groups, dating a scene, and so on. It's at fremontgame.vercel.app.
 >
 > Two reasons I'm writing.
 >

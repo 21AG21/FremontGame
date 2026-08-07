@@ -73,7 +73,7 @@ thing a district newsletter exists to carry.
 > from a drawing as it zooms out. One gives you twelve local things to
 > sort into groups. One shows you a scene and asks what year it is.
 >
-> It's at [URL]. It's free, there's no app to install, and it doesn't
+> It's at fremontgame.vercel.app. It's free, there's no app to install, and it doesn't
 > collect anything — the puzzles are worked out on your own phone.
 >
 > Everything on it is drawn rather than photographed, and the places are
