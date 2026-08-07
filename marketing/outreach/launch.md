@@ -35,8 +35,8 @@ Real outlets, in the order most likely to answer:
 - **Fremont Patch** — patch.com/california/fremont, runs community
   submissions.
 - **The Argus / East Bay Times** — bigger, slower, worth one email.
-- **Fremont Chamber of Commerce** newsletter — also your sponsor
-  pipeline, so this email does double duty.
+- **Fremont Chamber of Commerce** newsletter — they carry community
+  items and reach exactly the people who have lived here longest.
 
 Draft below.
 
@@ -54,11 +54,10 @@ Draft below.
 ## 4. Schools
 
 You work in one. Teachers, the staff room, the district newsletter, the
-PTA lists. Be careful and deliberate here: use your own time and your own
-accounts, do not push it through a school channel without asking whoever
-owns that channel, and keep it clearly separate from your teaching. A
-site with paid sponsorship promoted through a school list is a
-conversation you want to have _before_ it happens, not after.
+PTA lists. Still worth asking whoever owns a channel before posting to
+it, but this got much simpler when the site stopped selling anything — a
+free puzzle about local history with no advertising on it is the kind of
+thing a district newsletter exists to carry.
 
 ---
 

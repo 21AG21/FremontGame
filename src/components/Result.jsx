@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { TOWN } from '../data/town.js'
 import { DAY_NUMBER } from '../data/puzzles.js'
-import Sponsor from './Sponsor.jsx'
 
 // Drawn as boxes, not glyphs: Work Sans has no block characters, and a
 // fallback face for four of them would be four different shapes. The
@@ -82,10 +81,6 @@ export default function Result({ won, title, subtitle, squares, stats, note, onR
           Play again
         </button>
       </div>
-
-      {/* Last, under the share buttons. Renders nothing at all on the
-          days nobody has bought, which is most of them. */}
-      <Sponsor />
     </div>
   )
 }

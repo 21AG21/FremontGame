@@ -38,11 +38,13 @@ there says yes in writing.
 > The first is that I'd like to ask properly about images. All the
 > artwork on the site today is drawn — I haven't used a single
 > photograph, because I didn't want to use anything I didn't have clear
-> permission for. I'd like to know whether the museum licenses images
-> from the Tri-City collection, what that process looks like, and what it
-> costs. I should say plainly that the site carries local sponsorship, so
-> this would be a commercial use, and I'd rather tell you that up front
-> than have it come up later.
+> permission for. I'd like to know whether the museum lets people use
+> images from the Tri-City collection, what that process looks like, and
+> whether there's a fee.
+>
+> The site is free and stays free. There's no advertising on it, nothing
+> is sold, and I'm not making any money from it — it's a thing I built
+> for the town because I like the town.
 >
 > The second is that I noticed your Then and Now series. One of the five
 > puzzles is also a then-and-now — you're shown a scene and you guess the
@@ -64,9 +66,11 @@ there says yes in writing.
 
 - **Which images.** Vague requests get vague answers. Go through the
   collection and list the specific photographs you want.
-- **What "commercial" means here.** Be able to say it in one sentence: a
-  free site, no paywall, local businesses buy a small sponsor line under
-  the results.
+- **What the site is.** One sentence: a free daily puzzle about Fremont,
+  no advertising, nothing sold, made by a local teacher. Being plainly
+  non-commercial is the strongest thing you have to say to an archive —
+  it is the difference between a request they weigh and a request they
+  wave through.
 - **Credit.** Offer it before they ask. A visible credit and a link is
   cheap for you and is the main thing a small archive wants.
 - **Get it in writing.** An email saying yes, naming the images and the

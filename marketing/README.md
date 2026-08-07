@@ -31,36 +31,46 @@ Every image is composed out of `src/art` — our own code, drawing our own
 parts, from our own data. The plate in each poster is a real Zoom puzzle
 rendered by the same composer the game uses.
 
-That is a licensing decision, not an aesthetic one. This site is about to
-take sponsor money, which makes every use of an image a **commercial**
-use, and commercial use is exactly where free-image licences stop being
-free:
+It stays that way because the posters should look like the game. But the
+licensing arithmetic under this changed when the site stopped selling
+anything, and it changed in your favour — so what follows is the version
+that is true now.
 
-- **Stock sites.** Unsplash and Pexels are free for commercial use, but
-  the licence does not cover a recognisable person in frame — that needs
-  a model release the platform does not provide. Worse for us
-  specifically: searching either site for "Fremont" returns mostly
-  **Fremont Street, Las Vegas** and Fremont, Seattle. It is very easy to
-  end up advertising a Fremont, California puzzle with a photograph of a
-  Nevada casino.
-- **Wikimedia Commons.** Legally clean and correctly attributed, but most
-  Fremont files are **CC BY-SA**, which requires attribution _and_
-  share-alike. Share-alike on a paid placement means licensing your own
-  creative under the same terms. Read each file's page: a handful are CC0
-  or CC BY, and those are the only ones worth using.
-- **Anything else found by searching.** Being findable is not a licence.
+**The site is non-commercial.** No sponsors, nothing for sale, no
+advertising. That removes the hardest constraint there is on reusing
+someone else's picture, and it opens a whole category — anything licensed
+`NC`, "non-commercial", "educational use" — that was closed a week ago.
 
-Two sources are genuinely clean if you want real photographs later:
+What still applies:
+
+- **Attribution is not optional.** CC BY and CC BY-SA both require a
+  visible credit naming the photographer and the licence. Non-commercial
+  does not excuse you from it.
+- **Share-alike is still viral**, just cheaper. CC BY-SA asks that
+  anything you build _on top of_ the image carries the same licence. That
+  was painful for paid ad creative; for a free community poster it is
+  mostly a line of text.
+- **Being findable is not a licence.** Unchanged and permanent.
+- **Searching stock sites for "Fremont"** still returns mostly **Fremont
+  Street, Las Vegas** and Fremont, Seattle. Nothing to do with licensing
+  — you will simply advertise the wrong town.
+- **A recognisable face** still needs the person's permission, and stock
+  licences do not provide it. This one gets stricter, not looser, when
+  the subject is a private individual.
+
+Two sources are cleanest if you want real photographs:
 
 1. **Published in the US in 1930 or earlier** is public domain outright —
-   no attribution, no share-alike, no permission. That covers the whole
-   Niles/Essanay era: Essanay shot roughly 250 films in Niles from 1912,
-   including five Chaplins. Free, unambiguous, and nobody local is using
-   it.
-2. **Licensed directly from the holder.** See `outreach/museum.md`.
+   no attribution, no share-alike, no permission, commercial or not. That
+   covers the whole Niles/Essanay era: Essanay shot roughly 250 films in
+   Niles from 1912, including five Chaplins. Free, unambiguous, and
+   nobody local is using it.
+2. **Asked for directly.** Small archives are far more generous with a
+   free local project than with a business, which is exactly what you now
+   are. See `outreach/museum.md`.
 
 ## Rule
 
 Do not put an image in a poster, a post, or the site until you can name
-its licence and the name allows commercial use. If that takes more than a
-minute to establish, draw it instead — the composer is right there.
+its licence and say who to credit. If that takes more than a minute to
+establish, draw it instead — the composer is right there.
